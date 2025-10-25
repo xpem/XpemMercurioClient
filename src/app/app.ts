@@ -10,3 +10,6 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('XpemMercurioClient');
 }
+
+
+// ng g c home --skip-tests
