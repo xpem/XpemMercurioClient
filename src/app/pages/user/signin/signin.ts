@@ -1,0 +1,64 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../../../services/user.service';
+import { AuthService } from '../../../services/auth.service';
+
+
+@Component({
+  selector: 'app-signin',
+  templateUrl: './signin.html',
+  styleUrl: './signin.css',
+  imports: [ReactiveFormsModule],
+})
+export class Signin implements OnInit {
+  SignInForm!: FormGroup;
+  submitted = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    // Cria o FormGroup com os controles e validações
+    this.SignInForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  // Getter para facilitar o acesso aos controles do formulário no template
+  get f() { return this.SignInForm.controls; }
+
+  onSubmit() {
+    this.submitted = true;
+
+    // Para de processar se o formulário for inválido
+    if (this.SignInForm.invalid) {
+      return;
+    }
+
+    const formData = this.SignInForm.value;
+
+    this.userService.getUserToken(formData).subscribe({
+      next: (response) => {
+
+
+        const token = response.token;
+        // Salva o token usando o AuthService
+        // Supondo que você tenha um AuthService injetado para gerenciar o token
+        this.authService.saveToken(token);
+        
+        // Redireciona para a página inicial após o login bem-sucedido
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.error('Erro ao obter token:', error);
+        // Aqui você pode adicionar lógica para exibir uma mensagem de erro ao usuário
+      }
+    });
+  }
+}
