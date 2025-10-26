@@ -21,6 +21,6 @@ export class Sidebar {
     this.authService.logout(); // Remove o token
 
     // Redireciona para a tela de login/signin
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/user/signin']);
   }
 }

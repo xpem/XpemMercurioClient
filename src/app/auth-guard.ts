@@ -16,7 +16,7 @@ const authService = inject(AuthService);
             } else {
               console.log('Acesso negado - Usuário não autenticado');
                 // Se falhou (a API retornou 401), redireciona
-                return router.createUrlTree(['/signin'], { 
+                return router.createUrlTree(['user/signin'], { 
                     queryParams: { returnUrl: state.url } 
                 });
             }
