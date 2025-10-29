@@ -20,4 +20,12 @@ export class UserService {
   postCreateUser(userData: CreateUserPayload): Observable<any> {
     return this.http.post(`${this.apiUrl}`, userData);
   }
+
+  postSendEmailUpdatePassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Password/SendEmail`, { email }, { responseType: 'text' });
+  }
+
+  putUpdatePassword(token: string, password: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/Password`, { token, password });
+  }
 }

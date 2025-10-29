@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label for="inputPassword">Senha</label>
                 <input type="password" class="form-control" id="inputPassword" formControlName="password"
-                    [class.is-invalid]="submitted && f['password'].invalid || f['password'].touched && f['password'].invalid"/>
+                    [class.is-invalid]="submitted && f['password'].invalid || f['password'].touched && f['password'].invalid" />
 
                 @if((f['password'].touched || submitted) && f['password'].errors) {
                 <div class="invalid-feedback d-block">
@@ -87,6 +87,13 @@
             <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Criar
                 Conta</button>
         </div>
+
+        @if (errorMessage()) {
+        <div class="alert alert-danger mt-3" role="alert">
+            <i class="bi bi-exclamation-circle"></i>
+            {{ errorMessage() }}
+        </div>
+        }
 
         <div class="col-lg-12" style="margin-top: 20px"><a href="/user/signin"><i
                     class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a></div>

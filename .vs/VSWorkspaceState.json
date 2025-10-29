@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\.angular",
+    "\\.angular\\cache",
+    "\\.angular\\cache\\20.3.7",
+    "\\.angular\\cache\\20.3.7\\XpemMercurioClient",
+    "\\.angular\\cache\\20.3.7\\XpemMercurioClient\\vite",
+    "\\.angular\\cache\\20.3.7\\XpemMercurioClient\\vite\\deps",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\services"
   ],
+  "SelectedNode": "\\.angular\\cache\\20.3.7\\XpemMercurioClient\\vite\\deps\\package.json",
   "PreviewInSolutionExplorer": false
 }

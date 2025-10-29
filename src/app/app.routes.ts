@@ -3,10 +3,14 @@ import { Home } from './pages/home/home';
 import { Signin } from './pages/user/signin/signin';
 import { authGuard } from './auth-guard';
 import { Signup } from './pages/user/signup/signup';
+import { UpdatePassword } from './pages/user/update-password/update-password';
+import { PasswordSendEmail } from './pages/user/passwordsendemail/passwordsendemail';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
   { path: 'user/signin', component: Signin },
   { path: 'user/signup', component: Signup },
+  { path: 'user/update-password', component: UpdatePassword },
+  { path: 'user/password-send-email', component: PasswordSendEmail },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
