@@ -1,15 +1,37 @@
-<app-sidebar></app-sidebar> 
+<app-sidebar></app-sidebar>
+<div class="content px-4">
+    <div class="d-flex align-items-center">
+        <button class="btn btn-outline-light  me-3 mb-2" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <i class="bi bi-layout-sidebar"></i>
+        </button>
+        <h5>Xpem Mercúrio</h5>
+    </div>
 
-<div class="container-fluid p-3">
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-        aria-controls="offcanvasExample">
-        Abrir Menu
-    </button>
+    <div class="container">
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre"
+                            loading="lazy">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Mercado Livre</h5>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
+                                livre</p>
+                                <!-- style="background-color: #ffe600;" -->
+                            <a class="btn btn-info" (click)="conectarMercadoLivre()" ><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- futuramente, possibilitar a opção de conectar com a shopee -->
+    </div>
 </div>
-
-<div class="container">
-    <h1>Home Page</h1>
-    <p>home works!</p>
-
-    <button class="btn btn-success" (click)="salvarDados()">Salvar Dados</button>
-</div>
+<!-- npm run build -->

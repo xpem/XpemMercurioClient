@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/user-api';
 import { Router } from '@angular/router';
 import { CreateUserPayload } from '../../../models/user.model';
 import { ToastService } from '../../../services/toast.service';
@@ -85,7 +85,7 @@ export class Signup implements OnInit {
       error: (error) => {
         console.error('Erro ao tentar criar usuário:', error);
 
-        this.errorMessage.set(error.error || 'Erro ao criar usuário. Por favor, tente novamente.');
+        this.errorMessage.set(error.error || 'Erro ao criar usuário.');
       }
     });
   }

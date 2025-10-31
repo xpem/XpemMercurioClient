@@ -8,11 +8,12 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
 
   // Se houver um token, clona a requisição e adiciona o cabeçalho "Authorization"
+  //a rota é definida no proxy.conf.json
   if (token) {
     // Adiciona o formato Bearer Token (padrão JWT)
     const cloned = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}` 
+        Authorization: `Bearer ${token}`
       }
     });
     return next(cloned);

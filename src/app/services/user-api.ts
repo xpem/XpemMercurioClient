@@ -7,7 +7,7 @@ import { CreateUserPayload } from "../models/user.model";
   providedIn: 'root'
 })
 export class UserService {
-  
+
   //proxyConfig
   private apiUrl = '/api/user';
 
@@ -26,6 +26,6 @@ export class UserService {
   }
 
   putUpdatePassword(token: string, password: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/Password`, { token, password });
+    return this.http.put(`${this.apiUrl}/Password`, { Token: token, Password: password }, { responseType: 'text' });
   }
 }
