@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { Signin } from './pages/user/signin/signin';
+import { Signin } from './pages/user/SignIn/signin';
 import { authGuard } from './auth-guard';
-import { Signup } from './pages/user/signup/signup';
-import { UpdatePassword } from './pages/user/update-password/update-password';
-import { PasswordSendEmail } from './pages/user/passwordsendemail/passwordsendemail';
+import { Signup } from './pages/user/SignUp/signup';
+import { UpdatePassword } from './pages/user/UpdatePassword/update-password';
+import { PasswordSendEmail } from './pages/user/PasswordSendEmail/passwordsendemail';
+import { MercadoLivreOauthCallback } from './pages/MercadoLivre/mercadoLivreOAuthCallback/mercado-livre-oauthcallback';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'user/signup', component: Signup },
   { path: 'user/update-password', component: UpdatePassword },
   { path: 'user/password-send-email', component: PasswordSendEmail },
+  { path: 'MercadoLivre/OAuthCallback', component: MercadoLivreOauthCallback },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
