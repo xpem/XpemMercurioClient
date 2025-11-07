@@ -1,4 +1,21 @@
-
 <app-toasts></app-toasts>
+<div class="">
+    @if (authService.isAuthenticated()) {
+    <app-sidebar></app-sidebar>
+    }
 
-<router-outlet></router-outlet>
+    <div class="content p-4">
+        @if (authService.isAuthenticated()) {
+        <div class="d-flex align-items-center">
+            <button class="btn btn-outline-light  me-3 mb-2" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                <i class="bi bi-layout-sidebar"></i>
+            </button>
+            <h5>Xpem Mercúrio</h5>
+        </div>
+        }
+        
+        <router-outlet></router-outlet>
+
+    </div>
+</div>

@@ -28,4 +28,8 @@ export class UserService {
   putUpdatePassword(token: string, password: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/Password`, { Token: token, Password: password }, { responseType: 'text' });
   }
+
+  getUserProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile`);
+  }
 }

@@ -50,7 +50,6 @@ export class Signin implements OnInit {
         // Salva o token usando o AuthService
         // Supondo que você tenha um AuthService injetado para gerenciar o token
         this.authService.saveToken(token);
-        
         // Redireciona para a página inicial após o login bem-sucedido
         this.router.navigate(['/home']);
       },

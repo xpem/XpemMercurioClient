@@ -17,7 +17,11 @@ export class MercadoLivreService {
         return this.http.get(`${this.apiUrl}/Auth/Link`, { responseType: 'text' });
     }
 
-    public postUserCredential(mercadoLivreOath : MercadoLivreOath): Observable<any> {
+    public postUserCredential(mercadoLivreOath: MercadoLivreOath): Observable<any> {
         return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' });
+    }
+
+    public importSingleOrder(orderId: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Order/Import/${orderId}`);
     }
 }

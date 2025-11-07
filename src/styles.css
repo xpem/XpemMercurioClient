@@ -2,3 +2,29 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+    --primary-green: #22c55e;
+    --primary-green-dark: #16a34a;
+    --primary-green-light: #4ade80;
+    /* Backgrounds */
+    --bg-dark: #1a1d23;
+    --bg-card: #23262d;
+    --bg-sidebar: #23262d;
+    --bg-muted: #303542;
+    /* Text colors */
+    --text-light: #fafafa;
+    --text-muted: #a3a3a3;
+    --text-dark: #0a0a0b;
+    /* Borders */
+    --border-color: #333;
+    --border-light: #525252;
+    /* Status colors */
+    --status-em-uso: #166534;
+    --status-guardado: #1e40af;
+    --status-defeito: #dc2626;
+    --status-revendido: #7c3aed;
+    --status-dispensado: #6b7280;
+    --status-emprestado: #ea580c;
+    --status-doado: #059669;
+}
