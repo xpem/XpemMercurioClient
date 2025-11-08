@@ -1,5 +1,5 @@
 import {
-  ApplicationConfig, provideBrowserGlobalErrorListeners,
+  ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -8,9 +8,14 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt, 'pt-BR');
 
 export const appConfig: ApplicationConfig = {
   providers: [
+     { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes), provideClientHydration(withEventReplay()),

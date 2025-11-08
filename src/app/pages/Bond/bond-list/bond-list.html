@@ -57,6 +57,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <br />
+                        <p class="fw-medium m-0">ID da Venda: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.externalId }}</small></p>
+                        <p class="fw-medium m-0">Data da Venda: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.createdAt }}</small></p>
+                        <p class="fw-medium m-0">Valor Total: <small class="fw-light m-0" style="font-size: medium;">R$ {{ SingleOrder()?.totalAmount }}</small></p>
+                        <p class="fw-medium m-0">Status: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.status }}</small></p>
+                        <p class="fw-medium m-0">Produtos:</p>
+                        <ul class="list-unstyled ">
+                            @for (item of SingleOrder()?.products; track $index) {
+                            <li>
+                                {{ item.title }} - <small class="fw-light m-0" style="font-size: medium;">{{ item.quantity }}</small> - <small class="fw-light m-0" style="font-size: medium;">R$ {{ item.unitPrice }}</small>
+                            </li>
+                            }
+                        </ul>
+                    </div>
                     <button class="btn btn-info btn-sm" (click)="showErrorModal()"><i
                             class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
                         Venda</button>

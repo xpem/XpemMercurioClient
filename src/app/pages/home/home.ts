@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Sidebar } from '../../components/sidebar/sidebar';
 import { ToastService } from '../../services/toast.service';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
@@ -7,7 +6,7 @@ import { UserProfile } from '../../models/user-profile.model';
 
 @Component({
   selector: 'app-home',
-  imports: [Sidebar],
+  imports: [],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
