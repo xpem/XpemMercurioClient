@@ -1,3 +1,103 @@
 .content {
     padding-top: 1.1rem;
 }
+
+.linked-card {
+    transition: filter 0.2s;
+}
+
+    .linked-card:hover {
+        cursor: pointer;
+        filter: brightness(1.18);
+    }
+
+.category-circle-md {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #29A0B1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+
+/* Card styles */
+.card-custom {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    color: var(--text-light);
+}
+
+    .card-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary-green);
+    }
+
+    .card-custom .card-title {
+        color: var(--primary-green);
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .card-custom:hover .card-title {
+        color: var(--primary-green-light);
+    }
+
+    .card-custom .card-text {
+        color: var(--text-muted);
+        transition: color 0.2s ease;
+    }
+
+    .card-custom:hover .card-text {
+        color: var(--text-light);
+    }
+
+
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-card);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-muted);
+    }
+
+/*.status-badge {
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    letter-spacing: 0.5px;
+    background-color: #166534;
+    color: white;
+    width: fit-content;
+}*/
+
+
+.rounded-button {
+    background-color: var(--bg-card);
+    color: white;
+    border-radius: 30rem;
+}
+
+    .rounded-button:hover {
+       /* background-color: #16a34a;*/
+        color: white;
+        border-radius: 30rem;
+    }

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="col-sm-6 mb-3 mb-sm-0">
-        @if (userProfile?.mercadoLivreCredentialid) {
+        @if (!userProfile?.mercadoLivreCredentialid) {
         <div class="card mb-3" style="max-width: 540px;">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -22,5 +22,45 @@
         }
     </div>
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
-</div>
-<!-- npm run build -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col">
+            <div class="card h-100 linked-card card-custom">
+                <div class="card-body">
+                    <div class="card-title">
+                        <p class="fw-bold">Produto de teste</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-2">
+                    <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.75rem;">
+                        Mercado Livre</p>
+                    <p class="mb-0 status-badge">Confirmada</p>
+                    <div class="d-flex justify-content-between">
+                        <p class="card-text text-end mb-0 text-body-secondary">13/11/2025</p>
+                        <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
+                            R$ 100,00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 linked-card card-custom">
+                <div class="card-body">
+                    <div class="card-title">
+                        <p class="fw-bold">Produto de teste</p>
+                    </div>
+                    <div class="mb-1">
+                        <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
+                            Mercado Livre</p>
+                        <p class="mb-0 status-badge">Confirmada</p>
+                        <div class="d-flex justify-content-between" style="width: 100%;">
+                            <p class="card-text text-end mb-0 text-body-secondary">13/11/2025</p>
+                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
+                                R$ 100,00</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- npm run build -->

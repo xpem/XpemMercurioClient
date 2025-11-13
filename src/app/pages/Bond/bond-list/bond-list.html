@@ -59,15 +59,21 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <br />
-                        <p class="fw-medium m-0">ID da Venda: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.externalId }}</small></p>
-                        <p class="fw-medium m-0">Data da Venda: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.createdAt }}</small></p>
-                        <p class="fw-medium m-0">Valor Total: <small class="fw-light m-0" style="font-size: medium;">R$ {{ SingleOrder()?.totalAmount }}</small></p>
-                        <p class="fw-medium m-0">Status: <small class="fw-light m-0" style="font-size: medium;">{{ SingleOrder()?.status }}</small></p>
+                        <p class="fw-medium m-0">ID da Venda: <small class="fw-light m-0" style="font-size: medium;">{{
+                                SingleOrder()?.externalId }}</small></p>
+                        <p class="fw-medium m-0">Data da Venda: <small class="fw-light m-0"
+                                style="font-size: medium;">{{ SingleOrder()?.createdAt }}</small></p>
+                        <p class="fw-medium m-0">Valor Total: <small class="fw-light m-0" style="font-size: medium;">R$
+                                {{ SingleOrder()?.totalAmount }}</small></p>
+                        <p class="fw-medium m-0">Status: <small class="fw-light m-0" style="font-size: medium;">{{
+                                SingleOrder()?.status }}</small></p>
                         <p class="fw-medium m-0">Produtos:</p>
                         <ul class="list-unstyled ">
                             @for (item of SingleOrder()?.products; track $index) {
                             <li>
-                                {{ item.title }} - <small class="fw-light m-0" style="font-size: medium;">{{ item.quantity }}</small> - <small class="fw-light m-0" style="font-size: medium;">R$ {{ item.unitPrice }}</small>
+                                {{ item.title }} - <small class="fw-light m-0" style="font-size: medium;">{{
+                                    item.quantity }}</small> - <small class="fw-light m-0" style="font-size: medium;">R$
+                                    {{ item.unitPrice }}</small>
                             </li>
                             }
                         </ul>
@@ -92,8 +98,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-info btn-sm"><i class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
-                        Venda</button>
+                    <p>{{this.errorMessage()}}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

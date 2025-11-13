@@ -15,6 +15,7 @@ declare const bootstrap: any;
 export class BondList implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   SingleOrder: WritableSignal<Order | null> = signal(null);
+  errorMessage: WritableSignal<string> = signal('');
 
   constructor(private userService: UserService, private MercadoLivreService: MercadoLivreService) { }
 
@@ -40,7 +41,7 @@ export class BondList implements OnInit {
   ImportSingleOrder() {
     const orderIdInput = document.getElementById('orderId') as HTMLInputElement;
     const orderId = orderIdInput.value.trim();
-
+    this.errorMessage.set('');
     if (orderId) {
 
       console.log('Importing order with ID:', orderId);
@@ -53,7 +54,7 @@ export class BondList implements OnInit {
           console.log('Import single order response:', response);
           console.log('order value:', order);
 
-          
+
 
           console.log('SingleOrder signal value:', this.SingleOrder());
 
@@ -68,6 +69,8 @@ export class BondList implements OnInit {
           console.error('Error importing single order:', error);
           this.showModal('ErrorImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
+
+          this.errorMessage.set(error?.message || 'An error occurred while importing the order.');
         }
       });
     }
