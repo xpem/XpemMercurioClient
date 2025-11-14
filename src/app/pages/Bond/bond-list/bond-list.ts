@@ -26,8 +26,8 @@ export class BondList implements OnInit {
 
         var _userProfile = {} as UserProfile;
 
-        if (response.mercadoLivreCredentialid) {
-          _userProfile.mercadoLivreCredentialid = response.mercadoLivreCredentialid;
+        if (response.mercadoLivreCredentialId) {
+          _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialId;
         }
 
         this.userProfile.set(_userProfile);

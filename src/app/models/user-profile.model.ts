@@ -1,3 +1,3 @@
 export interface UserProfile {
-    mercadoLivreCredentialid: string;
+    mercadoLivreCredentialId: string;
 }

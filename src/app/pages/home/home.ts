@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
 import { UserProfile } from '../../models/user-profile.model';
+import { OrderService } from '../../services/MercadoLivre/order-api';
+import { Order } from '../../models/Order/order.model';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -14,10 +17,11 @@ export class Home implements OnInit {
   constructor(
     private toastService: ToastService,
     private mercadoLivreService: MercadoLivreService,
+    private orderService: OrderService,
     private userService: UserService
   ) { }
-
-  userProfile!: UserProfile | null;
+  userProfile: WritableSignal<UserProfile | null> = signal(null);
+  orders: WritableSignal<Order[]> = signal([]);
 
   salvarDados() {
     // Lógica para salvar os dados...
@@ -34,16 +38,23 @@ export class Home implements OnInit {
         console.log('User profile:', response);
         console.log('User mercadoLivreCredentialid:', response.mercadoLivreCredentialid);
 
-        if (!this.userProfile) {
-          this.userProfile = {} as UserProfile;
-        }
-        
+        var _userProfile = {} as UserProfile;
+
         if (response.mercadoLivreCredentialid) {
-          this.userProfile.mercadoLivreCredentialid = response.mercadoLivreCredentialid;
+          _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialid;
         }
+
+        this.userProfile.set(_userProfile);
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
+      }
+    });
+
+    this.orderService.get(1).subscribe({
+      next: (response) => {
+        console.log('Orders fetched successfully:', response);
+        this.orders.set(response);
       }
     });
   }
