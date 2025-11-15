@@ -1,4 +1,10 @@
 <div class="container">
+    @if (isLoading()) {
+    <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    }
+    @else {
     <div class="col-sm-6 mb-3 mb-sm-0">
         @if ((userProfile()?.mercadoLivreCredentialId) == null) {
         <div class="card mb-3" style="max-width: 540px;">
@@ -24,7 +30,7 @@
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @for (item of orders(); track $index) {
-        <div class="col">
+        <div class="col" (click)="goToOrderDetail(item.externalId)">
             <div class="card h-100 linked-card card-custom">
                 <div class="card-header fw-bold">
                     {{ item.externalId }}
@@ -67,3 +73,5 @@
         }
     </div>
     <!-- npm run build -->
+    }
+</div>

@@ -14,6 +14,13 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
+
+  goToOrderDetail(external_id: any) {
+    //navegar para a pagina order passando o externalId como parametro
+    window.location.href = `/order?externalId=${external_id}`;
+
+  }
+
   constructor(
     private toastService: ToastService,
     private mercadoLivreService: MercadoLivreService,
@@ -22,15 +29,10 @@ export class Home implements OnInit {
   ) { }
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   orders: WritableSignal<Order[]> = signal([]);
-
-  salvarDados() {
-    // Lógica para salvar os dados...
-
-    // Exibe o toast
-    this.toastService.showToast('Dados salvos com sucesso!', 'success');
-  }
+  isLoading: WritableSignal<boolean> = signal(true);
 
   ngOnInit(): void {
+    this.isLoading.set(true);
     console.log('Home component initialized');
 
     this.userService.getUserProfile().subscribe({
@@ -45,6 +47,8 @@ export class Home implements OnInit {
         }
 
         this.userProfile.set(_userProfile);
+
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
