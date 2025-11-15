@@ -1,48 +1,26 @@
-<div class="offcanvas offcanvas-start text-bg-dark sidebar" tabindex="-1" id="offcanvasExample"
-    aria-labelledby="offcanvasExampleLabel">
+<div class="offcanvas offcanvas-start text-bg-dark sidebar" tabindex="-1" id="offcanvasSidebar"
+    aria-labelledby="offcanvasSidebarLabel">
     <div class="offcanvas-header">
-        <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5> -->
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item px-3">
-                <a class="nav-link" href="#"><i class="bi bi-house"></i> Principal</a>
+        <ul class="nav navbar-nav justify-content-end flex-grow-1">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home"   routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-house"></i> Principal</a>
             </li>
-            <li class="nav-item px-3">
-                <a class="nav-link" href="/bond-list"><i class="bi bi-link"></i> Vínculos</a>
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="/bond-list" [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-link"></i> Vínculos</a>
             </li>
-            <!-- <li class="nav-item px-3 dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" style="background-color: var(--bs-danger);" (click)="onLogout()"><i
+                        class="bi bi-box-arrow-left"></i> Sair</a>
+            </li>
         </ul>
-        <!-- <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists,
-            etc.
-        </div> -->
-        <div class="d-grid gap-2">
-            <!-- <button class="btn btn-primary" type="button">Button</button> -->
-            <a class="btn btn-danger" style="width: 100%;" (click)="onLogout()">
-                <i class="bi bi-box-arrow-left"></i>&nbsp;&nbsp;Sair
-            </a>
-        </div>
         <div class="nav-item" style=" display: flex; flex-direction: row-reverse; margin-right: 20px;">
             <span>Versão 0.1.1</span>
         </div>
     </div>
 </div>
-
 <script>
     var offcanvasElementList = [].slice.call(document.querySelectorAll('.offcanvas'))
     var offcanvasList = offcanvasElementList.map(function (offcanvasEl) {

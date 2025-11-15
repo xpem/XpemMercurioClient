@@ -26,27 +26,36 @@
         @for (item of orders(); track $index) {
         <div class="col">
             <div class="card h-100 linked-card card-custom">
+                <div class="card-header fw-bold">
+                    {{ item.externalId }}
+                </div>
                 <div class="card-body">
-                    <div class="card-title">
+                    <!-- <div class="card-title">
                         <p class="fw-bold">{{ item.externalId }}</p>
-                    </div>
+                    </div> -->
                     <div class="mb-1">
                         <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
-                                {{item.marketPlace}}</p>
+                                {{item.marketPlaceText}}</p>
                             <p class="card-text text-end mb-0 text-body-secondary" style="font-size: 0.75rem;">
                                 {{item.createdAt}}</p>
                         </div>
 
-                        <p class="mb-0 status-badge">{{item.status}}</p>
+                        <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
                         @for (product of item.products; track $index) {
                         <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="card-text mb-0">{{product.title}}</p>
                             <p class="card-text text-end mb-0" style="font-weight: 600;">
-                                {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                                {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                            </p>
                         </div>
                         }
-                        <div class="d-flex justify-content-end" style="width: 100%;">
+                        <!-- <div class="d-flex justify-content-end" style="width: 100%;">
+                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
+                                {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                        </div> -->
+                        <div class="d-flex justify-content-between" style="width: 100%;">
+                            <p class="mb-0 status-badge">{{item.status}}</p>
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
                                 {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                         </div>

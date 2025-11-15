@@ -1,6 +1,7 @@
 export interface Order {
     externalId: string;
     marketPlace: string;
+    marketPlaceText: string;
     createdAt: string;
     externalDateCreated: string;
     externalLastUpdated: string;

@@ -6,10 +6,10 @@
     transition: filter 0.2s;
 }
 
-    .linked-card:hover {
-        cursor: pointer;
-        filter: brightness(1.18);
-    }
+.linked-card:hover {
+    cursor: pointer;
+    filter: brightness(1.18);
+}
 
 .category-circle-md {
     width: 40px;
@@ -33,30 +33,40 @@
     color: var(--text-light);
 }
 
-    .card-custom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        border-color: var(--primary-green);
-    }
+.card-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-green);
+}
 
-    .card-custom .card-title {
-        color: var(--primary-green);
-        font-weight: 600;
-        transition: color 0.2s ease;
-    }
+.card-custom .card-title {
+    color: var(--primary-green);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
 
-    .card-custom:hover .card-title {
-        color: var(--primary-green-light);
-    }
+.card-custom:hover .card-title {
+    color: var(--primary-green-light);
+}
 
-    .card-custom .card-text {
-        color: var(--text-muted);
-        transition: color 0.2s ease;
-    }
+.card-custom .card-header {
+    color: var(--primary-green);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
 
-    .card-custom:hover .card-text {
-        color: var(--text-light);
-    }
+.card-custom:hover .card-header {
+    color: var(--primary-green-light);
+}
+
+.card-custom .card-text {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.card-custom:hover .card-text {
+    color: var(--text-light);
+}
 
 
 
@@ -74,9 +84,9 @@
     border-radius: 3px;
 }
 
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--text-muted);
-    }
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
 
 /*.status-badge {
     border-radius: 20px;
@@ -96,8 +106,8 @@
     border-radius: 30rem;
 }
 
-    .rounded-button:hover {
-       /* background-color: #16a34a;*/
-        color: white;
-        border-radius: 30rem;
-    }
+.rounded-button:hover {
+    /* background-color: #16a34a;*/
+    color: white;
+    border-radius: 30rem;
+}
