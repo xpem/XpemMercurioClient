@@ -15,9 +15,9 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class Home implements OnInit {
 
-  goToOrderDetail(external_id: any) {
+  goToOrderDetail(id: any) {
     //navegar para a pagina order passando o externalId como parametro
-    window.location.href = `/order?externalId=${external_id}`;
+    window.location.href = `/order?id=${id}`;
 
   }
 

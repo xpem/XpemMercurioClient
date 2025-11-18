@@ -1,4 +1,5 @@
 export interface Order {
+    id: number;
     externalId: string;
     marketPlace: string;
     marketPlaceText: string;
@@ -10,6 +11,7 @@ export interface Order {
     status: string;
     buyer?: OrderBuyer;
     products: OrderProduct[];
+    printStatus: OrderShipmentLabelPrintStatus;
 }
 
 export interface OrderBuyer {
@@ -28,4 +30,10 @@ export interface OrderProduct {
     quantity: number;
     unitPrice: number;
     currencyId: string;
+}
+
+export enum OrderShipmentLabelPrintStatus {
+    NotPrinted = 0,
+    Printed = 1,
+    Undefined = 2
 }

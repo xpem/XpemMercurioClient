@@ -21,4 +21,8 @@ export class OrderService {
     public get(page: number): Observable<Order[]> {
         return this.http.get<Order[]>(`${this.apiUrl}?page=${page}`);
     }
+
+    public getbyId(id: number): Observable<Order> {
+        return this.http.get<Order>(`${this.apiUrl}/${id}`);
+    }
 }

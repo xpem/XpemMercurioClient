@@ -30,7 +30,7 @@
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @for (item of orders(); track $index) {
-        <div class="col" (click)="goToOrderDetail(item.externalId)">
+        <div class="col" (click)="goToOrderDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
                 <div class="card-header fw-bold">
                     {{ item.externalId }}
