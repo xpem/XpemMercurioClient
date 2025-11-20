@@ -3,6 +3,7 @@ import { RouterLink } from "@angular/router";
 import { OrderService } from '../../services/order-api';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { Order } from '../../models/Order/order.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-order',
@@ -15,7 +16,7 @@ export class OrderDetail {
   order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
 
-  constructor(private orderService: OrderService, private mercadoLivreService: MercadoLivreService) { }
+  constructor(private orderService: OrderService, private mercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.isLoading.set(false);
@@ -55,6 +56,8 @@ export class OrderDetail {
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
+
+          this.toastService.showToast('Etiqueta de envio gerada com sucesso!','success');
         }
       });
     }

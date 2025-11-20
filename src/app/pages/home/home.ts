@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
@@ -30,6 +30,17 @@ export class Home implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   orders: WritableSignal<Order[]> = signal([]);
   isLoading: WritableSignal<boolean> = signal(true);
+  currentPage: WritableSignal<number> = signal(1);
+  pageSize: WritableSignal<number> = signal(20);
+  totalPages: WritableSignal<number> = signal(1);
+  totalOrders: WritableSignal<number> = signal(0);
+
+  pages = computed(() => {
+    const tp = this.totalPages();
+    const arr: number[] = [];
+    for (let i = 1; i <= tp; i++) arr.push(i);
+    return arr;
+  });
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -55,12 +66,43 @@ export class Home implements OnInit {
       }
     });
 
-    this.orderService.get(1).subscribe({
+    this.orderService.getTotalOrders().subscribe({
       next: (response) => {
-        console.log('Orders fetched successfully:', response);
-        this.orders.set(response);
+        console.log('Total orders:', response);
+        const totalOrders = response.totalOrders;
+        const totalPages = response.totalPages;
+
+        this.totalOrders.set(totalOrders);
+        this.totalPages.set(totalPages);
+
+        this.loadOrders(1);
       }
     });
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages()) return;
+    this.loadOrders(page);
+  }
+
+  loadOrders(page: number) {
+    this.isLoading.set(true);
+    this.orderService.get(page).subscribe({
+      next: (response) => {
+        console.log(`Orders for page ${page} fetched successfully:`, response);
+        this.orders.set(response);
+        this.currentPage.set(page);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  prevPage() {
+    this.goToPage(this.currentPage() - 1);
+  }
+
+  nextPage() {
+    this.goToPage(this.currentPage() + 1);
   }
 
   conectarMercadoLivre() {

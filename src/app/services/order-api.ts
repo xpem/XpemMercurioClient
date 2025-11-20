@@ -15,7 +15,7 @@ export class OrderService {
     constructor(private http: HttpClient) { }
 
     public getTotalOrders(): Observable<TotalOrders> {
-        return this.http.get<TotalOrders>(`${this.apiUrl}/Total`);
+        return this.http.get<TotalOrders>(`${this.apiUrl}/totals`);
     }
 
     public get(page: number): Observable<Order[]> {
