@@ -1,6 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from "@angular/router";
-import { OrderService } from '../../services/MercadoLivre/order-api';
+import { OrderService } from '../../services/order-api';
+import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { Order } from '../../models/Order/order.model';
 
 @Component({
@@ -11,10 +12,10 @@ import { Order } from '../../models/Order/order.model';
 })
 
 export class OrderDetail {
-  orders: WritableSignal<Order> = signal({} as Order);
+  order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
-  
-  constructor(private orderService: OrderService) { }
+
+  constructor(private orderService: OrderService, private mercadoLivreService: MercadoLivreService) { }
 
   ngOnInit(): void {
     this.isLoading.set(false);
@@ -26,7 +27,34 @@ export class OrderDetail {
       this.orderService.getbyId(+id).subscribe({
         next: (response) => {
           console.log('Order fetched successfully:', response);
-          this.orders.set(response);
+          this.order.set(response);
+        }
+      });
+    }
+  }
+
+  printShipmentLabel(): void {
+
+    //verify if order.shipmentId is not null or empty
+    if (!this.order().shipmentId) {
+      console.error('Shipment ID is null or empty');
+      return;
+    }
+
+    var marketPlace = this.order().marketPlace;
+    console.log('MarketPlace:', marketPlace);
+    if (this.order().marketPlace == "1" /*Mercado Livre*/) {
+
+      this.mercadoLivreService.printShipmentLabel(this.order().shipmentId!).subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `shipment_label_${this.order().shipmentId}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
         }
       });
     }

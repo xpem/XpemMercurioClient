@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
-import { TotalOrders } from "../../models/Order/totalOrders.model";
+import { TotalOrders } from "../models/Order/totalOrders.model";
 import { Observable } from "rxjs";
-import { Order } from "../../models/Order/order.model";
+import { Order } from "../models/Order/order.model";
 import { Injectable } from "@angular/core";
 
 @Injectable({

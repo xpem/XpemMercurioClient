@@ -33,7 +33,7 @@
         <div class="col" (click)="goToOrderDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
                 <div class="card-header fw-bold">
-                    {{ item.externalId }}
+                    #{{ item.externalId }}
                 </div>
                 <div class="card-body">
                     <!-- <div class="card-title">
@@ -65,6 +65,16 @@
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
                                 {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                         </div>
+                        <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                            @if(item.printStatus == 1) {
+                            <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
+                                    class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+                            }
+                            @else {
+                            <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
+                                    class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+                            }
+                        </div>
                     </div>
                 </div>
 
@@ -72,6 +82,25 @@
         </div>
         }
     </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-end">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+               <li class="page-item"><a class="page-link" href="#">4</a></li>
+                  <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <!-- npm run build -->
     }
 </div>

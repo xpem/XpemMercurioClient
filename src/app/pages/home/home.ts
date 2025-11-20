@@ -3,7 +3,7 @@ import { ToastService } from '../../services/toast.service';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
 import { UserProfile } from '../../models/user-profile.model';
-import { OrderService } from '../../services/MercadoLivre/order-api';
+import { OrderService } from '../../services/order-api';
 import { Order } from '../../models/Order/order.model';
 import { CurrencyPipe } from '@angular/common';
 

@@ -12,6 +12,8 @@ export interface Order {
     buyer?: OrderBuyer;
     products: OrderProduct[];
     printStatus: OrderShipmentLabelPrintStatus;
+    printStatusText: string;
+    shipmentId?: string;
 }
 
 export interface OrderBuyer {
