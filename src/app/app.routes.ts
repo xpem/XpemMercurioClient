@@ -8,6 +8,7 @@ import { PasswordSendEmail } from './pages/user/PasswordSendEmail/passwordsendem
 import { MercadoLivreOauthCallback } from './pages/MercadoLivre/mercadoLivreOAuthCallback/mercado-livre-oauthcallback';
 import { BondList } from './pages/Bond/bond-list/bond-list';
 import { OrderDetail } from './pages/order/order';
+import { ProductList } from './pages/Product/product-list/product-list';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'user/password-send-email', component: PasswordSendEmail },
   { path: 'MercadoLivre/OAuthCallback', component: MercadoLivreOauthCallback },
   { path: 'bond-list', component: BondList, canActivate: [authGuard] },
-    { path: 'order', component: OrderDetail, canActivate: [authGuard] },
+  { path: 'order', component: OrderDetail, canActivate: [authGuard] },
+  { path: 'product-list', component: ProductList, canActivate: [authGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

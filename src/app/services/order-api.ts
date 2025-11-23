@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { TotalOrders } from "../models/Order/totalOrders.model";
+import { Total } from "../models/total.model";
 import { Observable } from "rxjs";
 import { Order } from "../models/Order/order.model";
 import { Injectable } from "@angular/core";
@@ -8,14 +8,13 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 
-
 export class OrderService {
     private apiUrl = "/api/Order";
 
     constructor(private http: HttpClient) { }
 
-    public getTotalOrders(): Observable<TotalOrders> {
-        return this.http.get<TotalOrders>(`${this.apiUrl}/totals`);
+    public getTotalOrders(): Observable<Total> {
+        return this.http.get<Total>(`${this.apiUrl}/totals`);
     }
 
     public get(page: number): Observable<Order[]> {

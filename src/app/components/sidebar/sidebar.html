@@ -6,10 +6,16 @@
     <div class="offcanvas-body">
         <ul class="nav navbar-nav justify-content-end flex-grow-1">
             <li class="nav-item">
-                <a class="nav-link" routerLink="/home"   routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-house"></i> Principal</a>
+                <a class="nav-link" routerLink="/home" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-house"></i> Principal</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLinkActive="active" routerLink="/bond-list" [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-link"></i> Vínculos</a>
+                <a class="nav-link" routerLink="/product-list" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-box2"></i> Produtos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="/bond-list"
+                    [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-link"></i> Vínculos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="background-color: var(--bs-danger);" (click)="onLogout()"><i

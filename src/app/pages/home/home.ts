@@ -59,7 +59,7 @@ export class Home implements OnInit {
 
         this.userProfile.set(_userProfile);
 
-        this.isLoading.set(false);
+
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
@@ -69,13 +69,15 @@ export class Home implements OnInit {
     this.orderService.getTotalOrders().subscribe({
       next: (response) => {
         console.log('Total orders:', response);
-        const totalOrders = response.totalOrders;
+        const totalOrders = response.totalItems;
         const totalPages = response.totalPages;
 
         this.totalOrders.set(totalOrders);
         this.totalPages.set(totalPages);
 
         this.loadOrders(1);
+
+        this.isLoading.set(false);
       }
     });
   }

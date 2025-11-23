@@ -51,13 +51,6 @@ export class BondList implements OnInit {
           const order: Order = response;
           this.SingleOrder.set(order);
 
-          console.log('Import single order response:', response);
-          console.log('order value:', order);
-
-
-
-          console.log('SingleOrder signal value:', this.SingleOrder());
-
           //external id of SingleOrder
           const externalId = order.externalId;
           console.log('External ID of imported order:', externalId);

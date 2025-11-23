@@ -5,67 +5,47 @@
     </div>
     }
     @else {
-    @if ((userProfile()?.mercadoLivreCredentialId) == null) {
     <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Mercado Livre</h5>
-                        <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
-                            livre</p>
-                        <!-- style="background-color: #ffe600;" -->
-                        <a class="btn btn-info" (click)="conectarMercadoLivre()"><i
-                                class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                            Conexão</a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-    }
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @for (item of orders(); track $index) {
-        <div class="col" (click)="goToOrderDetail(item.id)">
+        @for (item of products(); track $index) {
+        <div class="col" (click)="goToDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
                 <div class="card-header fw-bold">
-                    #{{ item.externalId }}
+                    #{{ item.title }}
                 </div>
                 <div class="card-body">
                     <!-- <div class="card-title">
                         <p class="fw-bold">{{ item.externalId }}</p>
                     </div> -->
                     <div class="mb-1">
-                        <div class="d-flex justify-content-between" style="width: 100%;">
+                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
                                 {{item.marketPlaceText}}</p>
                             <p class="card-text text-end mb-0 text-body-secondary" style="font-size: 0.75rem;">
                                 {{item.createdAt}}</p>
-                        </div>
+                        </div> -->
 
                         <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
-                        @for (product of item.products; track $index) {
-                        <div class="d-flex justify-content-between" style="width: 100%;">
+                        <!-- @for (product of item.products; track $index) { -->
+                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="card-text mb-0">{{product.title}}</p>
                             <p class="card-text text-end mb-0" style="font-weight: 600;">
                                 {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                             </p>
-                        </div>
-                        }
+                        </div> -->
+                        <!-- } -->
                         <!-- <div class="d-flex justify-content-end" style="width: 100%;">
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
                                 {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                         </div> -->
-                        <div class="d-flex justify-content-between" style="width: 100%;">
+                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="mb-0 status-badge">{{item.status}}</p>
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
                                 {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                        </div> -->
+                        <!-- <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                             @if(item.printStatus == 1) {
                             <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
@@ -74,7 +54,7 @@
                             <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
                             }
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -82,23 +62,63 @@
         </div>
         }
     </div>
-    @if ((totalPages() > 20)) {
-    <nav aria-label="Page navigation">
+    @if (totalPages() > 20) {
+    <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-end">
+            <!-- Botão Primeira Página -->
             <li class="page-item" [class.disabled]="currentPage() === 1">
-                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">&laquo;</button>
+                <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">
+                    &laquo;&laquo;
+                </button>
             </li>
-            @for (p of pages(); track $index) {
+
+            <!-- Botão Anterior -->
+            <li class="page-item" [class.disabled]="currentPage() === 1">
+                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">
+                    &laquo;
+                </button>
+            </li>
+
+            <!-- Reticências inicial (se necessário) -->
+            @if (pages()[0] > 1) {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            }
+
+            <!-- Páginas visíveis -->
+            @for (p of pages(); track p) {
             <li class="page-item" [class.active]="currentPage() === p">
                 <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
             </li>
             }
 
-            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                <button class="page-link" (click)="nextPage()"
-                    [disabled]="currentPage() === totalPages()">&raquo;</button>
-            </li>
+            <!-- Reticências final (se necessário) -->
+            @if (pages()[pages().length - 1] < totalPages()) { <li class="page-item disabled">
+                <span class="page-link">...</span>
+                </li>
+                }
+
+                <!-- Botão Próximo -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+                        &raquo;
+                    </button>
+                </li>
+
+                <!-- Botão Última Página -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="goToPage(totalPages())"
+                        [disabled]="currentPage() === totalPages()">
+                        &raquo;&raquo;
+                    </button>
+                </li>
         </ul>
+
+        <!-- Informação adicional -->
+        <div class="text-end text-muted small mt-2">
+            Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }} produtos
+        </div>
     </nav>
     }
     <!-- npm run build -->
