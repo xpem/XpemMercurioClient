@@ -13,51 +13,32 @@
         <div class="col" (click)="goToDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
                 <div class="card-header fw-bold">
-                    #{{ item.title }}
+                    {{ item.title }}
                 </div>
                 <div class="card-body">
-                    <!-- <div class="card-title">
-                        <p class="fw-bold">{{ item.externalId }}</p>
-                    </div> -->
-                    <div class="mb-1">
-                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
-                            <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
-                                {{item.marketPlaceText}}</p>
-                            <p class="card-text text-end mb-0 text-body-secondary" style="font-size: 0.75rem;">
-                                {{item.createdAt}}</p>
-                        </div> -->
 
-                        <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
-                        <!-- @for (product of item.products; track $index) { -->
-                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
-                            <p class="card-text mb-0">{{product.title}}</p>
-                            <p class="card-text text-end mb-0" style="font-weight: 600;">
-                                {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.65rem;">Quantidade
                             </p>
-                        </div> -->
-                        <!-- } -->
-                        <!-- <div class="d-flex justify-content-end" style="width: 100%;">
+                            <p class="card-text mb-0 text-body-secondary">{{item.quantity}}</p>
+                        </div>
+
+                        <div>
+                            <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Valor base
+                            </p>
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
-                                {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-                        </div> -->
-                        <!-- <div class="d-flex justify-content-between" style="width: 100%;">
-                            <p class="mb-0 status-badge">{{item.status}}</p>
-                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
-                                {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-                        </div> -->
-                        <!-- <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
-                            @if(item.printStatus == 1) {
-                            <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
-                                    class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-                            }
-                            @else {
-                            <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
-                                    class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-                            }
-                        </div> -->
+                                {{ item.basePrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <div>
+                            <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Vendidos
+                            </p>
+                            <p class="card-text mb-0 text-body-secondary">{{item.soldQuantity}}</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
         }

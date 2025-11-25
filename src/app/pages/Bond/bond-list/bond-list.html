@@ -11,11 +11,24 @@
                     <div class="card-body">
                         <h5 class="card-title">Mercado Livre</h5>
                         <p class="card-text">Importe suas vendas do Mercado Livre</p>
-                        <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
-                            data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
-                            Única</button>
-                        <button class="btn btn-danger btn-sm"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
-                            Período</button>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
+                                        data-bs-target="#ImportSingleOrderModal"><i
+                                            class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
+                                        Única</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger btn-sm"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
+                                        Período</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-info btn-sm me-2 mt-1" data-bs-toggle="modal"
+                                data-bs-target="#ImportSingleProductModal"><i
+                                    class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                                Único</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -24,7 +37,7 @@
     </div>
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
 
-    <!-- Modal -->
+    <!-- Modal order -->
     <div class="modal fade" id="ImportSingleOrderModal" tabindex="-1" aria-labelledby="ImportSingleOrderModal"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -89,12 +102,68 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" id="ErrorImportSingleOrderModal" tabindex="-1"
-        aria-labelledby="ErrorImportSingleOrderModal">
+
+    
+  <div class="modal fade" id="ImportSingleProductModal" tabindex="-1" aria-labelledby="ImportSingleProductModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Importar produto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="productId" class="form-label">Id do produto</label>
+                        <input type="text" class="form-control" id="productId" placeholder="Digite o ID do produto">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" (click)="this.ImportSingleProduct()"><i
+                            class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" tabindex="-1" id="ConfirmImportSingleProductModal" tabindex="-1"
+        aria-labelledby="ConfirmImportSingleProductModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--bs-success);">
+                    <h5 class="modal-title">Produto importado com sucesso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <br />
+                        <p class="fw-medium m-0">ID do Produto: <small class="fw-light m-0" style="font-size: medium;">{{
+                                SingleProduct()?.publicId }}</small></p>
+                        <p class="fw-medium m-0">Quantidade: <small class="fw-light m-0"
+                                style="font-size: medium;">{{ SingleProduct()?.quantity }}</small></p>
+                        <p class="fw-medium m-0">Preço: <small class="fw-light m-0" style="font-size: medium;">R$
+                                {{ SingleProduct()?.price }}</small></p>
+                        <p class="fw-medium m-0">Quantidade vendidos: <small class="fw-light m-0" style="font-size: medium;">{{
+                                SingleProduct()?.soldQuantity }}</small></p>
+                    </div>
+                    <button class="btn btn-info btn-sm" (click)="goToOrderDetail(SingleProduct()?.id)"><i
+                            class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
+                        Venda</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" tabindex="-1" id="ErrorImportSingleModal" tabindex="-1"
+        aria-labelledby="ErrorImportSingleModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: var(--bs-danger);">
-                    <h5 class="modal-title">Não foi possivel importar venda</h5>
+                    <h5 class="modal-title">Não foi possivel importar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

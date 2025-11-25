@@ -4,7 +4,7 @@ import { AuthService } from './services/auth.service';
 import { map, Observable, take } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
-const authService = inject(AuthService);
+    const authService = inject(AuthService);
     const router = inject(Router);
 
     // O Guard retorna o Observable, garantindo que o Router espere.
@@ -12,12 +12,15 @@ const authService = inject(AuthService);
         take(1),
         map(isLoggedIn => {
             if (isLoggedIn) {
-                return true; 
+                return true;
             } else {
-              console.log('Acesso negado - Usuário não autenticado');
+                console.log('Acesso negado - Usuário não autenticado');
+
+                //chamar a função logout do authService para garantir que o token seja removido
+                authService.logout();
                 // Se falhou (a API retornou 401), redireciona
-                return router.createUrlTree(['user/signin'], { 
-                    queryParams: { returnUrl: state.url } 
+                return router.createUrlTree(['user/signin'], {
+                    queryParams: { returnUrl: state.url }
                 });
             }
         })

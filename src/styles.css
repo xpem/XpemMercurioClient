@@ -28,3 +28,73 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --status-emprestado: #ea580c;
     --status-doado: #059669;
 }
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.linked-card {
+    transition: filter 0.2s;
+}
+
+.linked-card:hover {
+    cursor: pointer;
+    filter: brightness(1.18);
+}
+
+.category-circle-md {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #29A0B1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+
+/* Card styles */
+.card-custom {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    color: var(--text-light);
+}
+
+.card-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-green);
+}
+
+.card-custom .card-title {
+    color: var(--primary-green);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.card-custom:hover .card-title {
+    color: var(--primary-green-light);
+}
+
+.card-custom .card-header {
+    color: var(--primary-green);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.card-custom:hover .card-header {
+    color: var(--primary-green-light);
+}
+
+.card-custom .card-text {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.card-custom:hover .card-text {
+    color: var(--text-light);
+}

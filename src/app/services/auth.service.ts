@@ -27,6 +27,7 @@ export class AuthService {
 
     // 1. Obtém o token (se estiver em um cookie NÃO HTTP-ONLY)
     public getToken(): string | null {
+        // console.log(this.cookieService.get(this.TOKEN_KEY));
         // Verifica se o cookie existe
         return this.cookieService.get(this.TOKEN_KEY) || null;
     }

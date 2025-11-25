@@ -3,6 +3,7 @@ import { UserProfile } from '../../../models/user-profile.model';
 import { UserService } from '../../../services/user-api';
 import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
 import { Order } from '../../../models/Order/order.model';
+import { Product } from '../../../models/Product/product.model';
 
 declare const bootstrap: any;
 
@@ -15,6 +16,7 @@ declare const bootstrap: any;
 export class BondList implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   SingleOrder: WritableSignal<Order | null> = signal(null);
+  SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
 
   constructor(private userService: UserService, private MercadoLivreService: MercadoLivreService) { }
@@ -60,10 +62,41 @@ export class BondList implements OnInit {
         },
         error: (error) => {
           console.error('Error importing single order:', error);
-          this.showModal('ErrorImportSingleOrderModal');
+          this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleOrderModal');
 
           this.errorMessage.set(error?.message || 'An error occurred while importing the order.');
+        }
+      });
+    }
+  }
+
+  ImportSingleProduct() {
+    const productIdInput = document.getElementById('productId') as HTMLInputElement;
+    const productId = productIdInput.value.trim();
+    this.errorMessage.set('');
+    if (productId) {
+
+      console.log('Importing product with ID:', productId);
+      this.MercadoLivreService.importSingleProduct(productId).subscribe({
+        next: (response) => {
+
+          const product: Product = response;
+          this.SingleProduct.set(product);
+
+          //external id of SingleOrder
+          const externalId = product.publicId;
+          console.log('External ID of imported order:', externalId);
+
+          this.showModal('ConfirmImportSingleProductModal');
+          this.hideModal('ImportSingleProductModal');
+        },
+        error: (error) => {
+          console.log('Error object:', error.error.message);
+          this.showModal('ErrorImportSingleModal');
+          this.hideModal('ImportSingleProductModal');
+
+          this.errorMessage.set(error?.error?.message || 'An error occurred while importing the product.');
         }
       });
     }

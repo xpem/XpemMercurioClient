@@ -55,8 +55,6 @@ export class ProductList implements OnInit {
         this.loadProducts(this.currentPage());
       }
     });
-
-
   }
 
   loadProducts(page: number): void {

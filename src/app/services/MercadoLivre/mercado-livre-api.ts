@@ -28,4 +28,8 @@ export class MercadoLivreService {
     public printShipmentLabel(shipmentId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Order/Shipment/Label/${shipmentId}`, { responseType: 'blob' });
     }
+
+    public importSingleProduct(productId: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
+    }
 }
