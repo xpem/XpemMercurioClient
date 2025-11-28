@@ -7,6 +7,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --primary-green: #22c55e;
     --primary-green-dark: #16a34a;
     --primary-green-light: #4ade80;
+
+    --mercado-livre-color: #ffe600;
+    
     /* Backgrounds */
     --bg-dark: #1a1d23;
     --bg-card: #23262d;

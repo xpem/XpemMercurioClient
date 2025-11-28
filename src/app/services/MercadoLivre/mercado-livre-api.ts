@@ -29,6 +29,10 @@ export class MercadoLivreService {
         return this.http.get(`${this.apiUrl}/Order/Shipment/Label/${shipmentId}`, { responseType: 'blob' });
     }
 
+    public importOrdersByPeriod(startDate: string, endDate: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`);
+    }
+
     public importSingleProduct(productId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
     }

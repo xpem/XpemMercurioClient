@@ -20,13 +20,14 @@
                                         Única</button>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-danger btn-sm"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#ImportOrdersByPeriodModal"><i
+                                            class="bi bi-files"></i>&nbsp;&nbsp;Por
                                         Período</button>
                                 </div>
                             </div>
                             <button class="btn btn-info btn-sm me-2 mt-1" data-bs-toggle="modal"
-                                data-bs-target="#ImportSingleProductModal"><i
-                                    class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                                data-bs-target="#ImportSingleProductModal"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
                                 Único</button>
                         </div>
                     </div>
@@ -43,7 +44,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Importar venda</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -55,6 +56,40 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                     <button type="button" class="btn btn-primary" (click)="this.ImportSingleOrder()"><i
+                            class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal order -->
+    <div class="modal fade" id="ImportOrdersByPeriodModal" tabindex="-1" aria-labelledby="ImportOrdersByPeriodModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Importar vendas por período</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="mb-3 col-6">
+                        <label for="startDate" class="form-label">Data De Início</label>
+                        <input type="date" class="form-control" id="startDate" required required min="2020-01-01" max="{{todayDate()}}">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label for="endDate" class="form-label">Data De Fim</label>
+                        <input type="date" class="form-control" id="endDate" required min="2020-01-01" max="{{todayDate()}}">
+                    </div>
+                    @if (errorMessage()) {
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {{ errorMessage() }}
+                    </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" (click)="this.ImportOrdersByPeriod()"><i
                             class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
                 </div>
             </div>
@@ -102,9 +137,7 @@
         </div>
     </div>
 
-
-    
-  <div class="modal fade" id="ImportSingleProductModal" tabindex="-1" aria-labelledby="ImportSingleProductModal"
+    <div class="modal fade" id="ImportSingleProductModal" tabindex="-1" aria-labelledby="ImportSingleProductModal"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -127,7 +160,7 @@
         </div>
     </div>
 
-        <div class="modal fade" tabindex="-1" id="ConfirmImportSingleProductModal" tabindex="-1"
+    <div class="modal fade" tabindex="-1" id="ConfirmImportSingleProductModal" tabindex="-1"
         aria-labelledby="ConfirmImportSingleProductModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -138,13 +171,15 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <br />
-                        <p class="fw-medium m-0">ID do Produto: <small class="fw-light m-0" style="font-size: medium;">{{
+                        <p class="fw-medium m-0">ID do Produto: <small class="fw-light m-0"
+                                style="font-size: medium;">{{
                                 SingleProduct()?.publicId }}</small></p>
-                        <p class="fw-medium m-0">Quantidade: <small class="fw-light m-0"
-                                style="font-size: medium;">{{ SingleProduct()?.quantity }}</small></p>
+                        <p class="fw-medium m-0">Quantidade: <small class="fw-light m-0" style="font-size: medium;">{{
+                                SingleProduct()?.quantity }}</small></p>
                         <p class="fw-medium m-0">Preço: <small class="fw-light m-0" style="font-size: medium;">R$
                                 {{ SingleProduct()?.price }}</small></p>
-                        <p class="fw-medium m-0">Quantidade vendidos: <small class="fw-light m-0" style="font-size: medium;">{{
+                        <p class="fw-medium m-0">Quantidade vendidos: <small class="fw-light m-0"
+                                style="font-size: medium;">{{
                                 SingleProduct()?.soldQuantity }}</small></p>
                     </div>
                     <button class="btn btn-info btn-sm" (click)="goToOrderDetail(SingleProduct()?.id)"><i
@@ -157,7 +192,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" tabindex="-1" id="ErrorImportSingleModal" tabindex="-1"
         aria-labelledby="ErrorImportSingleModal">
         <div class="modal-dialog">

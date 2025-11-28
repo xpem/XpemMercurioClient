@@ -4,6 +4,7 @@ import { UserService } from '../../../services/user-api';
 import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
 import { Order } from '../../../models/Order/order.model';
 import { Product } from '../../../models/Product/product.model';
+import { ToastService } from '../../../services/toast.service';
 
 declare const bootstrap: any;
 
@@ -18,8 +19,15 @@ export class BondList implements OnInit {
   SingleOrder: WritableSignal<Order | null> = signal(null);
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
+  todayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
-  constructor(private userService: UserService, private MercadoLivreService: MercadoLivreService) { }
+  constructor(private userService: UserService, private MercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.userService.getUserProfile().subscribe({
@@ -56,7 +64,6 @@ export class BondList implements OnInit {
           //external id of SingleOrder
           const externalId = order.externalId;
           console.log('External ID of imported order:', externalId);
-
           this.showModal('ConfirmImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
         },
@@ -66,6 +73,38 @@ export class BondList implements OnInit {
           this.hideModal('ImportSingleOrderModal');
 
           this.errorMessage.set(error?.message || 'An error occurred while importing the order.');
+        }
+      });
+    }
+  }
+
+  ImportOrdersByPeriod() {
+    const startDateInput = document.getElementById('startDate') as HTMLInputElement;
+    const endDateInput = document.getElementById('endDate') as HTMLInputElement;
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
+    this.errorMessage.set('');
+    if (startDate && endDate) {
+
+      if(startDate > endDate){
+        this.errorMessage.set('A data de início não pode ser maior que a data de fim.');
+        return;
+      }
+
+      console.log('Importing orders from', startDate, 'to', endDate);
+      this.MercadoLivreService.importOrdersByPeriod(startDate, endDate).subscribe({
+        next: (response) => {
+          console.log('Orders imported successfully:', response);
+          this.toastService.showToast('Importação de pedidos em processamento!', 'info');
+          this.hideModal('ImportOrdersByPeriodModal');
+          //redirecionar para a home
+          // window.location.href = `/home`;
+        },
+        error: (error) => {
+          console.error('Error importing orders by period:', error);
+          this.showModal('ErrorImportSingleModal');
+          this.hideModal('ImportOrdersByPeriodModal');
+          this.errorMessage.set(error?.message || 'An error occurred while importing orders by period.');
         }
       });
     }

@@ -9,4 +9,5 @@ export interface Product {
     availableQuantity: number;
     soldQuantity: number;
     publicId: string;
+    mercadoLivreBonded: boolean;
 }

@@ -61,6 +61,7 @@ export class ProductList implements OnInit {
     this.isLoading.set(true);
     this.ProductService.get(page).subscribe({
       next: (response) => {
+        console.log('Products on page', page, ':', response);
         this.products.set(response);
         this.currentPage.set(page);
         this.isLoading.set(false);
