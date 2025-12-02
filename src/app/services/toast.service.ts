@@ -19,4 +19,16 @@ export class ToastService {
       this.toasts.update(toasts => toasts.filter(t => t !== toast));
     }, duration);
   }
+
+  showSuccess(message: string, duration: number = 5000) {
+    this.showToast(message, 'success', duration);
+  }
+
+  showError(message: string, duration: number = 5000) {
+    this.showToast(message, 'error', duration);
+  }
+
+  showInfo(message: string, duration: number = 5000) {
+    this.showToast(message, 'info', duration);
+  }
 }

@@ -7,8 +7,10 @@ import { UpdatePassword } from './pages/user/UpdatePassword/update-password';
 import { PasswordSendEmail } from './pages/user/PasswordSendEmail/passwordsendemail';
 import { MercadoLivreOauthCallback } from './pages/MercadoLivre/mercadoLivreOAuthCallback/mercado-livre-oauthcallback';
 import { BondList } from './pages/Bond/bond-list/bond-list';
-import { OrderDetail } from './pages/order/order';
+import { OrderDetail } from './pages/order-detail/order-detail';
 import { ProductList } from './pages/Product/product-list/product-list';
+import { ProductDetail } from './pages/Product/product-detail/product-detail';
+import { ProductBondList } from './pages/Bond/product-bond-list/product-bond-list';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
@@ -20,5 +22,7 @@ export const routes: Routes = [
   { path: 'bond-list', component: BondList, canActivate: [authGuard] },
   { path: 'order', component: OrderDetail, canActivate: [authGuard] },
   { path: 'product-list', component: ProductList, canActivate: [authGuard] },
+  { path: 'product-detail', component: ProductDetail, canActivate: [authGuard] },
+  { path: 'product-bond-list', component: ProductBondList, canActivate: [authGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

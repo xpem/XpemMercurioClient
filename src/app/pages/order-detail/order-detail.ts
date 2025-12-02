@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { OrderService } from '../../services/order-api';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
@@ -8,11 +8,11 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-order',
   imports: [RouterLink],
-  templateUrl: './order.html',
-  styleUrl: './order.css',
+  templateUrl: './order-detail.html',
+  styleUrl: './order-detail.css',
 })
 
-export class OrderDetail {
+export class OrderDetail  implements OnInit {
   order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
 

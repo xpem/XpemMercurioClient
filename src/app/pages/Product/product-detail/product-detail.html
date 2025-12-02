@@ -1,0 +1,106 @@
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+}
+@else {
+<div class="container-fluid">
+    <div class="col-lg-12 d-flex justify-content-between">
+        <a routerLink="/product-list" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
+                class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
+    </div>
+    <div class="col-lg-12">
+        <div class="col-lg-12 d-flex justify-content-between border-bottom border-info mb-1">
+            <p class="h5 text-info mb-1">{{product().title}}</p>
+        </div>
+        <form [formGroup]="ProductForm" (ngSubmit)="onSubmit()">
+            <div class="row mb-3">
+                <div class="form-group col-lg-3">
+
+                    <label for="inputQuantity" class="form-label">Quantidade em estoque</label>
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <input type="number" class="form-control" id="inputQuantity" formControlName="quantity"
+                                style="width: 100px;"
+                                [class.is-invalid]="ProductForm.get('quantity')?.invalid && (ProductForm.get('quantity')?.touched || ProductForm.get('quantity')?.dirty)" />
+                        </div>
+                        <!-- caso altere o campo inputQuantity, aparecer um botão de confirmação de alteração -->                         
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success mb-3"> <i class="bi bi-check"></i> Confirmar</button>
+                        </div>
+                    </div>
+                    @if (f['quantity']?.invalid && f['quantity']?.touched && f['quantity']?.dirty) {
+                    <div class="invalid-feedback d-block">
+                        @if (f['quantity']?.errors?.['required']) {
+                        <div>Quantidade é obrigatória</div>
+                        }
+                        @if (f['quantity']?.errors?.['min']) {
+                        <div>Quantidade não pode ser negativa</div>
+                        }
+                    </div>
+                    }
+
+                    <!-- <div class="d-grid" style="position: fixed; bottom: 10px; right:10px;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-plus"></i>&nbsp;&nbsp;Cadastrar
+                        </button>
+                    </div> -->
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-lg-3 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="soldQuantity"
+                    value="{{product().soldQuantity}}">
+                <label for="soldQuantity">Quantidade de vendidos</label>
+            </div>
+            <div class="col-lg-3 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="sku"
+                    value="{{product().sku ? product().sku : 'N/A'}}">
+                <label for="sku">SKU</label>
+            </div>
+        </div>
+    </div>
+    @if(product().productMercadoLivreBond ) {
+    <div class="col-lg-6">
+        <div class="h6 pb-2 mb-1  border-bottom border-secondary " style="color: var(--mercado-livre-color);">
+            Mercado Livre
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlBondId"
+                    value="{{product().productMercadoLivreBond?.id}}">
+                <label for="mlBondId">ID</label>
+            </div>
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlSku"
+                    value="{{product().productMercadoLivreBond?.title}}">
+                <label for="mlSku">Nome</label>
+            </div>
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlStatus"
+                    value="{{product().productMercadoLivreBond?.status}}">
+                <label for="mlStatus">Status</label>
+            </div>
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlPreco"
+                    value="{{ product().productMercadoLivreBond?.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                <label for="mlPreco">Preço</label>
+            </div>
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlQuantity"
+                    value="{{product().productMercadoLivreBond?.quantity}}">
+                <label for="mlQuantity">Quantidade</label>
+            </div>
+            <div class="col-lg-6 form-floating mb-3">
+                <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity"
+                    value="{{product().productMercadoLivreBond?.soldQuantity}}">
+                <label for="mlSoldQuantity">Quantidade Vendida</label>
+            </div>
+
+        </div>
+    </div>
+    }
+
+</div>
+}

@@ -1,6 +1,4 @@
-import { ProductBond } from "./productBond.model";
-
-export interface Product {
+export interface ProductBond {
     id: number;
     title: string;
     price: number;
@@ -10,8 +8,11 @@ export interface Product {
     quantity: number;
     availableQuantity: number;
     soldQuantity: number;
-    publicId: string;
-    MercadoLivreBondId: number;
-    sku: string;
-    productMercadoLivreBond?: ProductBond;
+    marketplace: string;
+    status: ProductStatusMercadoLivreBond;
+    productId: number;
+}
+
+export enum ProductStatusMercadoLivreBond {
+    Active, Paused, Undefined
 }
