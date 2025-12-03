@@ -9,6 +9,7 @@ import { CurrencyPipe } from '@angular/common';
   templateUrl: './product-list.html',
   styleUrl: './product-list.css',
 })
+
 export class ProductList implements OnInit {
 
   isLoading: WritableSignal<boolean> = signal(true);
@@ -85,7 +86,6 @@ export class ProductList implements OnInit {
   goToDetail(id: any) {
     //navegar para a pagina order passando o externalId como parametro
     window.location.href = `/product-detail?id=${id}`;
-
   }
 
 }

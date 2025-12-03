@@ -11,4 +11,5 @@ export interface ProductBond {
     marketplace: string;
     status: string;
     productId: number;
+    statusText: string;
 }

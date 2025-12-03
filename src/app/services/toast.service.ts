@@ -1,10 +1,11 @@
 import { Injectable, signal } from "@angular/core";
 
 interface Toast {
-    message: string;
-    type: 'success' | 'error' | 'info';
-    duration: number; // duration in milliseconds
+  message: string;
+  type: ToastType;
+  duration: number; // duration in milliseconds
 }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,7 @@ interface Toast {
 export class ToastService {
   public toasts = signal<Toast[]>([]);
 
-  showToast(message: string, type: 'success' | 'error' | 'info', duration: number = 5000) {
+  showToast(message: string, type: ToastType, duration: number = 5000) {
     const toast: Toast = { message, type, duration };
     this.toasts.update(toasts => [...toasts, toast]);
     setTimeout(() => {
@@ -21,14 +22,25 @@ export class ToastService {
   }
 
   showSuccess(message: string, duration: number = 5000) {
-    this.showToast(message, 'success', duration);
+    this.showToast(message, ToastType.Success, duration);
   }
 
   showError(message: string, duration: number = 5000) {
-    this.showToast(message, 'error', duration);
+    this.showToast(message, ToastType.Error, duration);
+  }
+
+  showWarning(message: string, duration: number = 5000) {
+    this.showToast(message, ToastType.Warning, duration);
   }
 
   showInfo(message: string, duration: number = 5000) {
-    this.showToast(message, 'info', duration);
+    this.showToast(message, ToastType.Info, duration);
   }
+}
+
+export enum ToastType {
+  Success = 'success',
+  Error = 'error',
+  Info = 'info',
+  Warning = 'warning'
 }
