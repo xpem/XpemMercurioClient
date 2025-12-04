@@ -34,7 +34,8 @@ export class PasswordSendEmail implements OnInit {
 
     this.userService.postSendEmailUpdatePassword(email).subscribe({
       next: (response) => {
-        this.toastService.showToast('Email enviado com sucesso!', 'success');
+        this.toastService.showSuccess('Email enviado com sucesso!', 5000);
+        
         this.router.navigate(['/user/signin']);
       },
       error: (error) => {

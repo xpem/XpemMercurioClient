@@ -70,7 +70,7 @@ export class UpdatePassword implements OnInit {
 
       this.userService.putUpdatePassword(token, this.UpdatePasswordForm.value.password).subscribe({
         next: (response) => {
-          this.toastService.showToast('Senha atualizada com sucesso!', 'success');
+          this.toastService.showSuccess('Senha atualizada com sucesso!', 5000);
           this.router.navigate(['/user/signin']);
         },
         error: (error) => {

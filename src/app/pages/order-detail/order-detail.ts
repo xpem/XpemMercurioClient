@@ -56,8 +56,8 @@ export class OrderDetail  implements OnInit {
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
-
-          this.toastService.showToast('Etiqueta de envio gerada com sucesso!','success');
+          
+          this.toastService.showSuccess('Etiqueta de envio gerada com sucesso!', 5000);
         }
       });
     }

@@ -21,7 +21,7 @@ export class ProductDetail implements OnInit {
   errorMessage: WritableSignal<string> = signal('');
   ProductForm!: FormGroup;
   productBond: WritableSignal<ProductBond[]> = signal([]);
- isEditingQuantity: WritableSignal<boolean> = signal(false);
+  isEditingQuantity: WritableSignal<boolean> = signal(false);
 
   constructor(private productService: ProductService, private router: Router, private fb: FormBuilder, private toastService: ToastService) { }
 
@@ -61,6 +61,7 @@ export class ProductDetail implements OnInit {
             }
 
             this.product.set(response);
+            this.ProductForm.get('quantity')?.disable();
 
             this.isLoading.set(false);
           }
@@ -78,12 +79,12 @@ export class ProductDetail implements OnInit {
 
   onEditQuantity(): void {
     const quantityControl = this.ProductForm.get('quantity');
-    
+
     if (this.isEditingQuantity()) {
       // Se está editando, salvar as alterações
       if (this.ProductForm.valid) {
         this.onSubmit();
-      } 
+      }
       // else {
       //   this.toastService.showWarning('Preencha o campo corretamente');
       // }
@@ -94,7 +95,7 @@ export class ProductDetail implements OnInit {
     }
   }
 
-    cancelEdit(): void {
+  cancelEdit(): void {
     // Restaura o valor original e desabilita o campo
     this.ProductForm.patchValue({
       quantity: this.product().quantity || 0,
@@ -113,16 +114,18 @@ export class ProductDetail implements OnInit {
       ...this.product(),
       quantity: this.ProductForm.value.quantity,
     };
-    // this.productService.update(updatedProduct).subscribe({
-    //   next: (response) => {
-    //     console.log('Product updated successfully:', response);
-    this.toastService.showSuccess('Produto atualizado com sucesso!');
-    this.router.navigate(['/product-list']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error updating product:', error);
-    //     this.errorMessage.set('Erro ao atualizar o produto. Por favor, tente novamente.');
-    //   }
-    // });
+
+    this.productService.updateQuantity(updatedProduct.id, updatedProduct.quantity).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Quantidade atualizada com sucesso!');
+
+        this.product.set(updatedProduct);
+        this.cancelEdit();
+      },
+      error: (error) => {
+        console.error('Error updating product:', error);
+        this.errorMessage.set('Erro ao atualizar a quantidade. Por favor, tente novamente.');
+      }
+    });
   }
 }

@@ -78,7 +78,7 @@ export class Signup implements OnInit {
       next: (response) => {
         console.log('Usuário criado com sucesso:', response);
 
-        this.toastService.showToast('Usuário criado com sucesso!', 'success');
+        this.toastService.showSuccess('Usuário criado com sucesso!', 5000);
         // Redireciona para a página inicial após o login bem-sucedido
         this.router.navigate(['/user/signin']);
       },

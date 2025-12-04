@@ -95,7 +95,7 @@ export class BondList implements OnInit {
       this.MercadoLivreService.importOrdersByPeriod(startDate, endDate).subscribe({
         next: (response) => {
           console.log('Orders imported successfully:', response);
-          this.toastService.showToast('Importação de pedidos em processamento!', 'info');
+          this.toastService.showInfo('Importação de pedidos em processamento!', 5000);
           this.hideModal('ImportOrdersByPeriodModal');
           //redirecionar para a home
           // window.location.href = `/home`;
