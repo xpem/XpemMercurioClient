@@ -78,25 +78,26 @@
             Mercado Livre
         </div>
         <div class="row mb-3">
-            <div class="col-lg-6 form-floating mb-3">
+            <div class="col-lg-3 form-floating mb-3">
                 <input type="text" readonly class="form-control-plaintext" id="mlBondId"
-                    value="{{product().productMercadoLivreBond?.id}}">
+                    value="{{product().productMercadoLivreBond?.productId}}">
                 <label for="mlBondId">ID</label>
             </div>
-            <div class="col-lg-6 form-floating mb-3">
+            <div class="col-lg-9 form-floating mb-3">
                 <input type="text" readonly class="form-control-plaintext" id="mlSku"
                     value="{{product().productMercadoLivreBond?.title}}">
                 <label for="mlSku">Nome</label>
             </div>
-            <div class="col-lg-6 form-floating mb-3">
-                <input type="text" readonly class="form-control-plaintext text-success" id="mlStatus"
-                    value="{{product().productMercadoLivreBond?.statusText}}">
-                <label for="mlStatus">Status</label>
+            <div class="col-lg-6 mb-3">
+                <!-- <input type="text" readonly class="form-control-plaintext text-success" id="mlStatus"
+                    value="{{product().productMercadoLivreBond?.statusText}}"> -->
+                    <label for="mlStatus">Status</label><br>
+                    <span class="badge text-bg-{{product().productMercadoLivreBond?.statusClassColor}}" style="font-size: 1rem;">{{product().productMercadoLivreBond?.statusText}}</span>
             </div>
-            <div class="col-lg-6 form-floating mb-3">
+            <div class="col-lg-6 mb-3">
+                <label for="mlPreco" class="form-label">Preço</label>
                 <input type="text" readonly class="form-control-plaintext" id="mlPreco"
                     value="{{ product().productMercadoLivreBond?.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="mlPreco">Preço</label>
             </div>
             <div class="col-lg-6 form-floating mb-3">
                 <input type="text" readonly class="form-control-plaintext" id="mlQuantity"

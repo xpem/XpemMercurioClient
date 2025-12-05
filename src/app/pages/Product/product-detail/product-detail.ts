@@ -51,12 +51,19 @@ export class ProductDetail implements OnInit {
             switch (status as number | string) {
               case 0:
                 response.productMercadoLivreBond!.statusText = 'Ativo';
+                response.productMercadoLivreBond!.statusClassColor = 'success';
                 break;
               case 1:
+                response.productMercadoLivreBond!.statusText = 'Pausado';
+                response.productMercadoLivreBond!.statusClassColor = 'warning';
+                break;
+              case 2:
                 response.productMercadoLivreBond!.statusText = 'Inativo';
+                response.productMercadoLivreBond!.statusClassColor = 'danger';
                 break;
               default:
                 response.productMercadoLivreBond!.statusText = 'Desconhecido';
+                response.productMercadoLivreBond!.statusClassColor = 'secondary';
                 break;
             }
 

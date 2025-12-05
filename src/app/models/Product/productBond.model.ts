@@ -12,4 +12,5 @@ export interface ProductBond {
     status: string;
     productId: number;
     statusText: string;
+    statusClassColor?: string;
 }
