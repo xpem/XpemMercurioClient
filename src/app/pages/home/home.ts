@@ -6,6 +6,7 @@ import { UserProfile } from '../../models/user-profile.model';
 import { OrderService } from '../../services/order-api';
 import { Order } from '../../models/Order/order.model';
 import { CurrencyPipe } from '@angular/common';
+import { ShipmentService } from '../../services/shipment-api';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class Home implements OnInit {
 
   constructor(
     private toastService: ToastService,
+    private shipmentService: ShipmentService,
     private mercadoLivreService: MercadoLivreService,
     private orderService: OrderService,
     private userService: UserService
@@ -34,7 +36,8 @@ export class Home implements OnInit {
   pageSize: WritableSignal<number> = signal(20);
   totalPages: WritableSignal<number> = signal(1);
   totalOrders: WritableSignal<number> = signal(0);
-
+  totalPendingLabelsPrint: WritableSignal<number> = signal(0);
+  isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
   pages = computed(() => {
     const tp = this.totalPages();
     const arr: number[] = [];
@@ -73,13 +76,23 @@ export class Home implements OnInit {
             this.isLoading.set(false);
           }
         });
+
+        this.shipmentService.getPendingLabelsPrintCount().subscribe({
+          next: (response) => {
+            console.log('Total Pending Labels Print:', response);
+            this.totalPendingLabelsPrint.set(response);
+            this.isLoadingTotalPendingLabelsPrint.set(false);
+          },
+          error: (error) => {
+            console.error('Error fetching Total Pending Labels Print:', error);
+            this.isLoadingTotalPendingLabelsPrint.set(false);
+          }
+        });
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
       }
     });
-
-
   }
 
   goToPage(page: number) {
