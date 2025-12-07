@@ -1,0 +1,128 @@
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+}
+@else {
+<div class="container-fluid">
+    <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-start align-items-center">
+            <a routerLink="/home" class="btn btn-sm btn-outline-info m-0"><i
+                    class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
+            <div class="ms-3">
+                <p class="mb-0">Etiquetas Pendentes</p>
+                <p class="text-body-secondary m-0" style="font-size: 0.75rem;">
+                    No máximo 40 etiquetas podem ser baixadas por vez.
+                </p>
+            </div>
+
+        </div>
+        <div>
+            <button type="button " class="btn btn-success position-relative m-0" (click)="printSelectedLabels()"
+                [disabled]="totalSelectedLabels() == 0">
+                <i class="bi bi-download"></i>&nbsp;&nbsp;
+                Baixar Etiquetas ({{ totalSelectedLabels() }})
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-12 ">
+        @if(ordersWithPendingLabels().length > 0){
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="selectAllCheckbox" (change)="toggleSelectAll()"
+                        [checked]="selectedLabels().length === ordersWithPendingLabels().length">
+                    <label class="form-check-label" for="selectAllCheckbox">
+                        Selecionar todas ({{ ordersWithPendingLabels().length }})
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @for (item of ordersWithPendingLabels(); track $index) {
+            <div class="col">
+                <div class="card h-100 linked-card card-custom selectable-card"
+                    id="selectOrderCard{{item.shipmentExternalId}}"
+                    [class.selected]="selectedLabels().includes(item.shipmentExternalId!)"
+                    (click)="toggleLabelSelection(item.shipmentExternalId!, $event)">
+                    <div class="card-header fw-bold">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="selectOrderCheckbox{{item.shipmentExternalId}}"
+                                [checked]="selectedLabels().includes(item.shipmentExternalId!)"
+                                (click)="$event.stopPropagation()">
+                            <label class="form-check-label" for="selectOrderCheckbox{{item.shipmentExternalId}}">
+                                #{{ item.externalId }}
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <!-- <div class="card-title">
+                            <p class="fw-bold">{{ item.externalId }}</p>
+                        </div> -->
+                        <div class="mb-1">
+                            <div class="d-flex justify-content-between" style="width: 100%;">
+                                <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
+                                    {{item.marketPlaceText}}</p>
+                                <p class="card-text text-end mb-0 text-body-secondary" style="font-size: 0.75rem;">
+                                    {{item.createdAt}}</p>
+                            </div>
+
+                            <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
+                            @for (product of item.products; track $index) {
+                            <div class="d-flex justify-content-between" style="width: 100%;">
+                                <p class="card-text mb-0">{{product.title}}</p>
+                                <p class="card-text text-end mb-0" style="font-weight: 600;">
+                                    {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR'
+                                    }}
+                                </p>
+                            </div>
+                            }
+                            <!-- <div class="d-flex justify-content-end" style="width: 100%;">
+                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
+                                {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                        </div> -->
+                            <div class="d-flex justify-content-between" style="width: 100%;">
+                                <p class="mb-0 status-badge">{{item.status}}</p>
+                                <p class="card-text text-end mb-0"
+                                    style="color: var(--primary-green); font-weight: 600;">
+                                    {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                                @switch(item.printStatus) {
+                                @case (null) {
+                                <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
+                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+
+                                }
+                                @case (1) {
+                                <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
+                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+
+                                }
+                                @default {
+                                <p class=" status-badge badge rounded-pill text-bg-warning mb-0"> <i
+                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+                                }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="alert alert-info" role="alert">
+            Nenhuma etiqueta pendente para imprimir.
+        </div>
+        }
+
+    </div>
+</div>
+}

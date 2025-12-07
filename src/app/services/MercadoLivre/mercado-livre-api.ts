@@ -26,7 +26,11 @@ export class MercadoLivreService {
     }
 
     public printShipmentLabel(shipmentId: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Order/Shipment/Label/${shipmentId}`, { responseType: 'blob' });
+        return this.http.get(`${this.apiUrl}/Order/Shipment/PrintLabel/Unique/${shipmentId}`, { responseType: 'blob' });
+    }
+
+    public printShipmentLabels(shipmentId: string[]): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Order/Shipment/PrintLabel/List?shipmentIds=${shipmentId.join(',')}`, { responseType: 'blob' });
     }
 
     public importOrdersByPeriod(startDate: string, endDate: string): Observable<any> {

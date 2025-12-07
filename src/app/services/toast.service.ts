@@ -40,7 +40,7 @@ export class ToastService {
 
 export enum ToastType {
   Success = 'success',
-  Error = 'error',
+  Error = 'danger',
   Info = 'info',
   Warning = 'warning'
 }

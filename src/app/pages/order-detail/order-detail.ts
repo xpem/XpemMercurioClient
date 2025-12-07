@@ -37,7 +37,7 @@ export class OrderDetail  implements OnInit {
   printShipmentLabel(): void {
 
     //verify if order.shipmentId is not null or empty
-    if (!this.order().shipmentId) {
+    if (!this.order().shipmentExternalId) {
       console.error('Shipment ID is null or empty');
       return;
     }
@@ -46,12 +46,12 @@ export class OrderDetail  implements OnInit {
     console.log('MarketPlace:', marketPlace);
     if (this.order().marketPlace == "1" /*Mercado Livre*/) {
 
-      this.mercadoLivreService.printShipmentLabel(this.order().shipmentId!).subscribe({
+      this.mercadoLivreService.printShipmentLabel(this.order().shipmentExternalId!).subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `shipment_label_${this.order().shipmentId}.pdf`;
+          a.download = `shipment_label_${this.order().shipmentExternalId}.pdf`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);

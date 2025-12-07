@@ -11,6 +11,7 @@ import { OrderDetail } from './pages/order-detail/order-detail';
 import { ProductList } from './pages/Product/product-list/product-list';
 import { ProductDetail } from './pages/Product/product-detail/product-detail';
 import { ProductBondList } from './pages/Bond/product-bond-list/product-bond-list';
+import { ShipmentPendingLabelsList } from './pages/Shipment/shipment-pending-labels-list/shipment-pending-labels-list';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
@@ -24,5 +25,7 @@ export const routes: Routes = [
   { path: 'product-list', component: ProductList, canActivate: [authGuard] },
   { path: 'product-detail', component: ProductDetail, canActivate: [authGuard] },
   { path: 'product-bond-list', component: ProductBondList, canActivate: [authGuard] },
+  {path: 'shipment-pending-labels-list', component: ShipmentPendingLabelsList, canActivate: [authGuard]},
   { path: '', redirectTo: 'home', pathMatch: 'full' }
+
 ];

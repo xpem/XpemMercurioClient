@@ -13,7 +13,7 @@ export interface Order {
     products: OrderProduct[];
     printStatus: OrderShipmentLabelPrintStatus;
     printStatusText: string;
-    shipmentId?: string;
+    shipmentExternalId?: string;
 }
 
 export interface OrderBuyer {

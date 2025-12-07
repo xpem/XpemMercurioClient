@@ -1,0 +1,24 @@
+.selectable-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.selectable-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.selectable-card.selected {
+    border-color: #198754;
+    background-color: rgba(25, 135, 84, 0.05);
+}
+
+.selectable-card.selected .card-header {
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+/* Previne a seleção de texto ao clicar */
+.selectable-card * {
+    user-select: none;
+}

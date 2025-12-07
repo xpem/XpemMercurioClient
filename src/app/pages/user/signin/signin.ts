@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user-api';
@@ -13,6 +13,7 @@ import { AuthService } from '../../../services/auth.service';
 export class Signin implements OnInit {
   SignInForm!: FormGroup;
   submitted = false;
+    isLoadingAccess: WritableSignal<boolean> = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -34,9 +35,11 @@ export class Signin implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.isLoadingAccess.set(true);
 
     // Para de processar se o formulário for inválido
     if (this.SignInForm.invalid) {
+      this.isLoadingAccess.set(false);
       return;
     }
 
@@ -45,17 +48,18 @@ export class Signin implements OnInit {
     this.userService.getUserToken(formData).subscribe({
       next: (response) => {
 
-
         const token = response.token;
         // Salva o token usando o AuthService
         // Supondo que você tenha um AuthService injetado para gerenciar o token
         this.authService.saveToken(token);
         // Redireciona para a página inicial após o login bem-sucedido
         this.router.navigate(['/home']);
+        this.isLoadingAccess.set(false);
       },
       error: (error) => {
         console.error('Erro ao obter token:', error);
         // Aqui você pode adicionar lógica para exibir uma mensagem de erro ao usuário
+        this.isLoadingAccess.set(false);
       }
     });
   }

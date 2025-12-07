@@ -22,6 +22,11 @@ export class Home implements OnInit {
 
   }
 
+  goToShipmentPendingLabelsList() {
+    //navegar para a pagina shipment-pending-labels-list
+    window.location.href = `/shipment-pending-labels-list`;
+  }
+
   constructor(
     private toastService: ToastService,
     private shipmentService: ShipmentService,
