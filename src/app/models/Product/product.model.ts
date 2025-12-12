@@ -1,5 +1,3 @@
-import { ProductBond } from "./productBond.model";
-
 export interface Product {
     id: number;
     title: string;
@@ -11,7 +9,5 @@ export interface Product {
     availableQuantity: number;
     soldQuantity: number;
     publicId: string;
-    MercadoLivreBondId: number;
     sku: string;
-    productMercadoLivreBond?: ProductBond;
 }

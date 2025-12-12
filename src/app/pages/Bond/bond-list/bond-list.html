@@ -1,34 +1,31 @@
 <div class="container">
     <h4>Vínculos</h4>
-    <div class="col-sm-6 mb-3 mb-sm-0">
+    <div class="col-sm-12 mb-3 mb-sm-0">
         @if ((userProfile()?.mercadoLivreCredentialId) == null) {
-        <div class="card mb-3" style="max-width: 540px;">
+        <div class="col-lg-12 card mb-3" style="border-color: var(--mercado-livre-color);">
             <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy">
+                <div class="col-auto">
+                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" style="max-width: 200px;" alt="Mercado Livre" loading="lazy">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">Mercado Livre</h5>
                         <p class="card-text">Importe suas vendas do Mercado Livre</p>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
-                                        data-bs-target="#ImportSingleOrderModal"><i
-                                            class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
-                                        Única</button>
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#ImportOrdersByPeriodModal"><i
-                                            class="bi bi-files"></i>&nbsp;&nbsp;Por
-                                        Período</button>
-                                </div>
+                        <div>
+                            <div class="d-grid gap-2 d-md-block">
+                                <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#ImportSingleOrderModal"><i
+                                        class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
+                                    Única</button>
+                                <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#ImportOrdersByPeriodModal"><i
+                                        class="bi bi-files"></i>&nbsp;&nbsp;Por
+                                    Período</button>
+                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#ImportSingleProductModal"><i
+                                        class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                                    Único</button>
                             </div>
-                            <button class="btn btn-info btn-sm me-2 mt-1" data-bs-toggle="modal"
-                                data-bs-target="#ImportSingleProductModal"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
-                                Único</button>
                         </div>
                     </div>
                 </div>
@@ -74,11 +71,13 @@
                 <div class="modal-body row">
                     <div class="mb-3 col-6">
                         <label for="startDate" class="form-label">Data De Início</label>
-                        <input type="date" class="form-control" id="startDate" required required min="2020-01-01" max="{{todayDate()}}">
+                        <input type="date" class="form-control" id="startDate" required required min="2020-01-01"
+                            max="{{todayDate()}}">
                     </div>
                     <div class="mb-3 col-6">
                         <label for="endDate" class="form-label">Data De Fim</label>
-                        <input type="date" class="form-control" id="endDate" required min="2020-01-01" max="{{todayDate()}}">
+                        <input type="date" class="form-control" id="endDate" required min="2020-01-01"
+                            max="{{todayDate()}}">
                     </div>
                     @if (errorMessage()) {
                     <div class="alert alert-danger mt-3" role="alert">

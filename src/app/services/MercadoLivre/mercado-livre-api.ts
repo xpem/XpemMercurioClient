@@ -40,4 +40,8 @@ export class MercadoLivreService {
     public importSingleProduct(productId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
     }
+
+    public importProductBonds(productId : number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/${productId}/Bond/List`);
+    }
 }

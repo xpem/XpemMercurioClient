@@ -1,5 +1,6 @@
 export interface ProductBond {
     id: number;
+    externalProductId: string;
     title: string;
     price: number;
     basePrice: number;
@@ -9,8 +10,12 @@ export interface ProductBond {
     availableQuantity: number;
     soldQuantity: number;
     marketplace: string;
-    status: string;
+    status: ProductStatusMercadoLivreBond;
     productId: number;
     statusText: string;
     statusClassColor?: string;
+}
+
+export enum ProductStatusMercadoLivreBond {
+    Active, Paused, Closed, Undefined
 }
