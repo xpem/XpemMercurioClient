@@ -13,59 +13,20 @@
             <i class="bi bi-clock-history"></i> Histórico de movimentações </a>
 
     </div>
-    <!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMovHistory"
-        aria-labelledby="offcanvasMovHistoryLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasMovHistoryLabel">Histórico de Movimentações</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            @for (item of mockMovementHistory; track $index) {
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        @if (item.type === 'entrada') {
-                        <span class="text-success"><i class="bi bi-graph-up-arrow"></i></span>
-                        } @else {
-                        <span class="text-danger"><i class="bi bi-graph-down-arrow"></i></span>
-                        }
-                        &nbsp;
-                        @if (item.type === 'entrada') {
-                        <span class="badge rounded-pill custom-outline-green ms-2">
-                            +{{item.quantity}} un</span>
-                        } @else {
-                        <span class="badge rounded-pill custom-outline-red ms-2">
-                            -{{item.quantity}} un</span>
-                        }
-                        <span> {{item.reason}}</span>
-                       
-                        @if (item.saleId) {
-                            <span class="text-secondary ms-1" style="font-size: small;">#{{item.saleId}}</span>
-                        }
-                    </h6>
-                    <div class="d-flex justify-content-between">
-                        <p class="text-secondary" style="font-size: small;">Saldo: {{item.balance}}</p>
-                        <p class="text-secondary" style="font-size: small;">
-                            {{item.formattedDate}}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            }
-        </div>
-    </div> -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMovHistory"
         aria-labelledby="offcanvasMovHistoryLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasMovHistoryLabel">
-               <i class="bi bi-box"></i>
-                Histórico de Movimentações</h5>
+                <i class="bi bi-box"></i>
+                Histórico de Movimentações
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             @for (item of mockMovementHistory; track $index) {
             <div class="position-relative">
-                <div style="background-color: #2b303b; width: .125rem; top: 2rem; left: 11px; position: absolute; bottom: 0;">
+                <div
+                    style="background-color: #2b303b; width: .125rem; top: 2rem; left: 11px; position: absolute; bottom: 0;">
                 </div>
                 <div class="d-flex gap-4">
                     @if (item.formattedType === 'entrada') {
@@ -105,46 +66,23 @@
 
         <div class="card border-light mb-3">
             <div class="card-body " style="padding-bottom: 0px;">
-                <form [formGroup]="ProductForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group col-lg-3">
-                        <label for="inputQuantity" class="form-label">Quantidade em estoque</label>
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <input type="number" class="form-control" id="inputQuantity" formControlName="quantity"
-                                    style="width: 100px;"
-                                    [class.is-invalid]="ProductForm.get('quantity')?.invalid && (ProductForm.get('quantity')?.touched || ProductForm.get('quantity')?.dirty)" />
-                            </div>
-                            <!-- caso altere o campo inputQuantity, aparecer um botão de confirmação de alteração -->
-                            <div class="col-auto">
-                                @if (!isEditingQuantity()) {
-                                <button type="button" class="btn btn-warning mb-3" (click)="onEditQuantity()"
-                                    title="Editar quantidade">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                } @else {
-                                <button type="button" class="btn btn-success mb-3 me-2" (click)="onEditQuantity()"
-                                    title="Salvar alterações">
-                                    <i class="bi bi-check-lg"></i>
-                                </button>
-                                <button type="button" class="btn btn-secondary mb-3" (click)="cancelEdit()"
-                                    title="Cancelar">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                                }
-                            </div>
+                <!-- <form [formGroup]="ProductForm" (ngSubmit)="onSubmit()"> -->
+                <div class="form-group col-lg-3">
+                    <label for="inputQuantity" class="form-label">Quantidade em estoque</label>
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <input type="number" class="form-control" id="inputQuantity" readonly
+                                value="{{product().quantity}}" style="width: 100px;" />
                         </div>
-                        @if (f['quantity']?.invalid && f['quantity']?.touched && f['quantity']?.dirty) {
-                        <div class="invalid-feedback d-block">
-                            @if (f['quantity']?.errors?.['required']) {
-                            <div>Quantidade é obrigatória</div>
-                            }
-                            @if (f['quantity']?.errors?.['min']) {
-                            <div>Quantidade não pode ser negativa</div>
-                            }
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-warning mb-3" data-bs-toggle="modal"
+                                data-bs-target="#EditQuantityModal" title="Editar quantidade">
+                                <i class="bi bi-pencil"></i>
+                            </button>
                         </div>
-                        }
                     </div>
-                </form>
+                </div>
+                <!-- </form> -->
                 <div class="row">
                     <div class="col-lg-3 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="soldQuantity"
@@ -161,6 +99,95 @@
         </div>
     </div>
 
+    <!-- Edit Quantity Modal -->
+    <div class="modal fade" id="EditQuantityModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="EditQuantityModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form [formGroup]="ProductForm" (ngSubmit)="onSubmit()">
+                <div class="modal-content">
+                    <div class="modal-header"
+                        [style.background-color]="editQuantityType() === 0 ? 'var(--bs-green)' : 'var(--bs-red)'">
+                        <h1 class="modal-title fs-5" id="EditQuantityModalLabel">Registrar Movimentação</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <label for="inputQuantity" class="form-label">Quantidade</label>
+                                <input type="number" class="form-control" id="inputQuantity" style="width: 100px;"
+                                    formControlName="quantity" (input)="onQuantityInput()"
+                                    [class.is-invalid]="ProductForm.get('quantity')?.invalid && (submitted || ProductForm.get('quantity')?.touched || ProductForm.get('quantity')?.dirty)" />
+                                @if (f['quantity']?.invalid && f['quantity']?.touched && f['quantity']?.dirty) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['quantity']?.errors?.['required']) {
+                                    <div>Quantidade é obrigatória</div>
+                                    }
+                                    @if (f['quantity']?.errors?.['min']) {
+                                    <div>Quantidade não pode ser negativa</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+
+                            <div class="col-6">
+                                <label for="selectType" class="form-label">Tipo de Movimentação</label>
+                                <select class="form-select" id="selectType" (change)="onTypeChange($event)"
+                                    formControlName="type"
+                                    [class.is-invalid]="ProductForm.get('type')?.invalid && (submitted || ProductForm.get('type')?.touched || ProductForm.get('type')?.dirty)">
+                                    <option [value]="0">Entrada</option>
+                                    <option [value]="1">Saída</option>
+                                </select>
+                            </div>
+                            <div id="inputQuantityHelpBlock" class="form-text">
+                                Quantidade atual: {{product().quantity}} unidades.
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="inputMotive" class="form-label">Motivo</label>
+                                <input type="text" class="form-control" id="inputMotive" maxlength="50"
+                                    formControlName="motive"
+                                    [class.is-invalid]="ProductForm.get('motive')?.invalid && (submitted || ProductForm.get('motive')?.touched || ProductForm.get('motive')?.dirty)" />
+                                @if (f['motive']?.invalid && f['motive']?.touched && f['motive']?.dirty) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['motive']?.errors?.['required']) {
+                                    <div>Motivo é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            @if(editNewQuantity() != 0) {
+                            <div class="col-12 mt-2">
+                                <div class="card">
+                                    <div class="card-body" style="padding: 5px; background-color: #3d4452;">
+                                        <div class="text-secondary">
+                                            Novo saldo após a movimentação:
+                                        </div>
+                                        <div class="text-default">
+                                            {{editNewQuantity()}} unidades
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" type="submit"
+                                [class]="editQuantityType() === 0 ? 'btn btn-success' : 'btn btn-danger'">
+                                @if (editQuantityType() === 0) {
+                                <i class="bi bi-graph-up-arrow"></i>
+                                } @else {
+                                <i class="bi bi-graph-down-arrow"></i>
+                                }
+                                Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     @if(productBonds().length > 0) {
     @for (item of productBonds(); track $index) {
     <div class="col-lg-6 card border-light text-bg-dark mb-3">
@@ -170,8 +197,6 @@
                 <span class="badge rounded-pill custom-outline-mercado-livre">
                     Mercado Livre</span>
             </div>
-
-
         </div>
         <div class="card-body">
             <div class="row mb-3">
