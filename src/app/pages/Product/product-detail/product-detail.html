@@ -8,65 +8,21 @@
     <div class="col-lg-12 d-flex justify-content-between">
         <a routerLink="/product-list" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
-        <a class="btn btn-sm btn-outline-secondary mb-3" style="margin-top: 20px" data-bs-toggle="offcanvas"
+        <a class="btn btn-sm btn-outline-secondary mb-3" style="margin-top: 20px" (click)="getQuantityHistoric()" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasMovHistory" aria-controls="offcanvasMovHistory">
             <i class="bi bi-clock-history"></i> Histórico de movimentações </a>
 
     </div>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMovHistory"
-        aria-labelledby="offcanvasMovHistoryLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasMovHistoryLabel">
-                <i class="bi bi-box"></i>
-                Histórico de Movimentações
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            @for (item of mockMovementHistory; track $index) {
-            <div class="position-relative">
-                <div
-                    style="background-color: #2b303b; width: .125rem; top: 2rem; left: 11px; position: absolute; bottom: 0;">
-                </div>
-                <div class="d-flex gap-4">
-                    @if (item.formattedType === 'entrada') {
-                    <span class="text-success"><i class="bi bi-graph-up-arrow"></i></span>
-                    } @else {
-                    <span class="text-danger"><i class="bi bi-graph-down-arrow"></i></span>
-                    }
-                    <div style="flex: 1 1 0%;">
-                        <span>
-                            @if (item.type === 1) {
-                            <span class="badge rounded-pill custom-outline-green">
-                                +{{item.quantity}} un</span>
-                            } @else {
-                            <span class="badge rounded-pill custom-outline-red">
-                                -{{item.quantity}} un</span>
-                            }
-                            <span> {{item.reason}}</span>
-
-                            @if (item.saleId) {
-                            <span class="text-secondary ms-1" style="font-size: small;">#{{item.saleId}}</span>
-                            }
-                        </span>
-                        <div class="d-flex justify-content-between">
-                            <p class="text-secondary" style="font-size: small;">Saldo: {{item.balance}}</p>
-                            <p class="text-secondary" style="font-size: small;">
-                                {{item.formattedDate}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            }
-        </div>
-    </div>
+    
+    <app-movement-history 
+        [movementHistory]="mockMovementHistory" 
+        [isLoading]="isLoadingQuantityHistory()"
+        [productTitle]="product().title">
+    </app-movement-history>
     <div class="col-lg-12">
         <h4 class="text-default">{{product().title}}</h4>
-
         <div class="card border-light mb-3">
             <div class="card-body " style="padding-bottom: 0px;">
-                <!-- <form [formGroup]="ProductForm" (ngSubmit)="onSubmit()"> -->
                 <div class="form-group col-lg-3">
                     <label for="inputQuantity" class="form-label">Quantidade em estoque</label>
                     <div class="row g-2">
@@ -82,7 +38,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- </form> -->
                 <div class="row">
                     <div class="col-lg-3 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="soldQuantity"
@@ -144,13 +99,13 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-                                <label for="inputMotive" class="form-label">Motivo</label>
-                                <input type="text" class="form-control" id="inputMotive" maxlength="50"
-                                    formControlName="motive"
-                                    [class.is-invalid]="ProductForm.get('motive')?.invalid && (submitted || ProductForm.get('motive')?.touched || ProductForm.get('motive')?.dirty)" />
-                                @if (f['motive']?.invalid && f['motive']?.touched && f['motive']?.dirty) {
+                                <label for="inputReason" class="form-label">Motivo</label>
+                                <input type="text" class="form-control" id="inputReason" maxlength="50"
+                                    formControlName="reason"
+                                    [class.is-invalid]="ProductForm.get('reason')?.invalid && (submitted || ProductForm.get('reason')?.touched || ProductForm.get('reason')?.dirty)" />
+                                @if (f['reason']?.invalid && f['reason']?.touched && f['reason']?.dirty) {
                                 <div class="invalid-feedback d-block">
-                                    @if (f['motive']?.errors?.['required']) {
+                                    @if (f['reason']?.errors?.['required']) {
                                     <div>Motivo é obrigatório</div>
                                     }
                                 </div>
@@ -173,7 +128,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" type="submit"
+                            <button type="submit"
                                 [class]="editQuantityType() === 0 ? 'btn btn-success' : 'btn btn-danger'">
                                 @if (editQuantityType() === 0) {
                                 <i class="bi bi-graph-up-arrow"></i>
@@ -200,14 +155,6 @@
         </div>
         <div class="card-body">
             <div class="row mb-3">
-                <!-- <div class="col-lg-3 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlBondId" value="{{item.id}}">
-                    <label for="mlBondId">ID</label>
-                </div>
-                <div class="col-lg-9 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlSku" value="{{item.title}}">
-                    <label for="mlSku">Nome</label>
-                </div> -->
                 <div class="col-lg-6">
                     <label for="mlStatus">Status</label><br>
                     <span class="badge text-bg-{{item.statusClassColor}}"

@@ -4,17 +4,3 @@
     border-color: var(--mercado-livre-color);
     border-width: 1px;
 }
-
-.custom-outline-green{
-    color: var(--primary-green);
-    border-style: solid;
-    border-color: var(--primary-green);
-    border-width: 1px;
-}
-
-.custom-outline-red{
-    color: var(--primary-red);
-    border-style: solid;
-    border-color: var(--primary-red);
-    border-width: 1px;
-}

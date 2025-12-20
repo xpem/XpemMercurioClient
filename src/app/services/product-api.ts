@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { isExportDeclaration } from "typescript";
+
 import { Total } from "../models/total.model";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Product } from "../models/Product/product.model";
+import { ProductQuantityHistory } from "../models/Product/product-quantity-history.model";
 
 @Injectable({
     providedIn: "root",
@@ -26,7 +27,11 @@ export class ProductService {
         return this.http.get<Product>(`${this.apiUrl}/${id}`);
     }
 
-    public updateQuantity(id: number, quantity: number): Observable<void> {
-        return this.http.put<void>(`${this.apiUrl}/${id}/quantity/${quantity}`, {});
+    public updateQuantity(id: number, quantity: number, reason: string, type: number): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/${id}/quantity`, { quantityMoved: quantity, reason, type });
+    }
+
+    public getQuantityHistory(productId: number, page: number): Observable<ProductQuantityHistory[]> {
+        return this.http.get<ProductQuantityHistory[]>(`${this.apiUrl}/${productId}/quantity/historic?page=${page}`);
     }
 }

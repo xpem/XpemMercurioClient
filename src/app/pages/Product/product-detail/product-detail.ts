@@ -7,10 +7,12 @@ import { ToastService } from '../../../services/toast.service';
 import { Router, RouterLink } from '@angular/router';
 import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
 import { ProductBond } from '../../../models/Product/product-Bond.model';
+import { MovementHistoryComponent } from './components/movement-history/movement-history';
+import { ProductQuantityHistory } from '../../../models/Product/product-quantity-history.model';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, NgClass],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, NgClass, MovementHistoryComponent],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -23,15 +25,8 @@ export class ProductDetail implements OnInit {
   errorMessage: WritableSignal<string> = signal('');
   ProductForm!: FormGroup;
   productBonds: WritableSignal<ProductBond[]> = signal([]);
-  mockMovementHistory: MovementHistoryItem[] = [
-    { id: '1', type: 1, formattedType: 'entrada', quantity: 50, reason: 'Compra de fornecedor', date: '2024-01-15T10:30:00', formattedDate: '15/01/2024 10:30', balance: 50 },
-    { id: '2', type: 2, formattedType: 'saida', quantity: 2, reason: 'Venda', saleId: 'MLB-001', date: '2024-01-16T14:20:00', formattedDate: '16/01/2024 14:20', balance: 48 },
-    { id: '3', type: 2, formattedType: 'saida', quantity: 1, reason: 'Venda', saleId: 'MLB-002', date: '2024-01-17T09:15:00', formattedDate: '17/01/2024 09:15', balance: 47 },
-    { id: '4', type: 1, formattedType: 'entrada', quantity: 20, reason: 'Reposição de estoque', date: '2024-01-20T11:00:00', formattedDate: '20/01/2024 11:00', balance: 67 },
-    { id: '5', type: 2, formattedType: 'saida', quantity: 3, reason: 'Venda', saleId: 'MLB-003', date: '2024-01-22T16:45:00', formattedDate: '22/01/2024 16:45', balance: 64 },
-    { id: '6', type: 2, formattedType: 'saida', quantity: 1, reason: 'Venda', saleId: 'SHP-001', date: '2024-01-23T08:30:00', formattedDate: '23/01/2024 08:30', balance: 63 },
-    { id: '7', type: 2, formattedType: 'saida', quantity: 2, reason: 'Avaria/Perda', date: '2024-01-24T12:00:00', formattedDate: '24/01/2024 12:00', balance: 61 },
-  ];
+  isLoadingQuantityHistory: WritableSignal<boolean> = signal(true);
+  mockMovementHistory: ProductQuantityHistory[] = [];
   editQuantityType: WritableSignal<number> = signal(0); // 1 para entrada, 2 para saída
   editNewQuantity: WritableSignal<number> = signal(0);
 
@@ -45,7 +40,7 @@ export class ProductDetail implements OnInit {
     this.ProductForm = this.fb.group({
       quantity: ['', [Validators.required, Validators.min(0)]],
       type: [0, [Validators.required]],
-      motive: ['', [Validators.required]],
+      reason: ['', [Validators.required]],
     });
 
     this.isLoading.set(true);
@@ -108,6 +103,34 @@ export class ProductDetail implements OnInit {
     }
   }
 
+  getQuantityHistoric(): void {
+    this.isLoadingQuantityHistory.set(true);
+    const productId = this.product().id;
+    this.productService.getQuantityHistory(productId, 1).subscribe({
+      next: (response) => {
+
+        //caso o response type seja 0, definir o formattedType como 'entrada', se for 1, definir como 'saida'
+        //tratar a data para o formato dd/MM/yyyy HH:mm
+        for (let item of response) {
+          if (item.type === 0) {
+            item.formattedType = 'entrada';
+          } else if (item.type === 1) {
+            item.formattedType = 'saida';
+          }
+        }
+
+
+        console.log('Quantity history fetched successfully:', response);
+        this.mockMovementHistory = response;
+        this.isLoadingQuantityHistory.set(false);
+      },
+      error: (error) => {
+        console.error('Error fetching quantity history:', error);
+        this.isLoadingQuantityHistory.set(false);
+      }
+    });
+  }
+
   get f() { return this.ProductForm.controls; }
 
 
@@ -135,20 +158,28 @@ export class ProductDetail implements OnInit {
 
       return;
     }
-    const updatedProduct: Product = {
-      ...this.product(),
-      quantity: this.ProductForm.value.quantity,
-    };
 
-    this.productService.updateQuantity(updatedProduct.id, updatedProduct.quantity).subscribe({
+
+    this.productService.updateQuantity(this.product().id, this.ProductForm.value.quantity, this.ProductForm.value.reason, this.editQuantityType()).subscribe({
       next: () => {
         this.toastService.showSuccess('Quantidade atualizada com sucesso!');
 
+        const updatedProduct: Product = {
+          ...this.product(),
+          quantity: this.editNewQuantity(),
+        };
+
         this.product.set(updatedProduct);
+
+        // Reset form state
+        this.submitted = false;
+        this.ProductForm.reset();
+        this.editNewQuantity.set(0);
+
       },
       error: (error) => {
         console.error('Error updating product:', error);
-        this.errorMessage.set('Erro ao atualizar a quantidade. Por favor, tente novamente.');
+        this.toastService.showError('Erro ao atualizar a quantidade. Por favor, tente novamente.');
       }
     });
   }
