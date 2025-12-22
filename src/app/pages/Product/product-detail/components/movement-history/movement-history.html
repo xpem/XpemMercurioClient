@@ -1,4 +1,5 @@
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMovHistory" aria-labelledby="offcanvasMovHistoryLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMovHistory" data-bs-scroll="true"
+    aria-labelledby="offcanvasMovHistoryLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasMovHistoryLabel">
             <i class="bi bi-box"></i>
@@ -7,13 +8,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        @if(isLoading) {
-        <div class="spinner-grow" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+
+        @if (productQuantityHistory.length === 0) {
+        <p class="text-center text-secondary">Nenhuma movimentação encontrada.</p>
         }
         @else {
-        @for (item of movementHistory; track $index) {
+        @for (item of productQuantityHistory; track $index) {
         <div class="position-relative">
             <div
                 style="background-color: #2b303b; width: .125rem; top: 2rem; left: 11px; position: absolute; bottom: 0;">
@@ -49,6 +49,18 @@
             </div>
         </div>
         }
+        @if(isLoading) {
+        <div class="spinner-grow" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
         }
+       <!-- @else if (hasMore) { -->
+        <div class="text-center mt-3">
+            <button class="btn btn-sm btn-outline-primary" (click)="movementHistoryLoadMore()"  [disabled]="!hasMore">
+                Carregar mais
+            </button>
+        </div>
+        }
+        <!-- } -->
     </div>
 </div>

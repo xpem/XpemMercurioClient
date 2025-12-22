@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, WritableSignal } from '@angular/core';
 import { ProductQuantityHistory } from '../../../../../models/Product/product-quantity-history.model';
 
 @Component({
@@ -8,7 +8,9 @@ import { ProductQuantityHistory } from '../../../../../models/Product/product-qu
   styleUrls: ['./movement-history.css'],
 })
 export class MovementHistoryComponent {
-  @Input() movementHistory: ProductQuantityHistory[] = [];
+  @Input() productQuantityHistory:  ProductQuantityHistory[] = [];;
   @Input() isLoading: boolean = true;
   @Input() productTitle: string = '';
+  @Input() hasMore: boolean = false;
+  @Input() movementHistoryLoadMore!: () => void;
 }

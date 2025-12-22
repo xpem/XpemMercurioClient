@@ -26,9 +26,11 @@ export class ProductDetail implements OnInit {
   ProductForm!: FormGroup;
   productBonds: WritableSignal<ProductBond[]> = signal([]);
   isLoadingQuantityHistory: WritableSignal<boolean> = signal(true);
-  mockMovementHistory: ProductQuantityHistory[] = [];
+  productQuantityHistory: WritableSignal<ProductQuantityHistory[]> = signal([]);
   editQuantityType: WritableSignal<number> = signal(0); // 1 para entrada, 2 para saída
   editNewQuantity: WritableSignal<number> = signal(0);
+  hasMoreQuantityHistory: WritableSignal<boolean> = signal(false);
+  currentPageProductQuantityHistory: number = 1;
 
   constructor(private productService: ProductService,
     private router: Router, private fb: FormBuilder,
@@ -90,7 +92,6 @@ export class ProductDetail implements OnInit {
             }
           });
 
-
           this.isLoading.set(false);
 
         },
@@ -105,8 +106,14 @@ export class ProductDetail implements OnInit {
 
   getQuantityHistoric(): void {
     this.isLoadingQuantityHistory.set(true);
-    const productId = this.product().id;
-    this.productService.getQuantityHistory(productId, 1).subscribe({
+    this.productQuantityHistory.set([]);
+    this.currentPageProductQuantityHistory = 1;
+    this.loadMoreQuantityHistory();
+  }
+
+  loadMoreQuantityHistory(): void {
+    const pageSize = 15;
+    this.productService.getQuantityHistory(this.product().id, this.currentPageProductQuantityHistory).subscribe({
       next: (response) => {
 
         //caso o response type seja 0, definir o formattedType como 'entrada', se for 1, definir como 'saida'
@@ -119,10 +126,16 @@ export class ProductDetail implements OnInit {
           }
         }
 
-
         console.log('Quantity history fetched successfully:', response);
-        this.mockMovementHistory = response;
+        //add response to movementHistory array
+        this.productQuantityHistory.set([...this.productQuantityHistory(), ...response]);
         this.isLoadingQuantityHistory.set(false);
+
+        if (response.length === pageSize)
+          this.hasMoreQuantityHistory.set(true);
+        else
+          this.hasMoreQuantityHistory.set(false);
+
       },
       error: (error) => {
         console.error('Error fetching quantity history:', error);
@@ -133,6 +146,11 @@ export class ProductDetail implements OnInit {
 
   get f() { return this.ProductForm.controls; }
 
+  movementHistoryLoadMore = (): void => {
+    this.isLoadingQuantityHistory.set(true);
+    this.currentPageProductQuantityHistory++;
+    this.loadMoreQuantityHistory();
+  }
 
   onQuantityInput(): void {
     if (this.ProductForm.value.quantity === undefined || this.ProductForm.value.quantity == 0) { return; }
@@ -154,11 +172,10 @@ export class ProductDetail implements OnInit {
     this.ProductForm.markAllAsTouched();
     this.ProductForm.updateValueAndValidity();
     this.errorMessage.set('');
-    if (this.ProductForm.invalid) {
 
+    if (this.ProductForm.invalid) {
       return;
     }
-
 
     this.productService.updateQuantity(this.product().id, this.ProductForm.value.quantity, this.ProductForm.value.reason, this.editQuantityType()).subscribe({
       next: () => {
