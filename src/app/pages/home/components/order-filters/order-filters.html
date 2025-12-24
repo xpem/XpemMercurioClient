@@ -16,9 +16,10 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Limpar todos</button>
-                    <button type="button" class="btn btn-success" (click)="submit.emit()" data-bs-dismiss="modal">Aplicar
-                        filtros</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onClearClick()"><i
+                            class="bi bi-x-circle"></i> Limpar</button>
+                    <button type="button" class="btn btn-success" (click)="submit.emit()" data-bs-dismiss="modal"><i
+                            class="bi bi-search"></i> Aplicar</button>
                 </div>
             </form>
         </div>

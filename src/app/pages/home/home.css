@@ -39,3 +39,11 @@
     color: white;
     border-radius: 30rem;
 }
+
+.rounded-badge-secondary {
+    background-color: #343a46;
+}
+
+.rounded-badge-danger:hover {
+    color: white !important;
+}

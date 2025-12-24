@@ -29,6 +29,8 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
+  orderFilterExternalId: WritableSignal<string> = signal('');
+  isActiveFilter: WritableSignal<boolean> = signal(false);
   orderFilterForm: FormGroup;
   pages = computed(() => {
     const tp = this.totalPages();
@@ -51,7 +53,6 @@ export class Home implements OnInit {
     });
   }
 
-
   ngOnInit(): void {
     this.isLoading.set(true);
     console.log('Home component initialized');
@@ -61,7 +62,7 @@ export class Home implements OnInit {
         console.log('User profile:', response);
         console.log('User mercadoLivreCredentialid:', response.mercadoLivreCredentialid);
 
-        var _userProfile = {} as UserProfile;
+        const _userProfile = {} as UserProfile;
 
         if (response.mercadoLivreCredentialid) {
           _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialid;
@@ -69,20 +70,7 @@ export class Home implements OnInit {
 
         this.userProfile.set(_userProfile);
 
-        this.orderService.getTotalOrders().subscribe({
-          next: (response) => {
-            console.log('Total orders:', response);
-            const totalOrders = response.totalItems;
-            const totalPages = response.totalPages;
-
-            this.totalOrders.set(totalOrders);
-            this.totalPages.set(totalPages);
-
-            this.loadOrders(1);
-
-            this.isLoading.set(false);
-          }
-        });
+        this.initLoadOrders();
 
         this.shipmentService.getPendingLabelsPrintCount().subscribe({
           next: (response) => {
@@ -102,11 +90,22 @@ export class Home implements OnInit {
     });
   }
 
-  onOrderFormSubmit(): void {
-    console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
+  initLoadOrders() {
+    this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter()).subscribe({
+      next: (response) => {
+        console.log('Total orders:', response);
+        const totalOrders = response.totalItems;
+        const totalPages = response.totalPages;
 
+        this.totalOrders.set(totalOrders);
+        this.totalPages.set(totalPages);
+
+        this.loadPaginatedOrders(1);
+
+        this.isLoading.set(false);
+      }
+    });
   }
-
 
   goToOrderDetail(id: any) {
     //navegar para a pagina order passando o externalId como parametro
@@ -119,20 +118,41 @@ export class Home implements OnInit {
     window.location.href = `/shipment-pending-labels-list`;
   }
 
-  cleanFilters() {
+  clearFilters(): void {
+
+    if (this.isActiveFilter() === true) {
+      //reload total orders and total pages without filter
+      this.initLoadOrders();
+    }
+
     this.orderFilter.set({});
-    this.loadOrders(1);
+    this.isActiveFilter.set(false);
+    this.orderFilterExternalId.set('');
+    this.orderFilterForm.reset();
   }
 
+  onOrderFiltersFormSubmit(): void {
+
+    console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
+
+    this.isActiveFilter.set(true);
+    this.orderFilterExternalId.set(`Id da venda: #${this.orderFilterForm.value.orderExternalId}`);
+    this.orderFilter.set({
+      orderExternalId: this.orderFilterForm.value.orderExternalId,
+      //map other form values to the filter object
+    });
+
+    this.initLoadOrders();
+  }
 
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages()) return;
-    this.loadOrders(page);
+    this.loadPaginatedOrders(page);
   }
 
-  loadOrders(page: number) {
+  loadPaginatedOrders(page: number) {
     this.isLoading.set(true);
-    this.orderService.get(page).subscribe({
+    this.orderService.get(page, this.orderFilter(), this.isActiveFilter()).subscribe({
       next: (response) => {
         console.log(`Orders for page ${page} fetched successfully:`, response);
         this.orders.set(response);

@@ -9,5 +9,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class OrderFilters {
   @Input() FilterFormGroup!: FormGroup;
+  @Output() clearFilters = new EventEmitter<void>();
   @Output() submit = new EventEmitter<void>();
+
+  onClearClick(): void {
+    console.log('Clear button clicked');
+    this.clearFilters.emit();
+  }
 }
