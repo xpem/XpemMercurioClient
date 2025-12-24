@@ -7,33 +7,18 @@ import { OrderService } from '../../services/order-api';
 import { Order } from '../../models/Order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { ShipmentService } from '../../services/shipment-api';
+import { OrderFilter } from '../../models/Order/order-filter.model';
+import { OrderFilters } from "./components/order-filters/order-filters";
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, OrderFilters],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
 
-  goToOrderDetail(id: any) {
-    //navegar para a pagina order passando o externalId como parametro
-    window.location.href = `/order?id=${id}`;
-
-  }
-
-  goToShipmentPendingLabelsList() {
-    //navegar para a pagina shipment-pending-labels-list
-    window.location.href = `/shipment-pending-labels-list`;
-  }
-
-  constructor(
-    private toastService: ToastService,
-    private shipmentService: ShipmentService,
-    private mercadoLivreService: MercadoLivreService,
-    private orderService: OrderService,
-    private userService: UserService
-  ) { }
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   orders: WritableSignal<Order[]> = signal([]);
   isLoading: WritableSignal<boolean> = signal(true);
@@ -42,13 +27,30 @@ export class Home implements OnInit {
   totalPages: WritableSignal<number> = signal(1);
   totalOrders: WritableSignal<number> = signal(0);
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
+  orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
+  orderFilterForm: FormGroup;
   pages = computed(() => {
     const tp = this.totalPages();
     const arr: number[] = [];
     for (let i = 1; i <= tp; i++) arr.push(i);
     return arr;
   });
+
+  constructor(
+    private toastService: ToastService,
+    private shipmentService: ShipmentService,
+    private mercadoLivreService: MercadoLivreService,
+    private orderService: OrderService,
+    private userService: UserService,
+    private fb: FormBuilder
+  ) {
+    this.orderFilterForm = this.fb.group({
+      orderExternalId: [''],
+      // Define your form controls and their initial values here
+    });
+  }
+
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -99,6 +101,29 @@ export class Home implements OnInit {
       }
     });
   }
+
+  onOrderFormSubmit(): void {
+    console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
+
+  }
+
+
+  goToOrderDetail(id: any) {
+    //navegar para a pagina order passando o externalId como parametro
+    window.location.href = `/order?id=${id}`;
+
+  }
+
+  goToShipmentPendingLabelsList() {
+    //navegar para a pagina shipment-pending-labels-list
+    window.location.href = `/shipment-pending-labels-list`;
+  }
+
+  cleanFilters() {
+    this.orderFilter.set({});
+    this.loadOrders(1);
+  }
+
 
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages()) return;
