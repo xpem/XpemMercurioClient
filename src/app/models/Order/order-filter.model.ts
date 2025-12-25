@@ -24,7 +24,5 @@ export interface OrderFilter {
     createdAfter?: Date;
     createdBefore?: Date;
     productExternalId?: string;
-    productSKU?: string;
     productName?: string;
-    marketplace?: string;
 }

@@ -58,16 +58,31 @@
         </div>
         }
     </div>
-    <app-order-filters [FilterFormGroup]="orderFilterForm" (clearFilters)="clearFilters()" (submit)="onOrderFiltersFormSubmit()"></app-order-filters>
+    <app-order-filters [FilterFormGroup]="orderFilterForm" (clearFilters)="clearFilters()"
+        (submit)="onOrderFiltersFormSubmit()"></app-order-filters>
     @if(isActiveFilter()){
-    <div class="col-lg-12 mb-3">Filtros: <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0"> {{
-            orderFilterExternalId() }}</p>
+    <div class="col-lg-12 mb-3">Filtros:
+        @if(orderFilterExternalId() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterExternalId() }}</p>
+        }
+        @if(orderFilterCreatedAfter() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedAfter() }}</p>
+        }
+        @if(orderFilterCreatedBefore() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedBefore() }}</p>
+        }
+        @if(orderFilterProductId() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductId() }}</p>
+        }
+        @if(orderFilterProductName() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductName() }}</p>
+        }
         <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
             (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
     </div>
     }
     <div class="col-lg-12 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @if(orders().length === 0) {
+        @if(!isLoading() && orders().length === 0) {
         <div class="col">
             <div class="alert alert-info" role="alert">
                 Nenhuma venda encontrada.

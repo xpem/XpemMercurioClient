@@ -40,10 +40,15 @@
             Comprador
         </div>
         <div class="col-lg-12 row">
+            <div class="col-lg-2 form-floating">
+                <input type="text" readonly class="form-control-plaintext" id="orderBuyerId"
+                    value="#{{order().buyer?.externalId}}">
+                <label for="orderBuyerId">Id</label>
+            </div>
             <div class="col-lg-6 form-floating mb-3">
-                <input type="text" readonly class="form-control-plaintext" id="marketplace"
+                <input type="text" readonly class="form-control-plaintext" id="orderBuyerName"
                     value="{{order().buyer?.firstName}} {{order().buyer?.lastName}}">
-                <label for="marketplace">#{{order().buyer?.externalId}}</label>
+                <label for="orderBuyerName">Nome</label>
             </div>
         </div>
         <div class="h6 pb-2 mb-1 text-secondary  border-bottom border-secondary ">
@@ -51,9 +56,14 @@
         </div>
         @for(product of order().products; track $index) {
         <div class="col-lg-12 row">
+            <div class="col-lg-8 form-floating">
+                <input type="text" readonly class="form-control-plaintext" id="productId"
+                    value="#{{product.externalId}}">
+                <label for="productId">Id</label>
+            </div>
             <div class="col-lg-8 form-floating mb-3">
                 <input type="text" readonly class="form-control-plaintext" id="productTitle" value="{{product.title}}">
-                <label for="productTitle">#{{product.externalId}}</label>
+                <label for="productTitle">Título</label>
             </div>
             <div class="col-lg-2 form-floating mb-3">
                 <input type="text" readonly class="form-control-plaintext" id="productQuantity"

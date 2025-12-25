@@ -9,7 +9,7 @@ import { CurrencyPipe } from '@angular/common';
 import { ShipmentService } from '../../services/shipment-api';
 import { OrderFilter } from '../../models/Order/order-filter.model';
 import { OrderFilters } from "./components/order-filters/order-filters";
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +18,24 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
+
+  // Validador customizado que compara datas
+  private dateRangeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control as FormGroup;
+      if (!parent.get) return null;
+
+      const startDate = parent.get('orderDateStart')?.value;
+      const endDate = parent.get('orderDateEnd')?.value;
+
+      // Se ambos os campos estão preenchidos, valida se startDate < endDate
+      if (startDate && endDate && startDate > endDate) {
+        return { dateRangeInvalid: true };
+      }
+
+      return null;
+    };
+  }
 
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   orders: WritableSignal<Order[]> = signal([]);
@@ -30,6 +48,10 @@ export class Home implements OnInit {
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
   orderFilterExternalId: WritableSignal<string> = signal('');
+  orderFilterCreatedAfter: WritableSignal<string> = signal('');
+  orderFilterCreatedBefore: WritableSignal<string> = signal('');
+  orderFilterProductId: WritableSignal<string> = signal('');
+  orderFilterProductName: WritableSignal<string> = signal('');
   isActiveFilter: WritableSignal<boolean> = signal(false);
   orderFilterForm: FormGroup;
   pages = computed(() => {
@@ -38,6 +60,8 @@ export class Home implements OnInit {
     for (let i = 1; i <= tp; i++) arr.push(i);
     return arr;
   });
+  //por enquantro fixo como 1 (Mercado Livre)
+  marketplace: number = 1;
 
   constructor(
     private toastService: ToastService,
@@ -47,10 +71,16 @@ export class Home implements OnInit {
     private userService: UserService,
     private fb: FormBuilder
   ) {
-    this.orderFilterForm = this.fb.group({
-      orderExternalId: [''],
-      // Define your form controls and their initial values here
-    });
+    this.orderFilterForm = this.fb.group(
+      {
+        orderExternalId: [''],
+        orderDateStart: [null],
+        orderDateEnd: [null],
+        orderProductId: [''],
+        orderProductName: [''],
+      },
+      { validators: this.dateRangeValidator() }
+    );
   }
 
   ngOnInit(): void {
@@ -91,7 +121,7 @@ export class Home implements OnInit {
   }
 
   initLoadOrders() {
-    this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter()).subscribe({
+    this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).subscribe({
       next: (response) => {
         console.log('Total orders:', response);
         const totalOrders = response.totalItems;
@@ -128,6 +158,10 @@ export class Home implements OnInit {
     this.orderFilter.set({});
     this.isActiveFilter.set(false);
     this.orderFilterExternalId.set('');
+    this.orderFilterCreatedAfter.set('');
+    this.orderFilterCreatedBefore.set('');
+    this.orderFilterProductId.set('');
+    this.orderFilterProductName.set('');
     this.orderFilterForm.reset();
   }
 
@@ -135,10 +169,35 @@ export class Home implements OnInit {
 
     console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
 
+    
+    // Validar se a data inicial é menor que a data final
+    if (this.orderFilterForm.hasError('dateRangeInvalid')) {
+      this.toastService.showError('A data inicial não pode ser maior que a data final!', 5000);
+      return;
+    }
+
     this.isActiveFilter.set(true);
-    this.orderFilterExternalId.set(`Id da venda: #${this.orderFilterForm.value.orderExternalId}`);
+    if (this.orderFilterForm.value.orderExternalId !== null && this.orderFilterForm.value.orderExternalId !== '')
+      this.orderFilterExternalId.set(`Id da venda: #${this.orderFilterForm.value.orderExternalId}`);
+
+    if (this.orderFilterForm.value.orderDateStart !== null)
+      this.orderFilterCreatedAfter.set(`De: ${this.formatDate(this.orderFilterForm.value.orderDateStart)}`);
+
+    if (this.orderFilterForm.value.orderDateEnd !== null)
+      this.orderFilterCreatedBefore.set(`Até: ${this.formatDate(this.orderFilterForm.value.orderDateEnd)}`);
+
+    if (this.orderFilterForm.value.orderProductId !== null && this.orderFilterForm.value.orderProductId !== '')
+      this.orderFilterProductId.set(`Id do produto: #${this.orderFilterForm.value.orderProductId}`);
+
+    if (this.orderFilterForm.value.orderProductName !== null && this.orderFilterForm.value.orderProductName !== '')
+      this.orderFilterProductName.set(`Nome do produto: ${this.orderFilterForm.value.orderProductName}`);
+
     this.orderFilter.set({
       orderExternalId: this.orderFilterForm.value.orderExternalId,
+      createdAfter: this.orderFilterForm.value.orderDateStart,
+      createdBefore: this.orderFilterForm.value.orderDateEnd,
+      productExternalId: this.orderFilterForm.value.orderProductId,
+      productName: this.orderFilterForm.value.orderProductName,
       //map other form values to the filter object
     });
 
@@ -152,7 +211,7 @@ export class Home implements OnInit {
 
   loadPaginatedOrders(page: number) {
     this.isLoading.set(true);
-    this.orderService.get(page, this.orderFilter(), this.isActiveFilter()).subscribe({
+    this.orderService.get(page, this.orderFilter(), this.isActiveFilter(), this.marketplace).subscribe({
       next: (response) => {
         console.log(`Orders for page ${page} fetched successfully:`, response);
         this.orders.set(response);
@@ -168,6 +227,12 @@ export class Home implements OnInit {
 
   nextPage() {
     this.goToPage(this.currentPage() + 1);
+  }
+
+  private formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
   }
 
   conectarMercadoLivre() {

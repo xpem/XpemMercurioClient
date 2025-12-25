@@ -17,6 +17,7 @@ export class OrderDetail implements OnInit {
   order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
 
+
   constructor(private orderService: OrderService,
     private mercadoLivreService: MercadoLivreService, private toastService: ToastService, private fb: FormBuilder) { }
 
@@ -46,6 +47,7 @@ export class OrderDetail implements OnInit {
 
     var marketPlace = this.order().marketPlace;
     console.log('MarketPlace:', marketPlace);
+
     if (this.order().marketPlace == "1" /*Mercado Livre*/) {
 
       this.mercadoLivreService.printShipmentLabel(this.order().shipmentExternalId!).subscribe({
