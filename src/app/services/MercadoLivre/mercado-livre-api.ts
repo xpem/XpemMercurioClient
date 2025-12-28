@@ -21,6 +21,10 @@ export class MercadoLivreService {
         return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' });
     }
 
+    public InactivateCredential(credentialid: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Auth/Credential/${credentialid}/Inactivate`, { responseType: 'text' });
+    }
+
     public importSingleOrder(orderId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Order/Import/${orderId}`);
     }

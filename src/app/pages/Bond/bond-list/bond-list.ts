@@ -19,6 +19,7 @@ export class BondList implements OnInit {
   SingleOrder: WritableSignal<Order | null> = signal(null);
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
+  isLoading: WritableSignal<boolean> = signal(true);
   todayDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -27,9 +28,14 @@ export class BondList implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  constructor(private userService: UserService, private MercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
+  constructor(private userService: UserService, private mercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
 
   ngOnInit(): void {
+    this.getUserProfile()
+  }
+
+  getUserProfile() {
+    this.isLoading.set(true);
     this.userService.getUserProfile().subscribe({
       next: (response) => {
         console.log('User profile:', response);
@@ -41,6 +47,7 @@ export class BondList implements OnInit {
         }
 
         this.userProfile.set(_userProfile);
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
@@ -55,7 +62,7 @@ export class BondList implements OnInit {
     if (orderId) {
 
       console.log('Importing order with ID:', orderId);
-      this.MercadoLivreService.importSingleOrder(orderId).subscribe({
+      this.mercadoLivreService.importSingleOrder(orderId).subscribe({
         next: (response) => {
 
           const order: Order = response;
@@ -86,19 +93,18 @@ export class BondList implements OnInit {
     this.errorMessage.set('');
     if (startDate && endDate) {
 
-      if(startDate > endDate){
+      if (startDate > endDate) {
         this.errorMessage.set('A data de início não pode ser maior que a data de fim.');
         return;
       }
 
       console.log('Importing orders from', startDate, 'to', endDate);
-      this.MercadoLivreService.importOrdersByPeriod(startDate, endDate).subscribe({
+      this.mercadoLivreService.importOrdersByPeriod(startDate, endDate).subscribe({
         next: (response) => {
           console.log('Orders imported successfully:', response);
           this.toastService.showInfo('Importação de pedidos em processamento!', 5000);
           this.hideModal('ImportOrdersByPeriodModal');
-          //redirecionar para a home
-          // window.location.href = `/home`;
+          this.getUserProfile()
         },
         error: (error) => {
           console.error('Error importing orders by period:', error);
@@ -117,7 +123,7 @@ export class BondList implements OnInit {
     if (productId) {
 
       console.log('Importing product with ID:', productId);
-      this.MercadoLivreService.importSingleProduct(productId).subscribe({
+      this.mercadoLivreService.importSingleProduct(productId).subscribe({
         next: (response) => {
 
           const product: Product = response;
@@ -139,6 +145,42 @@ export class BondList implements OnInit {
         }
       });
     }
+  }
+
+  conectarMercadoLivre() {
+    this.mercadoLivreService.getAuthUri().subscribe({
+      next: (response) => {
+        console.log('url de autenticação do Mercado Livre:', response);
+        // a response é uma URL de redirecionamento
+        window.location.href = response;
+      },
+      error: (error) => {
+        console.error('Erro ao conectar com o Mercado Livre:', error);
+      }
+    });
+  }
+
+  InactivateCredential(credentialId: string | undefined) {
+
+    if (!credentialId) {
+      console.error('Credential ID is undefined');
+      this.toastService.showError('ID da credencial indefinido!', 5000);
+      return;
+    }
+
+    this.mercadoLivreService.InactivateCredential(credentialId).subscribe({
+      next: (response) => {
+        console.log('Credential inactivated successfully:', response);
+        this.toastService.showSuccess('Credencial desativada com sucesso!', 5000);
+        //dismiss modal
+        this.hideModal('unbondModal');
+        //reload page after 2 seconds
+      },
+      error: (error) => {
+        console.error('Error inactivating credential:', error);
+        this.toastService.showError('Erro ao desativar credencial!', 5000);
+      }
+    });
   }
 
   goToOrderDetail(id: any) {

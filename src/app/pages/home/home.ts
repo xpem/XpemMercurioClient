@@ -4,7 +4,7 @@ import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-a
 import { UserService } from '../../services/user-api';
 import { UserProfile } from '../../models/user-profile.model';
 import { OrderService } from '../../services/order-api';
-import { Order } from '../../models/Order/order.model';
+import { Order, OrderStatus } from '../../models/Order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { ShipmentService } from '../../services/shipment-api';
 import { OrderFilter } from '../../models/Order/order-filter.model';
@@ -47,11 +47,15 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
+
+  //filters
   orderFilterExternalId: WritableSignal<string> = signal('');
   orderFilterCreatedAfter: WritableSignal<string> = signal('');
   orderFilterCreatedBefore: WritableSignal<string> = signal('');
   orderFilterProductId: WritableSignal<string> = signal('');
   orderFilterProductName: WritableSignal<string> = signal('');
+  orderFilterStatus: WritableSignal<string> = signal('');
+
   isActiveFilter: WritableSignal<boolean> = signal(false);
   orderFilterForm: FormGroup;
   pages = computed(() => {
@@ -78,6 +82,7 @@ export class Home implements OnInit {
         orderDateEnd: [null],
         orderProductId: [''],
         orderProductName: [''],
+        orderStatus: [[]],
       },
       { validators: this.dateRangeValidator() }
     );
@@ -90,12 +95,12 @@ export class Home implements OnInit {
     this.userService.getUserProfile().subscribe({
       next: (response) => {
         console.log('User profile:', response);
-        console.log('User mercadoLivreCredentialid:', response.mercadoLivreCredentialid);
+        console.log('User mercadoLivreCredentialId:', response.mercadoLivreCredentialId);
 
         const _userProfile = {} as UserProfile;
 
-        if (response.mercadoLivreCredentialid) {
-          _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialid;
+        if (response.mercadoLivreCredentialId) {
+          _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialId;
         }
 
         this.userProfile.set(_userProfile);
@@ -121,6 +126,7 @@ export class Home implements OnInit {
   }
 
   initLoadOrders() {
+    this.isLoading.set(true);
     this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).subscribe({
       next: (response) => {
         console.log('Total orders:', response);
@@ -132,7 +138,7 @@ export class Home implements OnInit {
 
         this.loadPaginatedOrders(1);
 
-        this.isLoading.set(false);
+
       }
     });
   }
@@ -162,6 +168,8 @@ export class Home implements OnInit {
     this.orderFilterCreatedBefore.set('');
     this.orderFilterProductId.set('');
     this.orderFilterProductName.set('');
+    this.orderFilterStatus.set('');
+    this.orderFilterForm.value.orderStatus = [] as number[];
     this.orderFilterForm.reset();
   }
 
@@ -169,7 +177,6 @@ export class Home implements OnInit {
 
     console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
 
-    
     // Validar se a data inicial é menor que a data final
     if (this.orderFilterForm.hasError('dateRangeInvalid')) {
       this.toastService.showError('A data inicial não pode ser maior que a data final!', 5000);
@@ -177,6 +184,7 @@ export class Home implements OnInit {
     }
 
     this.isActiveFilter.set(true);
+
     if (this.orderFilterForm.value.orderExternalId !== null && this.orderFilterForm.value.orderExternalId !== '')
       this.orderFilterExternalId.set(`Id da venda: #${this.orderFilterForm.value.orderExternalId}`);
 
@@ -192,13 +200,18 @@ export class Home implements OnInit {
     if (this.orderFilterForm.value.orderProductName !== null && this.orderFilterForm.value.orderProductName !== '')
       this.orderFilterProductName.set(`Nome do produto: ${this.orderFilterForm.value.orderProductName}`);
 
+    if (this.orderFilterForm.value.orderStatus !== null && this.orderFilterForm.value.orderStatus.length > 0) {
+      let statusesText = this.orderFilterForm.value.orderStatus.map((status: OrderStatus) => OrderStatus[status]).join(', ');
+      this.orderFilterStatus.set(`Situações: ${statusesText}`);
+    }
+
     this.orderFilter.set({
       orderExternalId: this.orderFilterForm.value.orderExternalId,
       createdAfter: this.orderFilterForm.value.orderDateStart,
       createdBefore: this.orderFilterForm.value.orderDateEnd,
       productExternalId: this.orderFilterForm.value.orderProductId,
       productName: this.orderFilterForm.value.orderProductName,
-      //map other form values to the filter object
+      orderStatus: this.orderFilterForm.value.orderStatus,
     });
 
     this.initLoadOrders();

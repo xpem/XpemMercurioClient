@@ -8,12 +8,18 @@ export interface Order {
     externalLastUpdated: string;
     totalAmount: number;
     paidAmount: number;
-    status: string;
+    status: OrderStatus;
     buyer?: OrderBuyer;
     products: OrderProduct[];
     printStatus: OrderShipmentLabelPrintStatus;
     printStatusText: string;
     shipmentExternalId?: string;
+}
+
+export enum OrderStatus {
+    Confirmada = 1,
+    Paga = 2,
+    Cancelada = 5
 }
 
 export interface OrderBuyer {

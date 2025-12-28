@@ -15,7 +15,31 @@
                             <input type="text" class="form-control form-control-sm" id="orderExternalId"
                                 formControlName="orderExternalId" placeholder="Digite o ID da Venda">
                         </div>
+                        <div class="col-lg-6">
+                            <label for="orderStatus" class="form-label fw-bold">Status do Pedido</label>
+                            <div class="col-lg-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1"
+                                        [checked]="FilterFormGroup.value.orderStatus?.includes(1)"
+                                        (change)="setCheckboxOrderStatusValue($event, 1)">
+                                    <label class="form-check-label" for="inlineCheckbox1">Confirmada</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="2"
+                                        [checked]="FilterFormGroup.value.orderStatus?.includes(2)"
+                                        (change)="setCheckboxOrderStatusValue($event, 2)">
+                                    <label class="form-check-label" for="inlineCheckbox2">Paga</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="5"
+                                        [checked]="FilterFormGroup.value.orderStatus?.includes(5)"
+                                        (change)="setCheckboxOrderStatusValue($event, 5)">
+                                    <label class="form-check-label" for="inlineCheckbox3">Cancelada</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <!-- filtros de data inicial e data final -->
                     <div class="row">
                         <div class="mb-3 col-md-6">
@@ -38,6 +62,19 @@
                         </div>
                         }
                     </div>
+                    <!-- <div class="row"> -->
+                    <!-- <div class="mb-3 col-lg-12">
+                            <label for="orderStatus" class="form-label fw-bold">Status do Pedido</label>
+                            <select multiple class="form-select form-select-sm" id="orderStatus"
+                                formControlName="orderStatus">
+                                <option [ngValue]="1" >Confirmada</option>
+                                <option [ngValue]="2" >Paga</option>
+                                <option [ngValue]="5" >Cancelada</option>                                
+                            </select>
+                            <div class="form-text">Segure a tecla Ctrl (Windows) ou Command (Mac) para selecionar múltiplos
+                                status.</div>
+                        </div> -->
+
                     <div class="row">
                         <div class="mb-3 col-lg-4">
                             <label for="orderProductId" class="form-label fw-bold">ID do produto</label>

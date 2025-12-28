@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { OrderStatus } from '../../../../models/Order/order.model';
 
 @Component({
   selector: 'app-order-filters',
@@ -15,5 +16,15 @@ export class OrderFilters {
   onClearClick(): void {
     console.log('Clear button clicked');
     this.clearFilters.emit();
+  }
+
+  setCheckboxOrderStatusValue(event: Event, statusValue: OrderStatus): void {
+    const status = (this.FilterFormGroup.value.orderStatus as number[]) ?? [];
+    const target = event.target as HTMLInputElement;
+    if (target.checked) {
+      this.FilterFormGroup.value.orderStatus = [...status, statusValue];
+    } else {
+      this.FilterFormGroup.value.orderStatus = status.filter(s => s !== statusValue);
+    }
   }
 }

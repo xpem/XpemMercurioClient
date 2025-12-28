@@ -8,6 +8,7 @@
     --primary-red-dark: #dc2626;
 
     --mercado-livre-color: #ffe600;
+    --shopee-color: #ee4e2e;
 
     /* Backgrounds */
     --bg-dark: #1a1d23;
@@ -113,4 +114,8 @@ body {
 
 .card-custom:hover .card-text {
     color: var(--text-light);
+}
+
+.background-custom {
+    background-color: #272c35;
 }
