@@ -7,21 +7,32 @@
     <div class="content p-4">
         @if (authService.isAuthenticated()) {
         <div class="d-flex align-items-center">
-            <button class="btn btn-outline-light  me-3 mb-2" type="button" data-bs-toggle="offcanvas"
+            <button class="btn btn-outline-primary  me-3 mb-2" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
                 <i class="bi bi-layout-sidebar"></i>
             </button>
             <h5>Xpem Mercúrio</h5>
 
             <!-- notificações -->
-            <div class="ms-auto">
-                <button type="button" #notificationPopover class="btn btn-light btn-sm position-relative"
-                   > <i class="bi bi-bell-fill"></i>
+            <div class="ms-auto dropdown">
+                <button type="button" id="notReadNotificationsListBtn" data-bs-toggle="dropdown"
+                    class="btn btn-outline-primary btn-sm position-relative" aria-expanded="false"> <i
+                        class="bi bi-bell-fill"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        99
-                        <span class="visually-hidden">unread messages</span>
+                        {{ notReadNotificationsCount() }}
                     </span>
                 </button>
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0"
+                    aria-labelledby="notReadNotificationsListBtn">
+                    <div class="p-2 border-bottom">
+                        <strong class="small">Notificações</strong>
+                        <a type="button"
+                            class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover float-end"
+                            style="font-size: 0.75rem;" (click)="clearAll()">Marcar todas como
+                            lidas</a>
+                    </div>
+                    <app-notifications-list [notifications]="notifications()"></app-notifications-list>
+                </div>
             </div>
         </div>
         }
