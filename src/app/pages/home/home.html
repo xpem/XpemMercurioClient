@@ -5,52 +5,121 @@
     </div>
     }
     @else {
-    @if ((userProfile()?.mercadoLivreCredentialId) == null) {
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy">
+    @if ((userProfile()?.mercadoLivreCredentialId) == null && (userProfile()?.shopeeCredentialId == null)) {
+    <div class="row border border-white rounded-3 p-3 mb-4">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre"
+                            loading="lazy">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Mercado Livre</h5>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
+                                livre</p>
+                            <!-- style="background-color: #ffe600;" -->
+                            <a class="btn btn-light" style="background-color: var(--mercado-livre-color);" (click)="conectarMercadoLivre()"><i
+                                    class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Mercado Livre</h5>
-                        <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
-                            livre</p>
-                        <!-- style="background-color: #ffe600;" -->
-                        <a class="btn btn-info" (click)="conectarMercadoLivre()"><i
-                                class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                            Conexão</a>
+            </div>
+        </div>
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Shopee</h5>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee</p>
+                            <!-- style="background-color: #ffe600;" -->
+                            <a class="btn btn-dark" style="background-color: var(--shopee-color);" (click)="conectarMercadoLivre()"><i
+                                    class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     }
+    <!-- @if ((userProfile()?.shopeeCredentialId) == null) { -->
+
+    <!-- } -->
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
-    @else {
-    @if (isLoadingTotalPendingLabelsPrint()) {
-    <div class="clearfix mb-3">
-        <div class="spinner-grow  spinner-grow-sm text-info float-end" role="status">
-            <span class="visually-hidden">Loading Total Pending Labels Print...</span>
+    <!-- @else { -->
+    <div class="d-flex justify-content-between mb-3">
+        <div class="col-lg-6">
+            <!-- open the app-order-filters modal component -->
+            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+                data-bs-target="#orderFiltersModal">
+                <i class="bi bi-funnel"></i>
+            </button>
         </div>
-    </div>
-    }
-    @else {
-    <div class="col-lg-6  mb-3 mb-sm-0 text-end float-end">
-        <button type="button" class="btn btn-light position-relative" (click)="goToShipmentPendingLabelsList()">
-            <i class="  bi bi-printer"></i>&nbsp;&nbsp;
-            Etiquetas pendentes
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ totalPendingLabelsPrint() }}
-                <span class="visually-hidden">Etiquetas pendentes</span>
-            </span>
-        </button>
-    </div>
 
+        @if (isLoadingTotalPendingLabelsPrint()) {
+        <div class="clearfix mb-3">
+            <div class="spinner-grow  spinner-grow-sm text-info float-end" role="status">
+                <span class="visually-hidden">Loading Total Pending Labels Print...</span>
+            </div>
+        </div>
+        }
+        @else {
+        <div class="col-lg-6  mb-3 mb-sm-0 text-end float-end">
+            <button type="button" class="btn btn-light position-relative" (click)="goToShipmentPendingLabelsList()">
+                <i class="bi bi-printer"></i>&nbsp;&nbsp;
+                Etiquetas pendentes
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ totalPendingLabelsPrint() }}
+                    <span class="visually-hidden">Etiquetas pendentes</span>
+                </span>
+            </button>
+        </div>
+        }
+    </div>
+    <app-order-filters [FilterFormGroup]="orderFilterForm" (clearFilters)="clearFilters()"
+        (submit)="onOrderFiltersFormSubmit()"></app-order-filters>
+    @if(isActiveFilter()){
+    <div class="col-lg-12 mb-3">Filtros:
 
+        @if(orderFilterExternalId() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterExternalId() }}</p>
+        }
+        @if(orderFilterCreatedAfter() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedAfter() }}</p>
+        }
+        @if(orderFilterCreatedBefore() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedBefore() }}</p>
+        }
+        @if(orderFilterProductId() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductId() }}</p>
+        }
+        @if(orderFilterProductName() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductName() }}</p>
+        }
+        @if(orderFilterStatus() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterStatus() }}</p>
+        }
+
+        <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
+            (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
+    </div>
     }
     <div class="col-lg-12 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @if(!isLoading() && orders().length === 0) {
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                Nenhuma venda encontrada.
+            </div>
+        </div>
+        }
+        @else{
         @for (item of orders(); track $index) {
         <div class="col" (click)="goToOrderDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
@@ -111,6 +180,7 @@
             </div>
         </div>
         }
+        }
     </div>
     @if ((totalPages() > 15)) {
     <nav aria-label="Page navigation">
@@ -131,7 +201,6 @@
         </ul>
     </nav>
     }
-    <!-- npm run build -->
     }
-    }
+    <!-- } -->
 </div>

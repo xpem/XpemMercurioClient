@@ -32,9 +32,10 @@ export class MercadoLivreOauthCallback implements OnInit {
           this.submitted.set(true);
         },
         error: (error) => {
-          console.error('Erro ao enviar credenciais:', error);
+          console.error('Erro ao enviar credenciais do mercado livre:', error);
           // Aqui você pode mostrar uma mensagem de erro para o usuário
-          this.errorMessage.set(error.error.message || 'Erro ao tentar associar conta.');
+          this.submitted.set(true);
+          this.errorMessage.set(error.error?.message || 'Erro ao tentar associar conta.');
         }
       });
   }

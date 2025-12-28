@@ -4,6 +4,7 @@ import { OrderService } from '../../services/order-api';
 import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
 import { Order } from '../../models/Order/order.model';
 import { ToastService } from '../../services/toast.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-order',
@@ -12,11 +13,13 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './order-detail.css',
 })
 
-export class OrderDetail  implements OnInit {
+export class OrderDetail implements OnInit {
   order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
 
-  constructor(private orderService: OrderService, private mercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
+
+  constructor(private orderService: OrderService,
+    private mercadoLivreService: MercadoLivreService, private toastService: ToastService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.isLoading.set(false);
@@ -44,6 +47,7 @@ export class OrderDetail  implements OnInit {
 
     var marketPlace = this.order().marketPlace;
     console.log('MarketPlace:', marketPlace);
+
     if (this.order().marketPlace == "1" /*Mercado Livre*/) {
 
       this.mercadoLivreService.printShipmentLabel(this.order().shipmentExternalId!).subscribe({
@@ -56,7 +60,7 @@ export class OrderDetail  implements OnInit {
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
-          
+
           this.toastService.showSuccess('Etiqueta de envio gerada com sucesso!', 5000);
         }
       });

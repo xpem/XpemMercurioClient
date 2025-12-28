@@ -1,32 +1,88 @@
 <div class="container">
-    <h4>Vínculos</h4>
+    @if (isLoading()) {
+    <div class="spinner-grow text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    }
+    @else {
+    <h4 class="mb-4"><i class="bi bi-shop"></i> Marketplaces</h4>
+    @if ((userProfile()?.mercadoLivreCredentialId) == null || (userProfile()?.shopeeCredentialId) == null) {
+            <div class="alert alert-warning" role="alert">
+        Não há contas vinculadas. Conecte-se a um dos marketplaces abaixo para começar a importar suas vendas e produtos.
+    </div>
+    <div class="row border border-white rounded-3 p-3 mb-4">
+        @if((userProfile()?.mercadoLivreCredentialId) == null){
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre"
+                            loading="lazy">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Mercado Livre</h5>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
+                                livre</p>
+                            <!-- style="background-color: #ffe600;" -->
+                            <a class="btn btn-light" style="background-color: var(--mercado-livre-color);"
+                                (click)="conectarMercadoLivre()"><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+        @if((userProfile()?.shopeeCredentialId) == null){
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Shopee</h5>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
+                            </p>
+                            <!-- style="background-color: #ffe600;" -->
+                            <a class="btn btn-dark" style="background-color: var(--shopee-color);"
+                                (click)="conectarMercadoLivre()"><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
     <div class="col-sm-12 mb-3 mb-sm-0">
-        @if ((userProfile()?.mercadoLivreCredentialId) == null) {
+        @if ((userProfile()?.mercadoLivreCredentialId) != null) {
         <div class="col-lg-12 card mb-3" style="border-color: var(--mercado-livre-color);">
             <div class="row g-0">
                 <div class="col-auto">
-                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" style="max-width: 200px;" alt="Mercado Livre" loading="lazy">
+                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" style="max-width: 200px;"
+                        alt="Mercado Livre" loading="lazy">
                 </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Mercado Livre</h5>
-                        <p class="card-text">Importe suas vendas do Mercado Livre</p>
-                        <div>
-                            <div class="d-grid gap-2 d-md-block">
-                                <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
-                                    data-bs-target="#ImportSingleOrderModal"><i
-                                        class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
-                                    Única</button>
-                                <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
-                                    data-bs-target="#ImportOrdersByPeriodModal"><i
-                                        class="bi bi-files"></i>&nbsp;&nbsp;Por
-                                    Período</button>
-                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#ImportSingleProductModal"><i
-                                        class="bi bi-box2"></i>&nbsp;&nbsp;Produto
-                                    Único</button>
-                            </div>
-                        </div>
+                <div class="col-md-8 p-3 d-flex flex-column justify-content-center">
+                    <!-- <div class="card-body"> -->
+                    <h5 class="me-3">Mercado Livre</h5>
+                    <div class="d-grid gap-2 d-md-block mb-3 mt-3">
+                        <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
+                            Única</button>
+                        <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#ImportOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
+                            Período</button>
+                        <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#ImportSingleProductModal"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                            Único</button>
+                    </div>
+                    <div class="d-grid gap-2 d-md-block">
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unbondModal"><i
+                                class="bi bi-ban"></i> Desvincular</button>
                     </div>
                 </div>
             </div>
@@ -35,6 +91,27 @@
     </div>
     <!-- futuramente, possibilitar a opção de conectar com a shopee -->
 
+    <!-- modal confirmação de desvincular -->
+    <div class="modal" id="unbondModal" tabindex="-1" aria-labelledby="unbondModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Desvincular Mercado Livre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja desvincular sua conta do Mercado Livre?</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="button" class="btn btn-danger"
+                        (click)="InactivateCredential(userProfile()?.mercadoLivreCredentialId)"><i
+                            class="bi bi-check-lg"></i> Sim</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Modal order -->
     <div class="modal fade" id="ImportSingleOrderModal" tabindex="-1" aria-labelledby="ImportSingleOrderModal"
         aria-hidden="true">
@@ -209,5 +286,6 @@
             </div>
         </div>
     </div>
+    }
 </div>
 <!-- npm run build -->
