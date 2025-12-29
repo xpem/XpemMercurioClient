@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { timeout } from "rxjs/operators";
 import { MercadoLivreOath } from "../../models/MercadoLivre/mercado-livre-oath.model";
 
 @Injectable({
@@ -18,7 +19,9 @@ export class MercadoLivreService {
     }
 
     public postUserCredential(mercadoLivreOath: MercadoLivreOath): Observable<any> {
-        return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' });
+        return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' }).pipe(
+            timeout(6000)
+        );
     }
 
     public InactivateCredential(credentialid: string): Observable<any> {
@@ -45,7 +48,7 @@ export class MercadoLivreService {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
     }
 
-    public importProductBonds(productId : number): Observable<any> {
+    public importProductBonds(productId: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/${productId}/Bond/List`);
     }
 }

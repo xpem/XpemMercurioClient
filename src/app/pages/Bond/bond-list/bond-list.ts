@@ -39,12 +39,17 @@ export class BondList implements OnInit {
     this.userService.getUserProfile().subscribe({
       next: (response) => {
         console.log('User profile:', response);
-
-        var _userProfile = {} as UserProfile;
+        const _userProfile = {} as UserProfile;
 
         if (response.mercadoLivreCredentialId) {
           _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialId;
-        }
+        } else
+          _userProfile.mercadoLivreCredentialId = null;
+
+        if (response.shopeeCredentialId) {
+          _userProfile.shopeeCredentialId = response.shopeeCredentialId;
+        } else
+          _userProfile.shopeeCredentialId = null;
 
         this.userProfile.set(_userProfile);
         this.isLoading.set(false);
@@ -127,6 +132,13 @@ export class BondList implements OnInit {
         next: (response) => {
 
           const product: Product = response;
+
+          if (product === null) {
+            this.showModal('ErrorImportSingleModal');
+            this.hideModal('ImportSingleProductModal');
+            this.errorMessage.set('Produto não encontrado.');
+            return;
+          }
           this.SingleProduct.set(product);
 
           //external id of SingleOrder
@@ -174,7 +186,7 @@ export class BondList implements OnInit {
         this.toastService.showSuccess('Credencial desativada com sucesso!', 5000);
         //dismiss modal
         this.hideModal('unbondModal');
-        //reload page after 2 seconds
+        this.getUserProfile()
       },
       error: (error) => {
         console.error('Error inactivating credential:', error);
@@ -183,10 +195,15 @@ export class BondList implements OnInit {
     });
   }
 
-  goToOrderDetail(id: any) {
+  goToOrderDetail(id: number | undefined) {
     //navegar para a pagina order passando o externalId como parametro
     window.location.href = `/order?id=${id}`;
 
+  }
+
+  goToProductDetail(id: number | undefined) {
+    //navegar para a pagina product passando o publicId como parametro
+    window.location.href = `/product-detail?id=${id}`;
   }
 
   showErrorModal(): void {

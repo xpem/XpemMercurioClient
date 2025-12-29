@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators } 
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user-api';
 import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-signin',
@@ -13,13 +14,14 @@ import { AuthService } from '../../../services/auth.service';
 export class Signin implements OnInit {
   SignInForm!: FormGroup;
   submitted = false;
-    isLoadingAccess: WritableSignal<boolean> = signal(false);
+  isLoadingAccess: WritableSignal<boolean> = signal(false);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -56,8 +58,12 @@ export class Signin implements OnInit {
         this.router.navigate(['/home']);
         this.isLoadingAccess.set(false);
       },
-      error: (error) => {
-        console.error('Erro ao obter token:', error);
+        console.error('Erro ao obter token:', error?.error?.ErrorCode);
+        console.error('Erro ao obter token:', error.error.ErrorCode);
+
+        if (error.error && error.error.ErrorCode === 5) {
+          this.toastService.showError('Email ou senha inválidos!', 5000);
+        }
         // Aqui você pode adicionar lógica para exibir uma mensagem de erro ao usuário
         this.isLoadingAccess.set(false);
       }

@@ -6,10 +6,12 @@
     }
     @else {
     <h4 class="mb-4"><i class="bi bi-shop"></i> Marketplaces</h4>
-    @if ((userProfile()?.mercadoLivreCredentialId) == null || (userProfile()?.shopeeCredentialId) == null) {
-            <div class="alert alert-warning" role="alert">
-        Não há contas vinculadas. Conecte-se a um dos marketplaces abaixo para começar a importar suas vendas e produtos.
+    @if ((userProfile()?.mercadoLivreCredentialId) == null && (userProfile()?.shopeeCredentialId) == null) {
+    <div class="alert alert-warning" role="alert">
+        Não há contas vinculadas. Conecte-se a um dos marketplaces abaixo para começar a importar suas vendas e
+        produtos.
     </div>
+    }
     <div class="row border border-white rounded-3 p-3 mb-4">
         @if((userProfile()?.mercadoLivreCredentialId) == null){
         <div class="col-sm-6 mb-3 mb-sm-0">
@@ -47,9 +49,9 @@
                             <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
                             </p>
                             <!-- style="background-color: #ffe600;" -->
-                            <a class="btn btn-dark" style="background-color: var(--shopee-color);"
-                                (click)="conectarMercadoLivre()"><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                                Conexão</a>
+                            <button class="btn btn-info" disabled
+                               ><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                                Conexão</button>
                         </div>
                     </div>
                 </div>
@@ -106,7 +108,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
                         Cancelar</button>
                     <button type="button" class="btn btn-danger"
-                        (click)="InactivateCredential(userProfile()?.mercadoLivreCredentialId)"><i
+                        (click)="InactivateCredential(userProfile()?.mercadoLivreCredentialId ?? '')"><i
                             class="bi bi-check-lg"></i> Sim</button>
                 </div>
             </div>
@@ -186,7 +188,8 @@
                         <p class="fw-medium m-0">ID da Venda: <small class="fw-light m-0" style="font-size: medium;">{{
                                 SingleOrder()?.externalId }}</small></p>
                         <p class="fw-medium m-0">Data da Venda: <small class="fw-light m-0"
-                                style="font-size: medium;">{{ SingleOrder()?.createdAt }}</small></p>
+                                style="font-size: medium;">{{
+                                SingleOrder()?.createdAt }}</small></p>
                         <p class="fw-medium m-0">Valor Total: <small class="fw-light m-0" style="font-size: medium;">R$
                                 {{ SingleOrder()?.totalAmount }}</small></p>
                         <p class="fw-medium m-0">Status: <small class="fw-light m-0" style="font-size: medium;">{{
@@ -258,9 +261,9 @@
                                 style="font-size: medium;">{{
                                 SingleProduct()?.soldQuantity }}</small></p>
                     </div>
-                    <button class="btn btn-info btn-sm" (click)="goToOrderDetail(SingleProduct()?.id)"><i
+                    <button class="btn btn-info btn-sm" (click)="goToProductDetail(SingleProduct()?.id)"><i
                             class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
-                        Venda</button>
+                        Produto</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -286,6 +289,4 @@
             </div>
         </div>
     </div>
-    }
 </div>
-<!-- npm run build -->

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateUserPayload } from "../models/user.model";
+import { response } from "express";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUserToken(userCredentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/session`, userCredentials);
+    return this.http.post(`${this.apiUrl}/session`, userCredentials,{ responseType: 'json' });
   }
 
   postCreateUser(userData: CreateUserPayload): Observable<any> {
