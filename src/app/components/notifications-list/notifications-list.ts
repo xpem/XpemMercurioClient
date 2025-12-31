@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AppNotification } from '../../models/appNotification.model';
 
 @Component({
   selector: 'app-notifications-list',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './notifications-list.css',
 })
 export class NotificationsList {
-  @Input() notifications: any[] = [];
+  @Input() notifications: AppNotification[] = [];
 }
 
 // ng generate component notifications-list --skip-tests --standalone   

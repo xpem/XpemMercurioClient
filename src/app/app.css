@@ -1,0 +1,15 @@
+/* Responsive container: full width on small screens, capped at 500px on large screens */
+.notifications-container {
+	width: min(500px, 90vw);
+	min-width: 280px; /* evita colapsar quando o dropdown herda width pequena */
+	max-height: 400px;
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+	.notifications-container {
+		width: 90vw;
+		min-width: 0;
+	}
+}

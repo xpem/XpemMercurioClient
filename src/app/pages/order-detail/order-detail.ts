@@ -1,8 +1,8 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { OrderService } from '../../services/order-api';
-import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
-import { Order } from '../../models/Order/order.model';
+import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-api';
+import { Order } from '../../models/order/order.model';
 import { ToastService } from '../../services/toast.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 

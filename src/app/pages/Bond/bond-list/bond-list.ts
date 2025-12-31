@@ -1,9 +1,9 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { UserProfile } from '../../../models/user-profile.model';
 import { UserService } from '../../../services/user-api';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
-import { Order } from '../../../models/Order/order.model';
-import { Product } from '../../../models/Product/product.model';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { Order } from '../../../models/order/order.model';
+import { Product } from '../../../models/product/product.model';
 import { ToastService } from '../../../services/toast.service';
 
 declare const bootstrap: any;

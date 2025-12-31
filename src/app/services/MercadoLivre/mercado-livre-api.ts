@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { timeout } from "rxjs/operators";
-import { MercadoLivreOath } from "../../models/MercadoLivre/mercado-livre-oath.model";
+import { MercadoLivreOath } from "../../models/mercadoLivre/mercado-livre-oath.model";
 
 @Injectable({
     providedIn: "root",

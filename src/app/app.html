@@ -15,15 +15,15 @@
 
             <!-- notificações -->
              <!-- comentado temporariamente para publicação para homologação da shopee -->
-            <!-- <div class="ms-auto dropdown">
-                <button type="button" id="notReadNotificationsListBtn" data-bs-toggle="dropdown"
+            <div class="ms-auto dropdown">
+                <button type="button" id="notReadNotificationsListBtn" data-bs-toggle="dropdown" (click)="loadNotReadNotifications()"
                     class="btn btn-outline-primary btn-sm position-relative" aria-expanded="false"> <i
                         class="bi bi-bell-fill"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         {{ notReadNotificationsCount() }}
                     </span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0"
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0 notifications-container"
                     aria-labelledby="notReadNotificationsListBtn">
                     <div class="p-2 border-bottom">
                         <strong class="small">Notificações</strong>
@@ -34,7 +34,7 @@
                     </div>
                     <app-notifications-list [notifications]="notifications()"></app-notifications-list>
                 </div>
-            </div> -->
+            </div>
         </div>
         }
 

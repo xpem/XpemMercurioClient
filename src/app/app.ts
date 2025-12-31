@@ -1,10 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Toasts } from "./components/toasts/toasts";
 import { Sidebar } from "./components/sidebar/sidebar";
 import { AuthService } from './services/auth.service';
 import { NotificationsList } from "./components/notifications-list/notifications-list";
 import { AppNotification } from './models/appNotification.model';
+import { NotificationApi } from './services/notification-api';
 
 @Component({
   selector: 'app-root',
@@ -16,25 +17,37 @@ export class App implements OnInit {
   protected readonly title = signal('XpemMercurioClient');
   notifications = signal<AppNotification[]>([]);
   notReadNotificationsCount = signal(0);
+  isLoadingNotifications: WritableSignal<boolean> = signal(false);
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private notificationApi: NotificationApi) { }
 
   ngOnInit() {
-    this.generateMocks();
+    this.LoadTotalNotificationsUnread();
   }
 
-  private generateMocks() {
-    const mocks: AppNotification[] = Array.from({ length: 10 }, (_, i) => ({
-      id: i + 1,
-      title: `Notificação ${i + 1}`,
-      message: `Este é o conteúdo detalhado da mensagem de teste número ${i + 1}.`,
-     //mostrar a data em formado dd/MM/yyyy HH:mm
-      date: new Date(Date.now() - i * 3600000).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-      isRead: false
-    }));
-    
-    this.notifications.set(mocks);
-    this.notReadNotificationsCount.set(mocks.length);
+  private LoadTotalNotificationsUnread() {
+    this.notificationApi.getTotalUnread().subscribe({
+      next: (result) => {
+        this.notReadNotificationsCount.set(result);
+      },
+      error: (e) => {
+        console.error("Erro ao carregar total de notificações não lidas", e);
+      }
+    });
+  }
+
+  loadNotReadNotifications() {
+    this.isLoadingNotifications.set(true);
+    this.notificationApi.getTopUnread().subscribe({
+      next: (result) => {
+        this.notifications.set(result);
+        this.isLoadingNotifications.set(false);
+      },
+      error: (e) => {
+        console.error("Erro ao carregar notificações não lidas", e);
+        this.isLoadingNotifications.set(false);
+      }
+    });
   }
 
   // Função para remover a notificação ao clicar

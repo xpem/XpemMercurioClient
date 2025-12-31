@@ -58,8 +58,8 @@ export class Signin implements OnInit {
         this.router.navigate(['/home']);
         this.isLoadingAccess.set(false);
       },
+      error: (error) => {
         console.error('Erro ao obter token:', error?.error?.ErrorCode);
-        console.error('Erro ao obter token:', error.error.ErrorCode);
 
         if (error.error && error.error.ErrorCode === 5) {
           this.toastService.showError('Email ou senha inválidos!', 5000);
