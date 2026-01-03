@@ -32,7 +32,7 @@
                             style="font-size: 0.75rem;" (click)="clearAll()">Marcar todas como
                             lidas</a>
                     </div>
-                    <app-notifications-list [notifications]="notifications()"></app-notifications-list>
+                    <app-notifications-list [notifications]="notifications()" (notificationRead)="markAsRead($event)"></app-notifications-list>
                 </div>
             </div>
         </div>

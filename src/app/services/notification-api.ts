@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { AppNotification } from "../models/appNotification.model";
 
 @Injectable({
     providedIn: "root",
@@ -15,8 +16,12 @@ export class NotificationApi {
         return this.http.get<number>(`${this.apiUrl}/notRead/total`);
     }
 
-    public getTopUnread(): Observable<number> {
-        return this.http.get<number>(`${this.apiUrl}/notRead/top`);
+    public getTopUnread(): Observable<AppNotification[]> {
+        return this.http.get<AppNotification[]>(`${this.apiUrl}/notRead/top`);
+    }
+
+    public markAsRead(ids: number[]): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/markAsRead`, ids);
     }
 }
 

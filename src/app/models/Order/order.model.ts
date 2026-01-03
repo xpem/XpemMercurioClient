@@ -43,5 +43,6 @@ export interface OrderProduct {
 export enum OrderShipmentLabelPrintStatus {
     NotPrinted = 0,
     Printed = 1,
-    Undefined = 2
+    Undefined = 2,
+    Stale = 3,
 }

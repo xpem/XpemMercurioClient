@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppNotification } from '../../models/appNotification.model';
 
@@ -11,6 +11,11 @@ import { AppNotification } from '../../models/appNotification.model';
 })
 export class NotificationsList {
   @Input() notifications: AppNotification[] = [];
+    @Output() notificationRead = new EventEmitter<number>();
+
+  onNotificationClick(id: number) {
+    this.notificationRead.emit(id);
+  }
 }
 
 // ng generate component notifications-list --skip-tests --standalone   

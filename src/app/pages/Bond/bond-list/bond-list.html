@@ -49,8 +49,7 @@
                             <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
                             </p>
                             <!-- style="background-color: #ffe600;" -->
-                            <button class="btn btn-info" disabled
-                               ><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                            <button class="btn btn-info" disabled><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
                                 Conexão</button>
                         </div>
                     </div>
@@ -69,7 +68,6 @@
                         alt="Mercado Livre" loading="lazy">
                 </div>
                 <div class="col-md-8 p-3 d-flex flex-column justify-content-center">
-                    <!-- <div class="card-body"> -->
                     <h5 class="me-3">Mercado Livre</h5>
                     <div class="d-grid gap-2 d-md-block mb-3 mt-3">
                         <button class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
@@ -131,8 +129,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+                    @if(!isImportLoading()){
                     <button type="button" class="btn btn-primary" (click)="this.ImportSingleOrder()"><i
                             class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
+                    } @else {
+                    <button class="btn btn-success" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                        <span role="status">Importando...</span>
+                    </button>
+                    }
                 </div>
             </div>
         </div>

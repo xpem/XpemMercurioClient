@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { Signin } from './pages/user/SignIn/signin';
+import { Signin } from './pages/user/sign-in/signin';
 import { authGuard } from './auth-guard';
-import { Signup } from './pages/user/SignUp/signup';
-import { UpdatePassword } from './pages/user/UpdatePassword/update-password';
-import { PasswordSendEmail } from './pages/user/PasswordSendEmail/passwordsendemail';
+import { Signup } from './pages/user/sign-up/signup';
+import { UpdatePassword } from './pages/user/update-password/update-password';
+import { PasswordSendEmail } from './pages/user/password-send-email/passwordsendemail';
 import { MercadoLivreOauthCallback } from './pages/MercadoLivre/mercadoLivreOAuthCallback/mercado-livre-oauthcallback';
 import { BondList } from './pages/Bond/bond-list/bond-list';
 import { OrderDetail } from './pages/order-detail/order-detail';

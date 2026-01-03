@@ -7,20 +7,23 @@ export interface AppNotification {
     readAt?: Date;
     type: NotificationType;
     objectType?: NotificationObjectType;
+    // Propriedades adicionais para exibição
+    icon?: string;
+    borderStyle?: 'warning' | 'danger' | 'success' | 'default' | 'info' | string;
 }
 
 export enum NotificationType {
-    Info = 'Info',
-    Warning = 'Warning',
-    Error = 'Error',
-    Success = 'Success'
+    Info = 0,
+    Warning = 1,
+    Error = 2,
+    Success = 3
 }
 
 export enum NotificationObjectType {
-    Order = 'Order',
-    Product = 'Product',
-    Shipment = 'Shipment',
-    User = 'User',
-    MarketPlace = 'MarketPlace',
-    System = 'System'
+    Order = 0,
+    Product = 1,
+    Shipment = 2,
+    User = 3,
+    MarketPlace = 4,
+    System = 5
 }

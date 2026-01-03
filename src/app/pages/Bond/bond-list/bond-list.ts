@@ -20,6 +20,8 @@ export class BondList implements OnInit {
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
+  isImportLoading: WritableSignal<boolean> = signal(false);
+
   todayDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -61,6 +63,7 @@ export class BondList implements OnInit {
   }
 
   ImportSingleOrder() {
+    this.isImportLoading.set(true);
     const orderIdInput = document.getElementById('orderId') as HTMLInputElement;
     const orderId = orderIdInput.value.trim();
     this.errorMessage.set('');
@@ -78,13 +81,14 @@ export class BondList implements OnInit {
           console.log('External ID of imported order:', externalId);
           this.showModal('ConfirmImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
+          this.isImportLoading.set(false);
         },
         error: (error) => {
           console.error('Error importing single order:', error);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleOrderModal');
-
           this.errorMessage.set(error?.message || 'An error occurred while importing the order.');
+          this.isImportLoading.set(false);
         }
       });
     }
@@ -124,6 +128,7 @@ export class BondList implements OnInit {
   ImportSingleProduct() {
     const productIdInput = document.getElementById('productId') as HTMLInputElement;
     const productId = productIdInput.value.trim();
+    this.isImportLoading.set(true);
     this.errorMessage.set('');
     if (productId) {
 
@@ -147,12 +152,13 @@ export class BondList implements OnInit {
 
           this.showModal('ConfirmImportSingleProductModal');
           this.hideModal('ImportSingleProductModal');
+          this.isImportLoading.set(false);
         },
         error: (error) => {
           console.log('Error object:', error.error.message);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleProductModal');
-
+          this.isImportLoading.set(false);
           this.errorMessage.set(error?.error?.message || 'An error occurred while importing the product.');
         }
       });

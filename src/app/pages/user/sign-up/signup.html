@@ -57,28 +57,26 @@
                 </div>
                 }
             </div>
+        </div>
+        <div class="row mb-3">
+            <div class="form-group">
+                <label for="inputConfirmPassword">Confirme a Senha</label>
+                <input type="password" class="form-control" id="inputConfirmPassword" formControlName="confirmPassword"
+                    [class.is-invalid]="submitted && f['confirmPassword'].invalid || f['confirmPassword'].touched && f['confirmPassword'].invalid" />
 
-            <div class="row mb-3">
-                <div class="form-group">
-                    <label for="inputConfirmPassword">Confirme a Senha</label>
-                    <input type="password" class="form-control" id="inputConfirmPassword"
-                        formControlName="confirmPassword"
-                        [class.is-invalid]="submitted && f['confirmPassword'].invalid || f['confirmPassword'].touched && f['confirmPassword'].invalid" />
-
-                    @if((f['confirmPassword'].touched || submitted) && f['confirmPassword'].errors) {
-                    <div class="invalid-feedback d-block">
-                        @if (f['confirmPassword'].errors['required']) {
-                        <div>Confirmação de senha é obrigatória</div>
-                        }
-                        @if (f['confirmPassword'].errors['minlength']) {
-                        <div>Confirmação de senha deve ter pelo menos 4 caracteres</div>
-                        }
-                        @if (f['confirmPassword'].errors['mustMatch']) {
-                        <div>As senhas não coincidem</div>
-                        }
-                    </div>
+                @if((f['confirmPassword'].touched || submitted) && f['confirmPassword'].errors) {
+                <div class="invalid-feedback d-block">
+                    @if (f['confirmPassword'].errors['required']) {
+                    <div>Confirmação de senha é obrigatória</div>
+                    }
+                    @if (f['confirmPassword'].errors['minlength']) {
+                    <div>Confirmação de senha deve ter pelo menos 4 caracteres</div>
+                    }
+                    @if (f['confirmPassword'].errors['mustMatch']) {
+                    <div>As senhas não coincidem</div>
                     }
                 </div>
+                }
             </div>
         </div>
 
