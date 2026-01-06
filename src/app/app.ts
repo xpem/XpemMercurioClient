@@ -14,6 +14,7 @@ import { map } from 'rxjs';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('XpemMercurioClient');
   notifications = signal<AppNotification[]>([]);
@@ -105,16 +106,18 @@ export class App implements OnInit, OnDestroy {
         // Notificação marcada como lida com sucesso
       },
       error: (e) => {
-    const ids = this.notifications().map(n => n.id);
+        const ids = this.notifications().map(n => n.id);
 
-    this.notifications.set([]);
-    this.notReadNotificationsCount.set(0);
+        this.notifications.set([]);
+        this.notReadNotificationsCount.set(0);
 
-    if (!ids.length) {
-      return;
-    }
+        if (!ids.length) {
+          return;
+        }
+      }
+    });
+  }
 
-  // Função para limpar tudo
   clearAll() {
     this.notifications.set([]);
     this.notReadNotificationsCount.set(0);

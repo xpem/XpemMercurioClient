@@ -112,13 +112,13 @@ export class BondList implements OnInit {
         next: (response) => {
           console.log('Orders imported successfully:', response);
           this.toastService.showInfo('Importação de pedidos em processamento!', 5000);
-          this.hideModal('ImportOrdersByPeriodModal');
+          this.hideModal('importOrdersByPeriodModal');
           this.getUserProfile()
         },
         error: (error) => {
           console.error('Error importing orders by period:', error);
           this.showModal('ErrorImportSingleModal');
-          this.hideModal('ImportOrdersByPeriodModal');
+          this.hideModal('importOrdersByPeriodModal');
           this.errorMessage.set(error?.message || 'An error occurred while importing orders by period.');
         }
       });
@@ -197,6 +197,26 @@ export class BondList implements OnInit {
       error: (error) => {
         console.error('Error inactivating credential:', error);
         this.toastService.showError('Erro ao desativar credencial!', 5000);
+      }
+    });
+  }
+
+  ImportAllProducts() {
+    this.isImportLoading.set(true);
+    this.errorMessage.set('');
+    this.mercadoLivreService.importAllProducts().subscribe({
+      next: (response) => {
+        console.log('All products imported successfully:', response);
+        this.toastService.showInfo('Importação de todos os produtos em processamento!', 5000);
+        this.hideModal('importProductsModal');
+        this.isImportLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error importing all products:', error);
+        this.showModal('ErrorImportSingleModal');
+        this.hideModal('importProductsModal');
+        this.isImportLoading.set(false);
+        this.errorMessage.set(error?.message || 'An error occurred while importing all products.');
       }
     });
   }

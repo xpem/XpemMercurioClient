@@ -7,7 +7,7 @@ export interface ProductBond {
     originalPrice?: number;
     currencyId: string;
     quantity: number;
-    availableQuantity: number;
+    // availableQuantity: number;
     soldQuantity: number;
     marketplace: string;
     status: ProductStatusMercadoLivreBond;

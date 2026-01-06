@@ -2,7 +2,7 @@ import {
   ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -18,7 +18,8 @@ export const appConfig: ApplicationConfig = {
      { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes), provideClientHydration(withEventReplay()),
+    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     CookieService
   ]

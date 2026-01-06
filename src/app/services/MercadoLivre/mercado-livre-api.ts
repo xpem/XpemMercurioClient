@@ -41,11 +41,15 @@ export class MercadoLivreService {
     }
 
     public importOrdersByPeriod(startDate: string, endDate: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`);
+        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`, { responseType: 'text' });
     }
 
     public importSingleProduct(productId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
+    }
+
+    public importAllProducts(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/Import`, { responseType: 'text' });
     }
 
     public importProductBonds(productId: number): Observable<any> {

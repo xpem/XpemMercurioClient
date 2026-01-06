@@ -5,10 +5,11 @@ import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-a
 import { Order } from '../../models/order/order.model';
 import { ToastService } from '../../services/toast.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order',
-  imports: [RouterLink],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './order-detail.html',
   styleUrl: './order-detail.css',
 })
@@ -22,7 +23,7 @@ export class OrderDetail implements OnInit {
     private mercadoLivreService: MercadoLivreService, private toastService: ToastService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.isLoading.set(false);
+    this.isLoading.set(true);
 
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
@@ -32,6 +33,12 @@ export class OrderDetail implements OnInit {
         next: (response) => {
           console.log('Order fetched successfully:', response);
           this.order.set(response);
+          this.isLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error fetching order:', error);
+          this.toastService.showError('Erro ao carregar o pedido. Por favor, tente novamente mais tarde.', 5000);
+          this.isLoading.set(false);
         }
       });
     }

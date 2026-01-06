@@ -40,8 +40,8 @@
                             <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
                             </p>
                             <!-- style="background-color: #ffe600;" -->
-                            <button class="btn btn-dark" style="background-color: var(--shopee-color);"
-                                disabled ><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                            <button class="btn btn-dark" style="background-color: var(--shopee-color);" disabled><i
+                                    class="bi bi-link"></i>&nbsp;&nbsp;Permitir
                                 Conexão</button>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
         @if(!isLoading() && orders().length === 0) {
         <div class="col">
             <div class="alert alert-info" role="alert">
-                Nenhuma venda encontrada.
+                Nenhuma venda encontrada, conecte-se a um marketplace e importe suas vendas.
             </div>
         </div>
         }
@@ -155,8 +155,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                             @switch(item.printStatus) {
-
-                              @case (0) {
+                            @case (0) {
                             <p class=" status-badge badge rounded-pill text-bg-primary mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
                             }
@@ -178,25 +177,63 @@
         }
         }
     </div>
-    @if ((totalPages() > 15)) {
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" class="mt-4">
+        @if (totalPages() > 1) {
         <ul class="pagination justify-content-end">
+            <!-- Botão Primeira Página -->
             <li class="page-item" [class.disabled]="currentPage() === 1">
-                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">&laquo;</button>
+                <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">
+                    &laquo;&laquo;
+                </button>
             </li>
-            @for (p of pages(); track $index) {
+
+            <!-- Botão Anterior -->
+            <li class="page-item" [class.disabled]="currentPage() === 1">
+                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">
+                    &laquo;
+                </button>
+            </li>
+
+            <!-- Reticências inicial (se necessário) -->
+            @if (pages()[0] > 1) {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            }
+
+            <!-- Páginas visíveis -->
+            @for (p of pages(); track p) {
             <li class="page-item" [class.active]="currentPage() === p">
                 <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
             </li>
             }
 
-            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                <button class="page-link" (click)="nextPage()"
-                    [disabled]="currentPage() === totalPages()">&raquo;</button>
-            </li>
+            <!-- Reticências final (se necessário) -->
+            @if (pages()[pages().length - 1] < totalPages()) { <li class="page-item disabled">
+                <span class="page-link">...</span>
+                </li>
+                }
+
+                <!-- Botão Próximo -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+                        &raquo;
+                    </button>
+                </li>
+
+                <!-- Botão Última Página -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="goToPage(totalPages())"
+                        [disabled]="currentPage() === totalPages()">
+                        &raquo;&raquo;
+                    </button>
+                </li>
         </ul>
+        }
+
+        <div class="text-end text-muted small mt-2">
+            Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ totalOrders() }}
+        </div>
     </nav>
     }
-    }
-    <!-- } -->
 </div>

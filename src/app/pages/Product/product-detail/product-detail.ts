@@ -7,8 +7,8 @@ import { ToastService } from '../../../services/toast.service';
 import { Router, RouterLink } from '@angular/router';
 import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 import { ProductBond } from '../../../models/product/product-Bond.model';
-import { MovementHistoryComponent } from './components/movement-history/movement-history';
 import { ProductQuantityHistory } from '../../../models/product/product-quantity-history.model';
+import { MovementHistoryComponent } from './components/movement-history/movement-history';
 
 declare const bootstrap: any;
 

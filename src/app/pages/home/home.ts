@@ -10,6 +10,8 @@ import { ShipmentService } from '../../services/shipment-api';
 import { OrderFilter } from '../../models/order/order-filter.model';
 import { OrderFilters } from "./components/order-filters/order-filters";
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Router } from '@angular/router';
+import { forkJoin, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -18,24 +20,6 @@ import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn 
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-
-  // Validador customizado que compara datas
-  private dateRangeValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const parent = control as FormGroup;
-      if (!parent.get) return null;
-
-      const startDate = parent.get('orderDateStart')?.value;
-      const endDate = parent.get('orderDateEnd')?.value;
-
-      // Se ambos os campos estão preenchidos, valida se startDate < endDate
-      if (startDate && endDate && startDate > endDate) {
-        return { dateRangeInvalid: true };
-      }
-
-      return null;
-    };
-  }
 
   userProfile: WritableSignal<UserProfile | null> = signal(null);
   orders: WritableSignal<Order[]> = signal([]);
@@ -73,7 +57,8 @@ export class Home implements OnInit {
     private mercadoLivreService: MercadoLivreService,
     private orderService: OrderService,
     private userService: UserService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.orderFilterForm = this.fb.group(
       {
@@ -88,39 +73,68 @@ export class Home implements OnInit {
     );
   }
 
+    // Validador customizado que compara datas
+  private dateRangeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control as FormGroup;
+      if (!parent.get) return null;
+
+      const startDate = parent.get('orderDateStart')?.value;
+      const endDate = parent.get('orderDateEnd')?.value;
+
+      // Se ambos os campos estão preenchidos, valida se startDate < endDate
+      if (startDate && endDate && startDate > endDate) {
+        return { dateRangeInvalid: true };
+      }
+
+      return null;
+    };
+  }
+
   ngOnInit(): void {
     this.isLoading.set(true);
-    console.log('Home component initialized');
-
-    this.userService.getUserProfile().subscribe({
-      next: (response) => {
-        console.log('User profile:', response);
-        console.log('User mercadoLivreCredentialId:', response.mercadoLivreCredentialId);
-
-        const _userProfile = {} as UserProfile;
-
-        if (response.mercadoLivreCredentialId) {
-          _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialId;
+    
+    // Executa as 3 requisições em paralelo, mas de forma independente
+    forkJoin({
+      profile: this.userService.getUserProfile().pipe(
+        catchError(error => {
+          console.error('Error loading user profile:', error);
+          return of(null);
+        })
+      ),
+      totals: this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).pipe(
+        catchError(error => {
+          console.error('Error loading order totals:', error);
+          return of({ totalItems: 0, totalPages: 0 });
+        })
+      ),
+      pending: this.shipmentService.getPendingLabelsPrintCount().pipe(
+        catchError(error => {
+          console.error('Error loading pending labels count:', error);
+          return of(0);
+        })
+      )
+    }).subscribe({
+      next: ({ profile, totals, pending }) => {
+        // Processa o perfil do usuário
+        if (profile) {
+          const profileData = {} as UserProfile;
+          if (profile.mercadoLivreCredentialId) {
+            profileData.mercadoLivreCredentialId = profile.mercadoLivreCredentialId;
+          }
+          this.userProfile.set(profileData);
         }
 
-        this.userProfile.set(_userProfile);
+        // Processa os totais
+        this.totalOrders.set(totals.totalItems);
+        this.totalPages.set(totals.totalPages);
 
-        this.initLoadOrders();
+        // Processa etiquetas pendentes
+        this.totalPendingLabelsPrint.set(pending);
+        this.isLoadingTotalPendingLabelsPrint.set(false);
 
-        this.shipmentService.getPendingLabelsPrintCount().subscribe({
-          next: (response) => {
-            console.log('Total Pending Labels Print:', response);
-            this.totalPendingLabelsPrint.set(response);
-            this.isLoadingTotalPendingLabelsPrint.set(false);
-          },
-          error: (error) => {
-            console.error('Error fetching Total Pending Labels Print:', error);
-            this.isLoadingTotalPendingLabelsPrint.set(false);
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error fetching user profile:', error);
+        // Carrega as ordens paginadas
+        this.loadPaginatedOrders(1);
       }
     });
   }
@@ -129,7 +143,6 @@ export class Home implements OnInit {
     this.isLoading.set(true);
     this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).subscribe({
       next: (response) => {
-        console.log('Total orders:', response);
         const totalOrders = response.totalItems;
         const totalPages = response.totalPages;
 
@@ -143,15 +156,12 @@ export class Home implements OnInit {
     });
   }
 
-  goToOrderDetail(id: any) {
-    //navegar para a pagina order passando o externalId como parametro
-    window.location.href = `/order?id=${id}`;
-
+  goToOrderDetail(id: number) {
+    this.router.navigate(['/order'], { queryParams: { id } });
   }
 
   goToShipmentPendingLabelsList() {
-    //navegar para a pagina shipment-pending-labels-list
-    window.location.href = `/shipment-pending-labels-list`;
+    this.router.navigate(['/shipment-pending-labels-list']);
   }
 
   clearFilters(): void {
@@ -174,9 +184,7 @@ export class Home implements OnInit {
   }
 
   onOrderFiltersFormSubmit(): void {
-
-    console.log('Order Filters Form Submitted:', this.orderFilterForm.value);
-
+  
     // Validar se a data inicial é menor que a data final
     if (this.orderFilterForm.hasError('dateRangeInvalid')) {
       this.toastService.showError('A data inicial não pode ser maior que a data final!', 5000);
@@ -226,7 +234,6 @@ export class Home implements OnInit {
     this.isLoading.set(true);
     this.orderService.get(page, this.orderFilter(), this.isActiveFilter(), this.marketplace).subscribe({
       next: (response) => {
-        console.log(`Orders for page ${page} fetched successfully:`, response);
         this.orders.set(response);
         this.currentPage.set(page);
         this.isLoading.set(false);
@@ -251,7 +258,6 @@ export class Home implements OnInit {
   conectarMercadoLivre() {
     this.mercadoLivreService.getAuthUri().subscribe({
       next: (response) => {
-        console.log('url de autenticação do Mercado Livre:', response);
         // a response é uma URL de redirecionamento
         window.location.href = response;
       },
