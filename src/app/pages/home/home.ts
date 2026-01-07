@@ -37,6 +37,7 @@ export class Home implements OnInit {
   orderFilterCreatedAfter: WritableSignal<string> = signal('');
   orderFilterCreatedBefore: WritableSignal<string> = signal('');
   orderFilterProductId: WritableSignal<string> = signal('');
+  orderFilterProductSku: WritableSignal<string> = signal('');
   orderFilterProductName: WritableSignal<string> = signal('');
   orderFilterStatus: WritableSignal<string> = signal('');
 
@@ -68,6 +69,7 @@ export class Home implements OnInit {
         orderProductId: [''],
         orderProductName: [''],
         orderStatus: [[]],
+        orderProductSKU: ['']
       },
       { validators: this.dateRangeValidator() }
     );
@@ -177,6 +179,7 @@ export class Home implements OnInit {
     this.orderFilterCreatedAfter.set('');
     this.orderFilterCreatedBefore.set('');
     this.orderFilterProductId.set('');
+    this.orderFilterProductSku.set('');
     this.orderFilterProductName.set('');
     this.orderFilterStatus.set('');
     this.orderFilterForm.value.orderStatus = [] as number[];
@@ -205,6 +208,9 @@ export class Home implements OnInit {
     if (this.orderFilterForm.value.orderProductId !== null && this.orderFilterForm.value.orderProductId !== '')
       this.orderFilterProductId.set(`Id do produto: #${this.orderFilterForm.value.orderProductId}`);
 
+    if (this.orderFilterForm.value.orderProductSku !== null && this.orderFilterForm.value.orderProductSku !== '')
+      this.orderFilterProductSku.set(`SKU do produto: ${this.orderFilterForm.value.orderProductSku}`);
+
     if (this.orderFilterForm.value.orderProductName !== null && this.orderFilterForm.value.orderProductName !== '')
       this.orderFilterProductName.set(`Nome do produto: ${this.orderFilterForm.value.orderProductName}`);
 
@@ -220,6 +226,7 @@ export class Home implements OnInit {
       productExternalId: this.orderFilterForm.value.orderProductId,
       productName: this.orderFilterForm.value.orderProductName,
       orderStatus: this.orderFilterForm.value.orderStatus,
+      productSKU: this.orderFilterForm.value.orderProductSKU,
     });
 
     this.initLoadOrders();

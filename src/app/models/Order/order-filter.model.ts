@@ -8,4 +8,5 @@ export interface OrderFilter {
     productExternalId?: string;
     productName?: string;
     orderStatus?: OrderStatus[];
+    productSKU?: string;
 }

@@ -14,13 +14,22 @@
             <h5>Xpem Mercúrio</h5>
 
             <!-- notificações -->
-             <!-- comentado temporariamente para publicação para homologação da shopee -->
+            <!-- comentado temporariamente para publicação para homologação da shopee -->
             <div class="ms-auto dropdown">
-                <button type="button" id="notReadNotificationsListBtn" data-bs-toggle="dropdown" (click)="loadNotReadNotifications()"
-                    class="btn btn-outline-primary position-relative" aria-expanded="false"> <i
-                        class="bi bi-bell-fill"></i>
+                <button type="button" id="notReadNotificationsListBtn" data-bs-toggle="dropdown"
+                    (click)="loadNotReadNotifications()" class="btn btn-outline-primary position-relative"
+                    aria-expanded="false"> <i class="bi bi-bell-fill"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @if(isLoadingNotifications())
+                        {
+                        <div class="spinner-grow text-light" role="status"
+                            style="width: 0.8rem; height: 0.8rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        }
+                        @else {
                         {{ notReadNotificationsCount() }}
+                        }
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0 notifications-container"
@@ -32,7 +41,8 @@
                             style="font-size: 0.75rem;" (click)="clearAll()">Marcar todas como
                             lidas</a>
                     </div>
-                    <app-notifications-list [notifications]="notifications()" (notificationRead)="markAsRead($event)"></app-notifications-list>
+                    <app-notifications-list [notifications]="notifications()"
+                        (notificationRead)="markAsRead($event)"></app-notifications-list>
                 </div>
             </div>
         </div>

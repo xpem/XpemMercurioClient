@@ -16,7 +16,7 @@ declare const bootstrap: any;
 })
 export class BondList implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
-  SingleOrder: WritableSignal<Order | null> = signal(null);
+  SingleImportOrders: WritableSignal<Order[] | null> = signal(null);
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
@@ -73,12 +73,10 @@ export class BondList implements OnInit {
       this.mercadoLivreService.importSingleOrder(orderId).subscribe({
         next: (response) => {
 
-          const order: Order = response;
-          this.SingleOrder.set(order);
+          const orders: Order[] = response;
+          this.SingleImportOrders.set(orders);
 
           //external id of SingleOrder
-          const externalId = order.externalId;
-          console.log('External ID of imported order:', externalId);
           this.showModal('ConfirmImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
           this.isImportLoading.set(false);

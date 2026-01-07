@@ -17,6 +17,7 @@ export interface Order {
     shippingSellerCost: number;
     shippingBuyerCost: number;
     liquidAmount: number;
+    externalPackId?: string;
 }
 
 export enum OrderStatus {

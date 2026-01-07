@@ -50,12 +50,7 @@
         </div>
     </div>
     }
-    <!-- @if ((userProfile()?.shopeeCredentialId) == null) { -->
-
-    <!-- } -->
-    <!-- futuramente, possibilitar a opção de conectar com a shopee -->
-    <!-- @else { -->
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between mb-3 mt-3">
         <div class="col-lg-6">
             <!-- open the app-order-filters modal component -->
             <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
@@ -100,6 +95,9 @@
         }
         @if(orderFilterProductId() != '') {
         <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductId() }}</p>
+        }
+        @if(orderFilterProductSku() != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductSku() }}</p>
         }
         @if(orderFilterProductName() != '') {
         <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductName() }}</p>
@@ -169,6 +167,10 @@
                             }
                             }
                         </div>
+                        @if(item.externalPackId != null) {
+                        <p class=" status-badge badge rounded-pill text-bg-info mb-0"> <i class="bi bi-box-seam"></i>
+                            Pacote: {{item.externalPackId}}</p>
+                        }
                     </div>
                 </div>
 
