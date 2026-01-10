@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { Total } from "../models/total.model";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Product } from "../models/Product/product.model";
-import { ProductQuantityHistory } from "../models/Product/product-quantity-history.model";
+import { Product } from "../models/product/product.model";
+import { ProductQuantityHistory } from "../models/product/product-quantity-history.model";
 
 @Injectable({
     providedIn: "root",

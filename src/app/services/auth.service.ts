@@ -20,8 +20,10 @@ export class AuthService {
     }
 
     private checkAuthentication(): void {
-        const token = localStorage.getItem('token'); // ou sessionStorage
+        const token = this.cookieService.get(this.TOKEN_KEY);
+
         this.isAuthenticatedSignal.set(!!token);
+
     }
 
 

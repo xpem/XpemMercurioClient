@@ -20,8 +20,8 @@
                             <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
                                 livre</p>
                             <!-- style="background-color: #ffe600;" -->
-                            <a class="btn btn-light" style="background-color: var(--mercado-livre-color);" (click)="conectarMercadoLivre()"><i
-                                    class="bi bi-link"></i>&nbsp;&nbsp;Permitir
+                            <a class="btn btn-light" style="background-color: var(--mercado-livre-color);"
+                                (click)="conectarMercadoLivre()"><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
                                 Conexão</a>
                         </div>
                     </div>
@@ -37,11 +37,12 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">Shopee</h5>
-                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee</p>
+                            <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
+                            </p>
                             <!-- style="background-color: #ffe600;" -->
-                            <a class="btn btn-dark" style="background-color: var(--shopee-color);" (click)="conectarMercadoLivre()"><i
+                            <button class="btn btn-dark" style="background-color: var(--shopee-color);" disabled><i
                                     class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                                Conexão</a>
+                                Conexão</button>
                         </div>
                     </div>
                 </div>
@@ -49,12 +50,7 @@
         </div>
     </div>
     }
-    <!-- @if ((userProfile()?.shopeeCredentialId) == null) { -->
-
-    <!-- } -->
-    <!-- futuramente, possibilitar a opção de conectar com a shopee -->
-    <!-- @else { -->
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between mb-3 mt-3">
         <div class="col-lg-6">
             <!-- open the app-order-filters modal component -->
             <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
@@ -88,23 +84,26 @@
     @if(isActiveFilter()){
     <div class="col-lg-12 mb-3">Filtros:
 
-        @if(orderFilterExternalId() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterExternalId() }}</p>
+        @if(this.orderFilterDisplay().externalId != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().externalId }}</p>
         }
-        @if(orderFilterCreatedAfter() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedAfter() }}</p>
+        @if(this.orderFilterDisplay().createdAfter != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().createdAfter }}</p>
         }
-        @if(orderFilterCreatedBefore() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedBefore() }}</p>
+        @if(this.orderFilterDisplay().createdBefore != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().createdBefore }}</p>
         }
-        @if(orderFilterProductId() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductId() }}</p>
+        @if(this.orderFilterDisplay().productId != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productId }}</p>
         }
-        @if(orderFilterProductName() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductName() }}</p>
+        @if(this.orderFilterDisplay().productSKU != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productSKU }}</p>
         }
-        @if(orderFilterStatus() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterStatus() }}</p>
+        @if(this.orderFilterDisplay().productName != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productName }}</p>
+        }
+        @if(this.orderFilterDisplay().status != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().status }}</p>
         }
 
         <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
@@ -115,7 +114,7 @@
         @if(!isLoading() && orders().length === 0) {
         <div class="col">
             <div class="alert alert-info" role="alert">
-                Nenhuma venda encontrada.
+                Nenhuma venda encontrada, conecte-se a um marketplace e importe suas vendas.
             </div>
         </div>
         }
@@ -147,10 +146,6 @@
                             </p>
                         </div>
                         }
-                        <!-- <div class="d-flex justify-content-end" style="width: 100%;">
-                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
-                                {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-                        </div> -->
                         <div class="d-flex justify-content-between" style="width: 100%;">
                             <p class="mb-0 status-badge">{{item.status}}</p>
                             <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
@@ -158,22 +153,24 @@
                         </div>
                         <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                             @switch(item.printStatus) {
-                            @case (null) {
-                            <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
+                            @case (0) {
+                            <p class=" status-badge badge rounded-pill text-bg-primary mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-
                             }
                             @case (1) {
                             <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-
                             }
-                            @default {
+                            @case (3) {
                             <p class=" status-badge badge rounded-pill text-bg-warning mb-0"> <i
                                     class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
                             }
                             }
                         </div>
+                        @if(item.externalPackId != null) {
+                        <p class=" status-badge badge rounded-pill text-bg-info mb-0"> <i class="bi bi-box-seam"></i>
+                            Pacote: {{item.externalPackId}}</p>
+                        }
                     </div>
                 </div>
 
@@ -182,25 +179,63 @@
         }
         }
     </div>
-    @if ((totalPages() > 15)) {
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" class="mt-4">
+        @if (totalPages() > 1) {
         <ul class="pagination justify-content-end">
+            <!-- Botão Primeira Página -->
             <li class="page-item" [class.disabled]="currentPage() === 1">
-                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">&laquo;</button>
+                <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">
+                    &laquo;&laquo;
+                </button>
             </li>
-            @for (p of pages(); track $index) {
+
+            <!-- Botão Anterior -->
+            <li class="page-item" [class.disabled]="currentPage() === 1">
+                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">
+                    &laquo;
+                </button>
+            </li>
+
+            <!-- Reticências inicial (se necessário) -->
+            @if (pages()[0] > 1) {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            }
+
+            <!-- Páginas visíveis -->
+            @for (p of pages(); track p) {
             <li class="page-item" [class.active]="currentPage() === p">
                 <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
             </li>
             }
 
-            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                <button class="page-link" (click)="nextPage()"
-                    [disabled]="currentPage() === totalPages()">&raquo;</button>
-            </li>
+            <!-- Reticências final (se necessário) -->
+            @if (pages()[pages().length - 1] < totalPages()) { <li class="page-item disabled">
+                <span class="page-link">...</span>
+                </li>
+                }
+
+                <!-- Botão Próximo -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+                        &raquo;
+                    </button>
+                </li>
+
+                <!-- Botão Última Página -->
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                    <button class="page-link" (click)="goToPage(totalPages())"
+                        [disabled]="currentPage() === totalPages()">
+                        &raquo;&raquo;
+                    </button>
+                </li>
         </ul>
+        }
+
+        <div class="text-end text-muted small mt-2">
+            Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ totalOrders() }}
+        </div>
     </nav>
     }
-    }
-    <!-- } -->
 </div>

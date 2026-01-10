@@ -85,6 +85,11 @@ export class Signup implements OnInit {
       error: (error) => {
         console.error('Erro ao tentar criar usuário:', error);
 
+        if(error.error && error.error.errorCode === 3) {
+          this.errorMessage.set('Email já cadastrado.');
+          return;
+        }
+
         this.errorMessage.set(error.error || 'Erro ao criar usuário.');
       }
     });

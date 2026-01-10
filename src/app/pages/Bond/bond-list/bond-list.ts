@@ -1,9 +1,9 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { UserProfile } from '../../../models/user-profile.model';
 import { UserService } from '../../../services/user-api';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
-import { Order } from '../../../models/Order/order.model';
-import { Product } from '../../../models/Product/product.model';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { Order } from '../../../models/order/order.model';
+import { Product } from '../../../models/product/product.model';
 import { ToastService } from '../../../services/toast.service';
 
 declare const bootstrap: any;
@@ -16,10 +16,12 @@ declare const bootstrap: any;
 })
 export class BondList implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
-  SingleOrder: WritableSignal<Order | null> = signal(null);
+  SingleImportOrders: WritableSignal<Order[] | null> = signal(null);
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
+  isImportLoading: WritableSignal<boolean> = signal(false);
+
   todayDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -39,12 +41,17 @@ export class BondList implements OnInit {
     this.userService.getUserProfile().subscribe({
       next: (response) => {
         console.log('User profile:', response);
-
-        var _userProfile = {} as UserProfile;
+        const _userProfile = {} as UserProfile;
 
         if (response.mercadoLivreCredentialId) {
           _userProfile.mercadoLivreCredentialId = response.mercadoLivreCredentialId;
-        }
+        } else
+          _userProfile.mercadoLivreCredentialId = null;
+
+        if (response.shopeeCredentialId) {
+          _userProfile.shopeeCredentialId = response.shopeeCredentialId;
+        } else
+          _userProfile.shopeeCredentialId = null;
 
         this.userProfile.set(_userProfile);
         this.isLoading.set(false);
@@ -56,6 +63,7 @@ export class BondList implements OnInit {
   }
 
   ImportSingleOrder() {
+    this.isImportLoading.set(true);
     const orderIdInput = document.getElementById('orderId') as HTMLInputElement;
     const orderId = orderIdInput.value.trim();
     this.errorMessage.set('');
@@ -65,21 +73,20 @@ export class BondList implements OnInit {
       this.mercadoLivreService.importSingleOrder(orderId).subscribe({
         next: (response) => {
 
-          const order: Order = response;
-          this.SingleOrder.set(order);
+          const orders: Order[] = response;
+          this.SingleImportOrders.set(orders);
 
           //external id of SingleOrder
-          const externalId = order.externalId;
-          console.log('External ID of imported order:', externalId);
           this.showModal('ConfirmImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
+          this.isImportLoading.set(false);
         },
         error: (error) => {
           console.error('Error importing single order:', error);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleOrderModal');
-
           this.errorMessage.set(error?.message || 'An error occurred while importing the order.');
+          this.isImportLoading.set(false);
         }
       });
     }
@@ -103,13 +110,13 @@ export class BondList implements OnInit {
         next: (response) => {
           console.log('Orders imported successfully:', response);
           this.toastService.showInfo('Importação de pedidos em processamento!', 5000);
-          this.hideModal('ImportOrdersByPeriodModal');
+          this.hideModal('importOrdersByPeriodModal');
           this.getUserProfile()
         },
         error: (error) => {
           console.error('Error importing orders by period:', error);
           this.showModal('ErrorImportSingleModal');
-          this.hideModal('ImportOrdersByPeriodModal');
+          this.hideModal('importOrdersByPeriodModal');
           this.errorMessage.set(error?.message || 'An error occurred while importing orders by period.');
         }
       });
@@ -119,6 +126,7 @@ export class BondList implements OnInit {
   ImportSingleProduct() {
     const productIdInput = document.getElementById('productId') as HTMLInputElement;
     const productId = productIdInput.value.trim();
+    this.isImportLoading.set(true);
     this.errorMessage.set('');
     if (productId) {
 
@@ -127,6 +135,13 @@ export class BondList implements OnInit {
         next: (response) => {
 
           const product: Product = response;
+
+          if (product === null) {
+            this.showModal('ErrorImportSingleModal');
+            this.hideModal('ImportSingleProductModal');
+            this.errorMessage.set('Produto não encontrado.');
+            return;
+          }
           this.SingleProduct.set(product);
 
           //external id of SingleOrder
@@ -135,12 +150,13 @@ export class BondList implements OnInit {
 
           this.showModal('ConfirmImportSingleProductModal');
           this.hideModal('ImportSingleProductModal');
+          this.isImportLoading.set(false);
         },
         error: (error) => {
           console.log('Error object:', error.error.message);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleProductModal');
-
+          this.isImportLoading.set(false);
           this.errorMessage.set(error?.error?.message || 'An error occurred while importing the product.');
         }
       });
@@ -174,7 +190,7 @@ export class BondList implements OnInit {
         this.toastService.showSuccess('Credencial desativada com sucesso!', 5000);
         //dismiss modal
         this.hideModal('unbondModal');
-        //reload page after 2 seconds
+        this.getUserProfile()
       },
       error: (error) => {
         console.error('Error inactivating credential:', error);
@@ -183,10 +199,35 @@ export class BondList implements OnInit {
     });
   }
 
-  goToOrderDetail(id: any) {
+  ImportAllProducts() {
+    this.isImportLoading.set(true);
+    this.errorMessage.set('');
+    this.mercadoLivreService.importAllProducts().subscribe({
+      next: (response) => {
+        console.log('All products imported successfully:', response);
+        this.toastService.showInfo('Importação de todos os produtos em processamento!', 5000);
+        this.hideModal('importProductsModal');
+        this.isImportLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error importing all products:', error);
+        this.showModal('ErrorImportSingleModal');
+        this.hideModal('importProductsModal');
+        this.isImportLoading.set(false);
+        this.errorMessage.set(error?.message || 'An error occurred while importing all products.');
+      }
+    });
+  }
+
+  goToOrderDetail(id: number | undefined) {
     //navegar para a pagina order passando o externalId como parametro
     window.location.href = `/order?id=${id}`;
 
+  }
+
+  goToProductDetail(id: number | undefined) {
+    //navegar para a pagina product passando o publicId como parametro
+    window.location.href = `/product-detail?id=${id}`;
   }
 
   showErrorModal(): void {

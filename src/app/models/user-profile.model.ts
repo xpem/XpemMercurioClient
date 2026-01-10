@@ -1,4 +1,4 @@
 export interface UserProfile {
-    mercadoLivreCredentialId: string;
-    shopeeCredentialId?: string;
+    mercadoLivreCredentialId: string | null;
+    shopeeCredentialId?: string | null;
 }

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators } 
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user-api';
 import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-signin',
@@ -13,16 +14,24 @@ import { AuthService } from '../../../services/auth.service';
 export class Signin implements OnInit {
   SignInForm!: FormGroup;
   submitted = false;
-    isLoadingAccess: WritableSignal<boolean> = signal(false);
+  isLoadingAccess: WritableSignal<boolean> = signal(false);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
+
+    //se usuario já estiver autenticado, redireciona para home
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+    }
+
+
     // Cria o FormGroup com os controles e validações
     this.SignInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -57,7 +66,11 @@ export class Signin implements OnInit {
         this.isLoadingAccess.set(false);
       },
       error: (error) => {
-        console.error('Erro ao obter token:', error);
+        console.error('Erro ao obter token:', error?.error?.errorCode);
+
+        if (error.error && error.error.errorCode === 5) {
+          this.toastService.showError('Email ou senha inválidos!', 5000);
+        }
         // Aqui você pode adicionar lógica para exibir uma mensagem de erro ao usuário
         this.isLoadingAccess.set(false);
       }

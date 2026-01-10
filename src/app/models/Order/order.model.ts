@@ -14,6 +14,10 @@ export interface Order {
     printStatus: OrderShipmentLabelPrintStatus;
     printStatusText: string;
     shipmentExternalId?: string;
+    shippingSellerCost: number;
+    shippingBuyerCost: number;
+    liquidAmount: number;
+    externalPackId?: string;
 }
 
 export enum OrderStatus {
@@ -38,10 +42,12 @@ export interface OrderProduct {
     quantity: number;
     unitPrice: number;
     currencyId: string;
+    saleFee: number;
 }
 
 export enum OrderShipmentLabelPrintStatus {
     NotPrinted = 0,
     Printed = 1,
-    Undefined = 2
+    Undefined = 2,
+    Stale = 3,
 }

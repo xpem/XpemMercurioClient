@@ -1,18 +1,20 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService } from '../../../services/product-api';
-import { Product } from '../../../models/Product/product.model';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { Product } from '../../../models/product/product.model';
+import { CurrencyPipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
 import { Router, RouterLink } from '@angular/router';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
-import { ProductBond } from '../../../models/Product/product-Bond.model';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { ProductBond } from '../../../models/product/product-Bond.model';
+import { ProductQuantityHistory } from '../../../models/product/product-quantity-history.model';
 import { MovementHistoryComponent } from './components/movement-history/movement-history';
-import { ProductQuantityHistory } from '../../../models/Product/product-quantity-history.model';
+
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-product-detail',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, NgClass, MovementHistoryComponent],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, MovementHistoryComponent],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -26,6 +28,7 @@ export class ProductDetail implements OnInit {
   ProductForm!: FormGroup;
   productBonds: WritableSignal<ProductBond[]> = signal([]);
   isLoadingQuantityHistory: WritableSignal<boolean> = signal(true);
+  isLoadingProductBonds: WritableSignal<boolean> = signal(true);
   productQuantityHistory: WritableSignal<ProductQuantityHistory[]> = signal([]);
   editQuantityType: WritableSignal<number> = signal(0); // 1 para entrada, 2 para saída
   editNewQuantity: WritableSignal<number> = signal(0);
@@ -86,9 +89,12 @@ export class ProductDetail implements OnInit {
                   }
                 }
               }
+
+              this.isLoadingProductBonds.set(false);
             },
             error: (error) => {
               console.error('Error fetching product bonds:', error);
+              this.isLoadingProductBonds.set(false);
             }
           });
 
@@ -193,12 +199,26 @@ export class ProductDetail implements OnInit {
         this.ProductForm.reset();
         this.editNewQuantity.set(0);
 
+        //close modal
+        this.hideModal('editQuantityModal');
+
       },
       error: (error) => {
         console.error('Error updating product:', error);
         this.toastService.showError('Erro ao atualizar a quantidade. Por favor, tente novamente.');
       }
     });
+  }
+
+
+  hideModal(modalId: string): void {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
   }
 
   onTypeChange(event: any): void {

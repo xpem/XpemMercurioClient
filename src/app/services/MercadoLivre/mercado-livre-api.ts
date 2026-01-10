@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { MercadoLivreOath } from "../../models/MercadoLivre/mercado-livre-oath.model";
+import { timeout } from "rxjs/operators";
+import { MercadoLivreOath } from "../../models/mercadoLivre/mercado-livre-oath.model";
 
 @Injectable({
     providedIn: "root",
@@ -18,7 +19,9 @@ export class MercadoLivreService {
     }
 
     public postUserCredential(mercadoLivreOath: MercadoLivreOath): Observable<any> {
-        return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' });
+        return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOath, { responseType: 'text' }).pipe(
+            timeout(6000)
+        );
     }
 
     public InactivateCredential(credentialid: string): Observable<any> {
@@ -38,14 +41,18 @@ export class MercadoLivreService {
     }
 
     public importOrdersByPeriod(startDate: string, endDate: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`);
+        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`, { responseType: 'text' });
     }
 
     public importSingleProduct(productId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`);
     }
 
-    public importProductBonds(productId : number): Observable<any> {
+    public importAllProducts(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/Import`, { responseType: 'text' });
+    }
+
+    public importProductBonds(productId: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/${productId}/Bond/List`);
     }
 }

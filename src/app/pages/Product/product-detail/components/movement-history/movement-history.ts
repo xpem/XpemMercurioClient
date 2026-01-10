@@ -1,5 +1,5 @@
 import { Component, Input, WritableSignal } from '@angular/core';
-import { ProductQuantityHistory } from '../../../../../models/Product/product-quantity-history.model';
+import { ProductQuantityHistory } from '../../../../../models/product/product-quantity-history.model';
 
 @Component({
   selector: 'app-movement-history',

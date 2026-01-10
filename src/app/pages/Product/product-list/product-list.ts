@@ -1,5 +1,5 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
-import { Product } from '../../../models/Product/product.model';
+import { Product } from '../../../models/product/product.model';
 import { ProductService } from '../../../services/product-api';
 import { CurrencyPipe } from '@angular/common';
 

@@ -1,10 +1,10 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../../services/toast.service';
 import { ShipmentService } from '../../../services/shipment-api';
-import { Order } from '../../../models/Order/order.model';
+import { Order } from '../../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from "@angular/router";
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 
 @Component({
   selector: 'app-shipment-pending-labels-list',

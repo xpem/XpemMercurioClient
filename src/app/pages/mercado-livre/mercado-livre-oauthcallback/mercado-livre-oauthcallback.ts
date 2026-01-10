@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 
 @Component({
   selector: 'app-mercado-livre-oauthcallback',

@@ -9,84 +9,98 @@
             </div>
             <form [formGroup]="FilterFormGroup">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-4 mb-3">
-                            <label for="orderExternalId" class="form-label fw-bold">ID da Venda</label>
-                            <input type="text" class="form-control form-control-sm" id="orderExternalId"
-                                formControlName="orderExternalId" placeholder="Digite o ID da Venda">
+
+                    <div class="card" style="margin-bottom: 0.5rem;">
+                        <div class="card-header">
+                            Vendas
                         </div>
-                        <div class="col-lg-6">
-                            <label for="orderStatus" class="form-label fw-bold">Status do Pedido</label>
-                            <div class="col-lg-12">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1"
-                                        [checked]="FilterFormGroup.value.orderStatus?.includes(1)"
-                                        (change)="setCheckboxOrderStatusValue($event, 1)">
-                                    <label class="form-check-label" for="inlineCheckbox1">Confirmada</label>
+                        <div class="card-body" style="padding: 0.5rem 0.5rem 0rem 0.5rem">
+                            <div class="row">
+                                <div class="col-lg-4 mb-3">
+                                    <label for="orderExternalId" class="form-label fw-bold">ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="orderExternalId"
+                                        formControlName="orderExternalId" placeholder="Digite o ID da Venda">
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="2"
-                                        [checked]="FilterFormGroup.value.orderStatus?.includes(2)"
-                                        (change)="setCheckboxOrderStatusValue($event, 2)">
-                                    <label class="form-check-label" for="inlineCheckbox2">Paga</label>
+                                <div class="col-lg-6">
+                                    <label for="orderStatus" class="form-label fw-bold">Status</label>
+                                    <div class="col-lg-12">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                                value="1" [checked]="FilterFormGroup.value.orderStatus?.includes(1)"
+                                                (change)="setCheckboxOrderStatusValue($event, 1)">
+                                            <label class="form-check-label" for="inlineCheckbox1">Confirmada</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                                value="2" [checked]="FilterFormGroup.value.orderStatus?.includes(2)"
+                                                (change)="setCheckboxOrderStatusValue($event, 2)">
+                                            <label class="form-check-label" for="inlineCheckbox2">Paga</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
+                                                value="5" [checked]="FilterFormGroup.value.orderStatus?.includes(5)"
+                                                (change)="setCheckboxOrderStatusValue($event, 5)">
+                                            <label class="form-check-label" for="inlineCheckbox3">Cancelada</label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="5"
-                                        [checked]="FilterFormGroup.value.orderStatus?.includes(5)"
-                                        (change)="setCheckboxOrderStatusValue($event, 5)">
-                                    <label class="form-check-label" for="inlineCheckbox3">Cancelada</label>
+                            </div>
+                            <!-- filtros de data inicial e data final -->
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="orderDateStart" class="form-label fw-bold">Data Inicial</label>
+                                    <input type="date" class="form-control form-control-sm" id="orderDateStart"
+                                        style="width: auto;"
+                                        [class.is-invalid]="FilterFormGroup.hasError('dateRangeInvalid')"
+                                        formControlName="orderDateStart">
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="orderDateEnd" class="form-label fw-bold">Data Final</label>
+                                    <input type="date" class="form-control form-control-sm" id="orderDateEnd"
+                                        style="width: auto;"
+                                        [class.is-invalid]="FilterFormGroup.hasError('dateRangeInvalid')"
+                                        formControlName="orderDateEnd">
+                                </div>
+                                @if(FilterFormGroup.hasError('dateRangeInvalid')) {
+                                <div class="col-lg-12">
+                                    <div class="invalid-feedback d-block">
+                                        A data inicial não pode ser maior que a data final.
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            Produtos
+                        </div>
+                        <div class="card-body" style="padding: 0.5rem 0.5rem 0rem 0.5rem">
+                            <div class="row">
+                                <div class="mb-3 col-lg-4">
+                                    <label for="orderProductId" class="form-label fw-bold">ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="orderProductId"
+                                        formControlName="orderProductId" placeholder="Digite o ID do produto">
+                                </div>
+                                <div class="mb-3 col-lg-4">
+                                    <label for="orderProductSKU" class="form-label fw-bold">SKU</label>
+                                    <input type="text" class="form-control form-control-sm" id="orderProductSKU"
+                                        formControlName="orderProductSKU" placeholder="Digite o SKU do produto">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-lg-6">
+                                    <label for="orderProductName" class="form-label fw-bold">Nome</label>
+                                    <input type="text" class="form-control form-control-sm" id="orderProductName"
+                                        formControlName="orderProductName" placeholder="Digite o nome do produto">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- filtros de data inicial e data final -->
-                    <div class="row">
-                        <div class="mb-3 col-md-6">
-                            <label for="orderDateStart" class="form-label fw-bold">Data Inicial</label>
-                            <input type="date" class="form-control form-control-sm" id="orderDateStart"
-                                style="width: auto;" [class.is-invalid]="FilterFormGroup.hasError('dateRangeInvalid')"
-                                formControlName="orderDateStart">
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="orderDateEnd" class="form-label fw-bold">Data Final</label>
-                            <input type="date" class="form-control form-control-sm" id="orderDateEnd"
-                                style="width: auto;" [class.is-invalid]="FilterFormGroup.hasError('dateRangeInvalid')"
-                                formControlName="orderDateEnd">
-                        </div>
-                        @if(FilterFormGroup.hasError('dateRangeInvalid')) {
-                        <div class="col-lg-12">
-                            <div class="invalid-feedback d-block">
-                                A data inicial não pode ser maior que a data final.
-                            </div>
-                        </div>
-                        }
-                    </div>
-                    <!-- <div class="row"> -->
-                    <!-- <div class="mb-3 col-lg-12">
-                            <label for="orderStatus" class="form-label fw-bold">Status do Pedido</label>
-                            <select multiple class="form-select form-select-sm" id="orderStatus"
-                                formControlName="orderStatus">
-                                <option [ngValue]="1" >Confirmada</option>
-                                <option [ngValue]="2" >Paga</option>
-                                <option [ngValue]="5" >Cancelada</option>                                
-                            </select>
-                            <div class="form-text">Segure a tecla Ctrl (Windows) ou Command (Mac) para selecionar múltiplos
-                                status.</div>
-                        </div> -->
 
-                    <div class="row">
-                        <div class="mb-3 col-lg-4">
-                            <label for="orderProductId" class="form-label fw-bold">ID do produto</label>
-                            <input type="text" class="form-control form-control-sm" id="orderProductId"
-                                formControlName="orderProductId" placeholder="Digite o ID do produto">
-                        </div>
-                        <div class="mb-3 col-lg-8">
-                            <label for="orderProductName" class="form-label fw-bold">Nome do produto</label>
-                            <input type="text" class="form-control form-control-sm" id="orderProductName"
-                                formControlName="orderProductName" placeholder="Digite o nome do produto">
-                        </div>
-                    </div>
+
+
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onClearClick()"><i
