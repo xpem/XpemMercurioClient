@@ -142,7 +142,13 @@
             </form>
         </div>
     </div>
-
+    @if(isLoadingProductBonds()) {
+    <button class="btn btn-success" type="button" disabled>
+        <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+        &nbsp;&nbsp;Carregando...
+    </button>
+    }
+    @else {
     @if(productBonds().length > 0) {
     @for (item of productBonds(); track $index) {
     <div class="col-lg-6 card border-light text-bg-dark mb-3">
@@ -172,14 +178,21 @@
                         value="{{item.quantity}}">
                     <label for="mlQuantity-{{item.id}}">Quantidade</label>
                 </div>
+                <!-- <div class="col-lg-6 form-floating">
+                    <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
+                        value="{{item.soldQuantity}}">
+                    <label for="mlSoldQuantity-{{item.id}}">Acessos</label>
+                </div> -->
                 <div class="col-lg-6 form-floating">
                     <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
                         value="{{item.soldQuantity}}">
-                    <label for="mlSoldQuantity-{{item.id}}">Quantidade Vendida</label>
+                    <label for="mlSoldQuantity-{{item.id}}">Vendidos</label>
                 </div>
+
             </div>
         </div>
     </div>
+    }
     }
     }
 </div>

@@ -28,6 +28,7 @@ export class ProductDetail implements OnInit {
   ProductForm!: FormGroup;
   productBonds: WritableSignal<ProductBond[]> = signal([]);
   isLoadingQuantityHistory: WritableSignal<boolean> = signal(true);
+  isLoadingProductBonds: WritableSignal<boolean> = signal(true);
   productQuantityHistory: WritableSignal<ProductQuantityHistory[]> = signal([]);
   editQuantityType: WritableSignal<number> = signal(0); // 1 para entrada, 2 para saída
   editNewQuantity: WritableSignal<number> = signal(0);
@@ -88,9 +89,12 @@ export class ProductDetail implements OnInit {
                   }
                 }
               }
+
+              this.isLoadingProductBonds.set(false);
             },
             error: (error) => {
               console.error('Error fetching product bonds:', error);
+              this.isLoadingProductBonds.set(false);
             }
           });
 
@@ -206,7 +210,7 @@ export class ProductDetail implements OnInit {
     });
   }
 
-  
+
   hideModal(modalId: string): void {
     const modalElement = document.getElementById(modalId);
     if (modalElement) {

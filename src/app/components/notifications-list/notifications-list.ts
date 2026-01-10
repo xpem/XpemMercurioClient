@@ -11,7 +11,8 @@ import { AppNotification } from '../../models/appNotification.model';
 })
 export class NotificationsList {
   @Input() notifications: AppNotification[] = [];
-    @Output() notificationRead = new EventEmitter<number>();
+  @Output() notificationRead = new EventEmitter<number>();
+  @Input() isLoadingNotifications: boolean = false;
 
   onNotificationClick(id: number) {
     this.notificationRead.emit(id);

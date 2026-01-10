@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Toasts } from "./components/toasts/toasts";
 import { Sidebar } from "./components/sidebar/sidebar";
@@ -20,22 +20,50 @@ export class App implements OnInit, OnDestroy {
   notifications = signal<AppNotification[]>([]);
   notReadNotificationsCount = signal(0);
   isLoadingNotifications: WritableSignal<boolean> = signal(false);
+
   private notificationInterval: any;
 
-  constructor(public authService: AuthService, private notificationApi: NotificationApi) { }
+  constructor(public authService: AuthService, private notificationApi: NotificationApi) {
+    // Reage às mudanças no estado de autenticação
+    effect(() => {
+      const isAuthenticated = this.authService.isAuthenticated();
+      
+      if (isAuthenticated) {
+        this.startNotificationPolling();
+      } else {
+        this.stopNotificationPolling();
+      }
+    });
+  }
 
   ngOnInit() {
+    // Verifica o estado de autenticação através da API
+    this.authService.checkSessionStatus().subscribe();
+  }
 
+  ngOnDestroy() {
+    this.stopNotificationPolling();
+  }
+
+  private startNotificationPolling() {
+    // Evita múltiplos intervals
+    if (this.notificationInterval) {
+      return;
+    }
+
+    // Carrega imediatamente
     this.loadTotalNotificationsUnread();
 
+    // Depois continua carregando a cada 20 segundos
     this.notificationInterval = setInterval(() => {
       this.loadTotalNotificationsUnread();
     }, 20000);
   }
 
-  ngOnDestroy() {
+  private stopNotificationPolling() {
     if (this.notificationInterval) {
       clearInterval(this.notificationInterval);
+      this.notificationInterval = null;
     }
   }
 
