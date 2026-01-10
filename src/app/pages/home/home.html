@@ -84,26 +84,26 @@
     @if(isActiveFilter()){
     <div class="col-lg-12 mb-3">Filtros:
 
-        @if(orderFilterExternalId() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterExternalId() }}</p>
+        @if(this.orderFilterDisplay().externalId != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().externalId }}</p>
         }
-        @if(orderFilterCreatedAfter() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedAfter() }}</p>
+        @if(this.orderFilterDisplay().createdAfter != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().createdAfter }}</p>
         }
-        @if(orderFilterCreatedBefore() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterCreatedBefore() }}</p>
+        @if(this.orderFilterDisplay().createdBefore != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().createdBefore }}</p>
         }
-        @if(orderFilterProductId() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductId() }}</p>
+        @if(this.orderFilterDisplay().productId != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productId }}</p>
         }
-        @if(orderFilterProductSKU() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductSKU() }}</p>
+        @if(this.orderFilterDisplay().productSKU != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productSKU }}</p>
         }
-        @if(orderFilterProductName() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterProductName() }}</p>
+        @if(this.orderFilterDisplay().productName != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productName }}</p>
         }
-        @if(orderFilterStatus() != '') {
-        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterStatus() }}</p>
+        @if(this.orderFilterDisplay().status != '') {
+        <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().status }}</p>
         }
 
         <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"

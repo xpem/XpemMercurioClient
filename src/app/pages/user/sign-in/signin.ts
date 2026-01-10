@@ -25,6 +25,13 @@ export class Signin implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    //se usuario já estiver autenticado, redireciona para home
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+    }
+
+
     // Cria o FormGroup com os controles e validações
     this.SignInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

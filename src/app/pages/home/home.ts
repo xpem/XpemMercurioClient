@@ -7,7 +7,7 @@ import { OrderService } from '../../services/order-api';
 import { Order, OrderStatus } from '../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { ShipmentService } from '../../services/shipment-api';
-import { OrderFilter } from '../../models/order/order-filter.model';
+import { OrderFilter, OrderFilterDisplay } from '../../models/order/order-filter.model';
 import { OrderFilters } from "./components/order-filters/order-filters";
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,13 +33,15 @@ export class Home implements OnInit {
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
 
   //filters
-  orderFilterExternalId: WritableSignal<string> = signal('');
-  orderFilterCreatedAfter: WritableSignal<string> = signal('');
-  orderFilterCreatedBefore: WritableSignal<string> = signal('');
-  orderFilterProductId: WritableSignal<string> = signal('');
-  orderFilterProductSKU: WritableSignal<string> = signal('');
-  orderFilterProductName: WritableSignal<string> = signal('');
-  orderFilterStatus: WritableSignal<string> = signal('');
+  orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
+    externalId: '',
+    createdAfter: '',
+    createdBefore: '',
+    productId: '',
+    productSKU: '',
+    productName: '',
+    status: ''
+  });
 
   isActiveFilter: WritableSignal<boolean> = signal(false);
   orderFilterForm: FormGroup;
@@ -75,7 +77,7 @@ export class Home implements OnInit {
     );
   }
 
-    // Validador customizado que compara datas
+  // Validador customizado que compara datas
   private dateRangeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const parent = control as FormGroup;
@@ -95,7 +97,7 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    
+
     // Executa as 3 requisições em paralelo, mas de forma independente
     forkJoin({
       profile: this.userService.getUserProfile().pipe(
@@ -175,19 +177,21 @@ export class Home implements OnInit {
 
     this.orderFilter.set({});
     this.isActiveFilter.set(false);
-    this.orderFilterExternalId.set('');
-    this.orderFilterCreatedAfter.set('');
-    this.orderFilterCreatedBefore.set('');
-    this.orderFilterProductId.set('');
-    this.orderFilterProductSKU.set('');
-    this.orderFilterProductName.set('');
-    this.orderFilterStatus.set('');
+    this.orderFilterDisplay.set({
+      externalId: '',
+      createdAfter: '',
+      createdBefore: '',
+      productId: '',
+      productSKU: '',
+      productName: '',
+      status: ''
+    });
     this.orderFilterForm.value.orderStatus = [] as number[];
     this.orderFilterForm.reset();
   }
 
   onOrderFiltersFormSubmit(): void {
-  
+
     // Validar se a data inicial é menor que a data final
     if (this.orderFilterForm.hasError('dateRangeInvalid')) {
       this.toastService.showError('A data inicial não pode ser maior que a data final!', 5000);
@@ -196,29 +200,40 @@ export class Home implements OnInit {
 
     this.isActiveFilter.set(true);
 
-    if (this.orderFilterForm.value.orderExternalId !== null && this.orderFilterForm.value.orderExternalId !== '')
-      this.orderFilterExternalId.set(`Id da venda: #${this.orderFilterForm.value.orderExternalId}`);
+    const currentDisplay: OrderFilterDisplay = { ...this.orderFilterDisplay() };
 
-    if (this.orderFilterForm.value.orderDateStart !== null)
-      this.orderFilterCreatedAfter.set(`De: ${this.formatDate(this.orderFilterForm.value.orderDateStart)}`);
-
-    if (this.orderFilterForm.value.orderDateEnd !== null)
-      this.orderFilterCreatedBefore.set(`Até: ${this.formatDate(this.orderFilterForm.value.orderDateEnd)}`);
-
-    if (this.orderFilterForm.value.orderProductId !== null && this.orderFilterForm.value.orderProductId !== '')
-      this.orderFilterProductId.set(`Id do produto: #${this.orderFilterForm.value.orderProductId}`);
-
-    if (this.orderFilterForm.value.orderProductSKU !== null && this.orderFilterForm.value.orderProductSKU !== '')
-      this.orderFilterProductSKU.set(`SKU do produto: ${this.orderFilterForm.value.orderProductSKU}`);
-
-    if (this.orderFilterForm.value.orderProductName !== null && this.orderFilterForm.value.orderProductName !== '')
-      this.orderFilterProductName.set(`Nome do produto: ${this.orderFilterForm.value.orderProductName}`);
-
-    if (this.orderFilterForm.value.orderStatus !== null && this.orderFilterForm.value.orderStatus.length > 0) {
-      let statusesText = this.orderFilterForm.value.orderStatus.map((status: OrderStatus) => OrderStatus[status]).join(', ');
-      this.orderFilterStatus.set(`Situações: ${statusesText}`);
+    if (this.orderFilterForm.value.orderExternalId !== null && this.orderFilterForm.value.orderExternalId !== '') {
+      currentDisplay.externalId = `Id da venda: #${this.orderFilterForm.value.orderExternalId}`;
     }
 
+    if (this.orderFilterForm.value.orderDateStart !== null) {
+      currentDisplay.createdAfter = `De: ${this.formatDate(this.orderFilterForm.value.orderDateStart)}`;
+    }
+
+    if (this.orderFilterForm.value.orderDateEnd !== null) {
+      currentDisplay.createdBefore = `Até: ${this.formatDate(this.orderFilterForm.value.orderDateEnd)}`;
+    }
+
+    if (this.orderFilterForm.value.orderProductId !== null && this.orderFilterForm.value.orderProductId !== '') {
+      currentDisplay.productId = `Id do produto: #${this.orderFilterForm.value.orderProductId}`;
+    }
+
+    if (this.orderFilterForm.value.orderProductSKU !== null && this.orderFilterForm.value.orderProductSKU !== '') {
+      currentDisplay.productSKU = `SKU do produto: ${this.orderFilterForm.value.orderProductSKU}`;
+    }
+
+    if (this.orderFilterForm.value.orderProductName !== null && this.orderFilterForm.value.orderProductName !== '') {
+      currentDisplay.productName = `Nome do produto: ${this.orderFilterForm.value.orderProductName}`;
+    }
+
+    if (this.orderFilterForm.value.orderStatus !== null && this.orderFilterForm.value.orderStatus.length > 0) {
+      let statusesText = this.orderFilterForm.value.orderStatus
+        .map((status: OrderStatus) => OrderStatus[status])
+        .join(', ');
+      currentDisplay.status = `Situações: ${statusesText}`;
+    }
+
+    this.orderFilterDisplay.set(currentDisplay);
     this.orderFilter.set({
       orderExternalId: this.orderFilterForm.value.orderExternalId,
       createdAfter: this.orderFilterForm.value.orderDateStart,
