@@ -143,10 +143,9 @@
         </div>
     </div>
     @if(isLoadingProductBonds()) {
-    <button class="btn btn-success" type="button" disabled>
-        <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-        &nbsp;&nbsp;Carregando...
-    </button>
+            <div class="spinner-grow text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
     }
     @else {
     @if(productBonds().length > 0) {

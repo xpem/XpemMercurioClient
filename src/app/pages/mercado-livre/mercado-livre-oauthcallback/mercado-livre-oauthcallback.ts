@@ -1,9 +1,10 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-mercado-livre-oauthcallback',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './mercado-livre-oauthcallback.html',
   styleUrl: './mercado-livre-oauthcallback.css',
   standalone: true
@@ -13,8 +14,9 @@ export class MercadoLivreOauthCallback implements OnInit {
   //o state é o id publico do usuário
   errorMessage: WritableSignal<string> = signal('');
   submitted: WritableSignal<boolean> = signal(false);
-  constructor(private MercadoLivreService: MercadoLivreService) { }
-
+  MercadoLivreService = inject(MercadoLivreService);
+  router = inject(Router);
+  
   ngOnInit(): void {
 
     const urlParams = new URLSearchParams(window.location.search);
