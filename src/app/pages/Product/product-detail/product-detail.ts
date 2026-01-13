@@ -59,8 +59,8 @@ export class ProductDetail implements OnInit {
           console.log('Product fetched successfully:', response);
           this.product.set(response);
 
-          this.mercadoLivreService.importProductBonds(response.id).subscribe({
-            next: (bondResponse) => {
+          this.mercadoLivreService.getProductBonds(response.id).subscribe({
+            next: async (bondResponse) => {
               console.log('Product bonds fetched successfully:', bondResponse);
 
               this.productBonds.set(bondResponse);
@@ -88,6 +88,7 @@ export class ProductDetail implements OnInit {
                       break;
                   }
                 }
+
               }
 
               this.isLoadingProductBonds.set(false);
@@ -109,7 +110,6 @@ export class ProductDetail implements OnInit {
       });
     }
   }
-
   getQuantityHistoric(): void {
     this.isLoadingQuantityHistory.set(true);
     this.productQuantityHistory.set([]);

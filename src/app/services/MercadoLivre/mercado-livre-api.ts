@@ -52,7 +52,11 @@ export class MercadoLivreService {
         return this.http.get(`${this.apiUrl}/Product/Import`, { responseType: 'text' });
     }
 
-    public importProductBonds(productId: number): Observable<any> {
+    public getProductBonds(productId: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/${productId}/Bond/List`);
+    }
+
+    public getProductBondVisits(productExternalId: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/${productExternalId}/Visits`);
     }
 }

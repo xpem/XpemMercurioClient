@@ -143,7 +143,7 @@
         </div>
     </div>
     @if(isLoadingProductBonds()) {
-            <div class="spinner-grow text-light" role="status">
+    <div class="spinner-grow text-light" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
     }
@@ -177,11 +177,11 @@
                         value="{{item.quantity}}">
                     <label for="mlQuantity-{{item.id}}">Quantidade</label>
                 </div>
-                <!-- <div class="col-lg-6 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
-                        value="{{item.soldQuantity}}">
-                    <label for="mlSoldQuantity-{{item.id}}">Acessos</label>
-                </div> -->
+                <div class="col-lg-6 form-floating">
+                    <input type="text" readonly class="form-control-plaintext" id="mlQuantityVisits-{{item.id}}"
+                        value="{{item.visits}}">
+                    <label for="mlQuantityVisits-{{item.id}}">Acessos</label>
+                </div>
                 <div class="col-lg-6 form-floating">
                     <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
                         value="{{item.soldQuantity}}">

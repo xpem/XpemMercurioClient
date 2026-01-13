@@ -14,6 +14,7 @@ export interface ProductBond {
     productId: number;
     statusText: string;
     statusClassColor?: string;
+    visits: number;
 }
 
 export enum ProductStatusMercadoLivreBond {
