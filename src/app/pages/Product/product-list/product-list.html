@@ -1,142 +1,139 @@
-<div class="container">
-    <h5 class="mb-4"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produtos</h5>
-    @if (isLoading()) {
-    <div class="spinner-grow" role="status">
-        <span class="visually-hidden">Loading...</span>
+<h5 class="mb-4"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produtos</h5>
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+}
+@else {
+@if (products().length === 0) {
+<div class="col-lg-12 d-flex justify-content-center align-items-center" style="height: 300px;">
+    <div class="text-center text-body-secondary">
+        <i class="bi bi-box-seam" style="font-size: 50px;"></i>
+        <p class="mt-3">Nenhum produto vinculado, conecte-se a um marketplace e importe seus produtos.</p>
     </div>
-    }
-    @else {
-    @if (products().length === 0) {
-    <div class="col-lg-12 d-flex justify-content-center align-items-center" style="height: 300px;">
-        <div class="text-center text-body-secondary">
-            <i class="bi bi-box-seam" style="font-size: 50px;"></i>
-            <p class="mt-3">Nenhum produto vinculado, conecte-se a um marketplace e importe seus produtos.</p>
+</div>
+}
+@else {
+<div class="d-flex justify-content-between mb-3 mt-3">
+    <div class="col-lg-6">
+        <!-- open the app-product-filters modal component -->
+        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+            data-bs-target="#productFiltersModal">
+            <i class="bi bi-funnel"></i>
+        </button>
+    </div>
+</div>
+<app-product-filters [FilterFormGroup]="productFilterForm" (submit)="onProductFiltersFormSubmit()"
+    (clearFilters)="clearFilters()"></app-product-filters>
+@if(isActiveFilter()){
+@if(this.productFilterDisplay().productSKU) {
+<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productSKU }}</p>
+}
+@if(this.productFilterDisplay().productTitle) {
+<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productTitle }}</p>
+}
+<button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
+    (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
+}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @if(!isLoading() && products().length === 0) {
+    <div class="col">
+        <div class="alert alert-info" role="alert">
+            Nenhum produto.
         </div>
     </div>
     }
-    @else {
-    <div class="d-flex justify-content-between mb-3 mt-3">
-        <div class="col-lg-6">
-            <!-- open the app-product-filters modal component -->
-            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
-                data-bs-target="#productFiltersModal">
-                <i class="bi bi-funnel"></i>
-            </button>
-        </div>
-    </div>
-    <app-product-filters [FilterFormGroup]="productFilterForm" (submit)="onProductFiltersFormSubmit()"
-        (clearFilters)="clearFilters()"></app-product-filters>
-    @if(isActiveFilter()){
-    @if(this.productFilterDisplay()?.productSKU) {
-    <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productSKU }}</p>
-    }
-    @if(this.productFilterDisplay()?.productTitle) {
-    <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productTitle }}</p>
-    }
-    <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
-        (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
-    }
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @if(!isLoading() && products().length === 0) {
-        <div class="col">
-            <div class="alert alert-info" role="alert">
-                Nenhum produto.
+    @else{
+    @for (item of products(); track $index) {
+    <div class="col" (click)="goToDetail(item.id)">
+        <div class="card h-100 linked-card card-custom">
+            <div class="card-header fw-bold">
+                {{ item.title }}
             </div>
-        </div>
-        }
-        @else{
-        @for (item of products(); track $index) {
-        <div class="col" (click)="goToDetail(item.id)">
-            <div class="card h-100 linked-card card-custom">
-                <div class="card-header fw-bold">
-                    {{ item.title }}
-                </div>
-                <div class="card-body">
+            <div class="card-body">
 
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.65rem;">Quantidade
-                            </p>
-                            <p class="card-text mb-0 text-body-secondary">{{item.quantity}}</p>
-                        </div>
-
-                        <div>
-                            <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Valor base
-                            </p>
-                            <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
-                                {{ item.basePrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-                        </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.65rem;">Quantidade
+                        </p>
+                        <p class="card-text mb-0 text-body-secondary">{{item.quantity}}</p>
                     </div>
-                    <div class="d-flex justify-content-between mt-2">
-                        <div>
-                            <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Vendidos
-                            </p>
-                            <p class="card-text mb-0 text-body-secondary">{{item.soldQuantity}}</p>
-                        </div>
+
+                    <div>
+                        <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Valor base
+                        </p>
+                        <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
+                            {{ item.basePrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <div>
+                        <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Vendidos
+                        </p>
+                        <p class="card-text mb-0 text-body-secondary">{{item.soldQuantity}}</p>
                     </div>
                 </div>
             </div>
         </div>
-        }
-        }
     </div>
-    <nav aria-label="Page navigation" class="mt-4">
-        @if (totalPages() > 1) {
-        <ul class="pagination justify-content-end">
-            <!-- Botão Primeira Página -->
-            <li class="page-item" [class.disabled]="currentPage() === 1">
-                <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">
-                    &laquo;&laquo;
-                </button>
-            </li>
-
-            <!-- Botão Anterior -->
-            <li class="page-item" [class.disabled]="currentPage() === 1">
-                <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">
-                    &laquo;
-                </button>
-            </li>
-
-            <!-- Reticências inicial (se necessário) -->
-            @if (pages()[0] > 1) {
-            <li class="page-item disabled">
-                <span class="page-link">...</span>
-            </li>
-            }
-
-            <!-- Páginas visíveis -->
-            @for (p of pages(); track p) {
-            <li class="page-item" [class.active]="currentPage() === p">
-                <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
-            </li>
-            }
-
-            <!-- Reticências final (se necessário) -->
-            @if (pages()[pages().length - 1] < totalPages()) { <li class="page-item disabled">
-                <span class="page-link">...</span>
-                </li>
-                }
-
-                <!-- Botão Próximo -->
-                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                    <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
-                        &raquo;
-                    </button>
-                </li>
-
-                <!-- Botão Última Página -->
-                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                    <button class="page-link" (click)="goToPage(totalPages())"
-                        [disabled]="currentPage() === totalPages()">
-                        &raquo;&raquo;
-                    </button>
-                </li>
-        </ul>
-        }
-        <div class="text-end text-muted small mt-2">
-            Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }}
-        </div>
-    </nav>
     }
     }
 </div>
+<nav aria-label="Page navigation" class="mt-4">
+    @if (totalPages() > 1) {
+    <ul class="pagination justify-content-end">
+        <!-- Botão Primeira Página -->
+        <li class="page-item" [class.disabled]="currentPage() === 1">
+            <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">
+                &laquo;&laquo;
+            </button>
+        </li>
+
+        <!-- Botão Anterior -->
+        <li class="page-item" [class.disabled]="currentPage() === 1">
+            <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">
+                &laquo;
+            </button>
+        </li>
+
+        <!-- Reticências inicial (se necessário) -->
+        @if (pages()[0] > 1) {
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        }
+
+        <!-- Páginas visíveis -->
+        @for (p of pages(); track p) {
+        <li class="page-item" [class.active]="currentPage() === p">
+            <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
+        </li>
+        }
+
+        <!-- Reticências final (se necessário) -->
+        @if (pages()[pages().length - 1] < totalPages()) { <li class="page-item disabled">
+            <span class="page-link">...</span>
+            </li>
+            }
+
+            <!-- Botão Próximo -->
+            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+                    &raquo;
+                </button>
+            </li>
+
+            <!-- Botão Última Página -->
+            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                <button class="page-link" (click)="goToPage(totalPages())" [disabled]="currentPage() === totalPages()">
+                    &raquo;&raquo;
+                </button>
+            </li>
+    </ul>
+    }
+    <div class="text-end text-muted small mt-2">
+        Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }}
+    </div>
+</nav>
+}
+}
