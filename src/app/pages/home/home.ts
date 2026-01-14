@@ -31,6 +31,7 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
+  isConnectingMercadoLivre: WritableSignal<boolean> = signal(false);
 
   //filters
   orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
@@ -278,6 +279,11 @@ export class Home implements OnInit {
   }
 
   conectarMercadoLivre() {
+    if (this.isConnectingMercadoLivre()) {
+      return; // Previne múltiplos cliques
+    }
+
+    this.isConnectingMercadoLivre.set(true);
     this.mercadoLivreService.getAuthUri().subscribe({
       next: (response) => {
         // a response é uma URL de redirecionamento
@@ -285,6 +291,8 @@ export class Home implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao conectar com o Mercado Livre:', error);
+        this.isConnectingMercadoLivre.set(false);
+        this.toastService.showError('Erro ao conectar com o Mercado Livre. Tente novamente.', 5000);
       }
     });
   }

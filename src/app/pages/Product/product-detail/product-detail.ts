@@ -48,8 +48,6 @@ export class ProductDetail implements OnInit {
       reason: ['', [Validators.required]],
     });
 
-    this.isLoading.set(true);
-
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 

@@ -18,9 +18,16 @@
                         <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
                             livre</p>
                         <!-- style="background-color: #ffe600;" -->
-                        <a class="btn btn-light" style="background-color: var(--mercado-livre-color);"
-                            (click)="conectarMercadoLivre()"><i class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                            Conexão</a>
+                        <button class="btn btn-light" style="background-color: var(--mercado-livre-color);"
+                            (click)="conectarMercadoLivre()" [disabled]="isConnectingMercadoLivre()">
+                            @if (isConnectingMercadoLivre()) {
+                             <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span> &nbsp;&nbsp; Conectando...
+                            }
+                            @else {
+                            <i class="bi bi-link"></i> &nbsp;&nbsp;Permitir Conexão
+                            }
+
+                        </button>
                     </div>
                 </div>
             </div>
