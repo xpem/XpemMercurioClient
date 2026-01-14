@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Product } from "../models/product/product.model";
 import { ProductQuantityHistory } from "../models/product/product-quantity-history.model";
+import { ProductFilter } from "../models/product/product-filter.model";
 
 @Injectable({
     providedIn: "root",
@@ -15,13 +16,14 @@ export class ProductService {
 
     constructor(private http: HttpClient) { }
 
-    public getTotal(): Observable<Total> {
-        return this.http.get<Total>(`${this.apiUrl}/totals`);
+    public getTotal(filter?: ProductFilter): Observable<Total> {
+        return this.http.post<Total>(`${this.apiUrl}/totals`, filter);
     }
 
-    public get(page: number): Observable<Product[]> {
-        return this.http.get<Product[]>(`${this.apiUrl}?page=${page}`);
+    public get(page: number, filter?: ProductFilter): Observable<Product[]> {
+        return this.http.post<Product[]>(`${this.apiUrl}?page=${page}`, filter);
     }
+
 
     public getbyId(id: number): Observable<Product> {
         return this.http.get<Product>(`${this.apiUrl}/${id}`);

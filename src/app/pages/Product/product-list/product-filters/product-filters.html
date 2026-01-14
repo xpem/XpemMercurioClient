@@ -1,0 +1,37 @@
+<div class="modal fade modal" id="productFiltersModal" tabindex="-1" aria-labelledby="productFiltersModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productFiltersModalLabel"><i class="bi bi-funnel"></i> &nbsp;&nbsp; Filtros
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="FilterFormGroup">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-6 col-lg-12">
+                            <label for="productSKU" class="form-label fw-bold">SKU</label>
+                            <input type="text" class="form-control form-control-sm" id="productSKU"
+                                formControlName="productSKU" placeholder="Digite o SKU do produto">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-6 col-lg-12">
+                            <label for="productTitle" class="form-label fw-bold">Nome</label>
+                            <input type="text" class="form-control form-control-sm" id="productTitle"
+                                formControlName="productTitle" placeholder="Digite o nome do produto">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onClearClick()"><i
+                            class="bi bi-x-circle"></i> Limpar</button>
+                    <button type="button" class="btn btn-success" (click)="submit.emit()" data-bs-dismiss="modal"><i
+                            class="bi bi-search"></i> Aplicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

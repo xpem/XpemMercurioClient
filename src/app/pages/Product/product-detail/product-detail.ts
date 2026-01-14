@@ -60,7 +60,7 @@ export class ProductDetail implements OnInit {
           this.product.set(response);
 
           this.mercadoLivreService.getProductBonds(response.id).subscribe({
-            next: async (bondResponse) => {
+            next: (bondResponse) => {
               console.log('Product bonds fetched successfully:', bondResponse);
 
               this.productBonds.set(bondResponse);

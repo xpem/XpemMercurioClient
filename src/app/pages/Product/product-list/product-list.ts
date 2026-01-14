@@ -2,10 +2,13 @@ import { Component, computed, OnInit, signal, WritableSignal } from '@angular/co
 import { Product } from '../../../models/product/product.model';
 import { ProductService } from '../../../services/product-api';
 import { CurrencyPipe } from '@angular/common';
+import { ProductFilter, ProductFilterDisplay } from '../../../models/product/product-filter.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ProductFilters } from "./product-filters/product-filters";
 
 @Component({
   selector: 'app-product-list',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, ProductFilters],
   templateUrl: './product-list.html',
   styleUrl: './product-list.css',
 })
@@ -18,8 +21,17 @@ export class ProductList implements OnInit {
   pageSize: WritableSignal<number> = signal(20);
   totalPages: WritableSignal<number> = signal(1);
   total: WritableSignal<number> = signal(0);
+  productFilter: WritableSignal<ProductFilter> = signal({});
+  productFilterDisplay: WritableSignal<ProductFilterDisplay> = signal({});
+  productFilterForm: FormGroup;
+  isActiveFilter: WritableSignal<boolean> = signal(false);
 
-  constructor(private ProductService: ProductService) { }
+  constructor(private ProductService: ProductService, private fb: FormBuilder) {
+    this.productFilterForm = this.fb.group({
+      productTitle: [''],
+      productSKU: ['']
+    });
+  }
 
   pages = computed(() => {
     const current = this.currentPage();
@@ -58,9 +70,23 @@ export class ProductList implements OnInit {
     });
   }
 
+  initLoadProducts(): void {
+    this.isLoading.set(true);
+    this.ProductService.getTotal(this.productFilter()).subscribe({
+      next: (response) => {
+        const totalProducts = response.totalItems;
+        const totalPages = response.totalPages;
+        this.total.set(totalProducts);
+        this.totalPages.set(totalPages);
+        console.log('Total products with filter:', response);
+        this.loadProducts(1);
+      }
+    });
+  }
+
   loadProducts(page: number): void {
     this.isLoading.set(true);
-    this.ProductService.get(page).subscribe({
+    this.ProductService.get(page, this.productFilter()).subscribe({
       next: (response) => {
         console.log('Products on page', page, ':', response);
         this.products.set(response);
@@ -86,6 +112,43 @@ export class ProductList implements OnInit {
   goToDetail(id: any) {
     //navegar para a pagina order passando o externalId como parametro
     window.location.href = `/product-detail?id=${id}`;
+  }
+
+  clearFilters(): void {
+
+    if (this.isActiveFilter() === true) {
+      //reload total orders and total pages without filter
+      this.initLoadProducts();
+    }
+
+    this.productFilter.set({});
+    this.productFilterDisplay.set({});
+    this.productFilterForm.reset();
+    this.isActiveFilter.set(false);
+  }
+
+  onProductFiltersFormSubmit(): void {
+
+    this.isActiveFilter.set(true);
+
+    const currentDisplay: ProductFilterDisplay = { ...this.productFilterDisplay() };
+
+    if (this.productFilterForm.value.productSKU !== null && this.productFilterForm.value.productSKU !== '') {
+      currentDisplay.productSKU = `SKU do produto: ${this.productFilterForm.value.productSKU}`;
+    }
+
+    if (this.productFilterForm.value.productTitle !== null && this.productFilterForm.value.productTitle !== '') {
+      currentDisplay.productTitle = `Nome do produto: ${this.productFilterForm.value.productTitle}`;
+    }
+
+    this.productFilterDisplay.set(currentDisplay);
+
+    this.productFilter.set({
+      productSKU: this.productFilterForm.value.productSKU,
+      productTitle: this.productFilterForm.value.productTitle
+    });
+
+    this.initLoadProducts();
   }
 
 }

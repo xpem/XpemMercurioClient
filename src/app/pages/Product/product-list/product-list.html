@@ -15,7 +15,36 @@
     </div>
     }
     @else {
+    <div class="d-flex justify-content-between mb-3 mt-3">
+        <div class="col-lg-6">
+            <!-- open the app-product-filters modal component -->
+            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+                data-bs-target="#productFiltersModal">
+                <i class="bi bi-funnel"></i>
+            </button>
+        </div>
+    </div>
+    <app-product-filters [FilterFormGroup]="productFilterForm" (submit)="onProductFiltersFormSubmit()"
+        (clearFilters)="clearFilters()"></app-product-filters>
+    @if(isActiveFilter()){
+    @if(this.productFilterDisplay()?.productSKU) {
+    <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productSKU }}</p>
+    }
+    @if(this.productFilterDisplay()?.productTitle) {
+    <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productTitle }}</p>
+    }
+    <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
+        (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
+    }
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @if(!isLoading() && products().length === 0) {
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                Nenhum produto.
+            </div>
+        </div>
+        }
+        @else{
         @for (item of products(); track $index) {
         <div class="col" (click)="goToDetail(item.id)">
             <div class="card h-100 linked-card card-custom">
@@ -49,9 +78,10 @@
             </div>
         </div>
         }
+        }
     </div>
-    @if (totalPages() > 1) {
     <nav aria-label="Page navigation" class="mt-4">
+        @if (totalPages() > 1) {
         <ul class="pagination justify-content-end">
             <!-- Botão Primeira Página -->
             <li class="page-item" [class.disabled]="currentPage() === 1">
@@ -102,14 +132,11 @@
                     </button>
                 </li>
         </ul>
-
-        <!-- Informação adicional -->
+        }
         <div class="text-end text-muted small mt-2">
             Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }}
         </div>
     </nav>
-    }
-    <!-- npm run build -->
     }
     }
 </div>

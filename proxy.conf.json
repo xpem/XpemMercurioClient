@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target_local": "https://xpem-mercurio.vps-kinghost.net",
+    "_target": "https://xpem-mercurio.vps-kinghost.net",
     "target": "https://localhost:7189",
     "secure": false,
     "changeOrigin": true,
