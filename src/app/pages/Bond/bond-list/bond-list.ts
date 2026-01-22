@@ -5,6 +5,7 @@ import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livr
 import { Order } from '../../../models/order/order.model';
 import { Product } from '../../../models/product/product.model';
 import { ToastService } from '../../../services/toast.service';
+import { ShopeeApiService } from '../../../services/mercadoLivre/shopee-api';
 
 declare const bootstrap: any;
 
@@ -21,6 +22,7 @@ export class BondList implements OnInit {
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
   isImportLoading: WritableSignal<boolean> = signal(false);
+  isConnecting: WritableSignal<boolean> = signal(false);
 
   todayDate(): string {
     const today = new Date();
@@ -30,7 +32,8 @@ export class BondList implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  constructor(private userService: UserService, private mercadoLivreService: MercadoLivreService, private toastService: ToastService) { }
+  constructor(private userService: UserService, private mercadoLivreService: MercadoLivreService,
+    private shopeeApiService: ShopeeApiService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.getUserProfile()
@@ -164,6 +167,11 @@ export class BondList implements OnInit {
   }
 
   conectarMercadoLivre() {
+
+    if (this.isConnecting()) {
+      return; // Previne múltiplos cliques
+    }
+    this.isConnecting.set(true);
     this.mercadoLivreService.getAuthUri().subscribe({
       next: (response) => {
         console.log('url de autenticação do Mercado Livre:', response);
@@ -172,6 +180,26 @@ export class BondList implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao conectar com o Mercado Livre:', error);
+        this.isConnecting.set(false);
+      }
+    });
+  }
+
+  conectarShopee() {
+    if (this.isConnecting()) {
+      return; // Previne múltiplos cliques
+    }
+    this.isConnecting.set(true);
+
+    this.shopeeApiService.getAuthUri().subscribe({
+      next: (response) => {
+        console.log('url de autenticação da Shopee:', response);
+        // a response é uma URL de redirecionamento
+        window.location.href = response;
+      },
+      error: (error) => {
+        console.error('Erro ao conectar com a Shopee:', error);
+        this.isConnecting.set(false);
       }
     });
   }

@@ -9,12 +9,12 @@ import { RouterModule, Router } from '@angular/router';
   styleUrl: './mercado-livre-oauthcallback.css',
   standalone: true
 })
-export class MercadoLivreOauthCallback implements OnInit {
+export class MercadoLivreOAuthCallback implements OnInit {
   //será recebido via query params o code e o state do Mercado Livre
   //o state é o id publico do usuário
   errorMessage: WritableSignal<string> = signal('');
   submitted: WritableSignal<boolean> = signal(false);
-  MercadoLivreService = inject(MercadoLivreService);
+  mercadoLivreService = inject(MercadoLivreService);
   router = inject(Router);
   
   ngOnInit(): void {
@@ -23,10 +23,19 @@ export class MercadoLivreOauthCallback implements OnInit {
     const code = urlParams.get('code');
     const state = urlParams.get('state');
 
+    if (code === null || state === null) {
+      console.error('Parâmetros de autenticação ausentes na URL.', { code, state });
+      this.errorMessage.set(
+        'Dados de autenticação inválidos ou ausentes. Tente novamente o processo de conexão.'
+      );
+      this.submitted.set(true);
+      return;
+    }
+
     console.log('Código recebido do Mercado Livre:', code);
     console.log('State recebido do Mercado Livre:', state);
 
-    this.MercadoLivreService.postUserCredential({ Code: code!, UserPublicId: state! })
+    this.mercadoLivreService.postUserCredential({ Code: code, UserPublicId: state })
       .subscribe({
         next: (response) => {
           console.log('Credenciais enviadas com sucesso:', response);

@@ -10,12 +10,12 @@ import { ShipmentService } from '../../services/shipment-api';
 import { OrderFilter, OrderFilterDisplay } from '../../models/order/order-filter.model';
 import { OrderFilters } from "./components/order-filters/order-filters";
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { forkJoin, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [CurrencyPipe, OrderFilters],
+  imports: [CurrencyPipe, OrderFilters, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -31,8 +31,7 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
-  isConnectingMercadoLivre: WritableSignal<boolean> = signal(false);
-
+  
   //filters
   orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
     externalId: '',
@@ -169,6 +168,10 @@ export class Home implements OnInit {
     this.router.navigate(['/shipment-pending-labels-list']);
   }
 
+    goToCredentialBondList() {
+    this.router.navigate(['/bond-list']);
+  }
+
   clearFilters(): void {
 
     if (this.isActiveFilter() === true) {
@@ -276,24 +279,5 @@ export class Home implements OnInit {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
-  }
-
-  conectarMercadoLivre() {
-    if (this.isConnectingMercadoLivre()) {
-      return; // Previne múltiplos cliques
-    }
-
-    this.isConnectingMercadoLivre.set(true);
-    this.mercadoLivreService.getAuthUri().subscribe({
-      next: (response) => {
-        // a response é uma URL de redirecionamento
-        window.location.href = response;
-      },
-      error: (error) => {
-        console.error('Erro ao conectar com o Mercado Livre:', error);
-        this.isConnectingMercadoLivre.set(false);
-        this.toastService.showError('Erro ao conectar com o Mercado Livre. Tente novamente.', 5000);
-      }
-    });
   }
 }

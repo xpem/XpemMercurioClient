@@ -6,60 +6,22 @@
 @else {
 @if ((userProfile()?.mercadoLivreCredentialId) == null && (userProfile()?.shopeeCredentialId == null)) {
 <div class="row border border-white rounded-3 p-3 mb-4">
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Mercado Livre</h5>
-                        <p class="card-text">Acesse para ser redirecionado para a página de autenticação do mercado
-                            livre</p>
-                        <!-- style="background-color: #ffe600;" -->
-                        <button class="btn btn-light" style="background-color: var(--mercado-livre-color);"
-                            (click)="conectarMercadoLivre()" [disabled]="isConnectingMercadoLivre()">
-                            @if (isConnectingMercadoLivre()) {
-                             <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span> &nbsp;&nbsp; Conectando...
-                            }
-                            @else {
-                            <i class="bi bi-link"></i> &nbsp;&nbsp;Permitir Conexão
-                            }
-
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Shopee</h5>
-                        <p class="card-text">Acesse para ser redirecionado para a página de autenticação da Shopee
-                        </p>
-                        <!-- style="background-color: #ffe600;" -->
-                        <button class="btn btn-dark" style="background-color: var(--shopee-color);" disabled><i
-                                class="bi bi-link"></i>&nbsp;&nbsp;Permitir
-                            Conexão</button>
-                    </div>
-                </div>
-            </div>
+    <div class="col-lg-12 d-flex justify-content-center align-items-center" style="height: 150px;">
+        <div class="text-center text-white">
+            <i class="bi bi-exclamation-triangle" style="font-size: 50px;"></i>
+            <p class="mt-3">Nenhum marketplace conectado. Conecte-se a um marketplace para começar a importar suas
+                vendas.</p>
+            <a (click)="goToCredentialBondList()" class="btn btn-light"><i class="bi bi-plug"></i> Conectar
+                Marketplace</a>
         </div>
     </div>
 </div>
 }
 <div class="d-flex justify-content-end mb-3 mt-3">
-        <!-- open the app-order-filters modal component -->
-        <button type="button" class="btn btn-outline-light me-3" data-bs-toggle="modal" data-bs-target="#orderFiltersModal">
-            <i class="bi bi-funnel"></i>
-        </button>
+    <!-- open the app-order-filters modal component -->
+    <button type="button" class="btn btn-outline-light me-3" data-bs-toggle="modal" data-bs-target="#orderFiltersModal">
+        <i class="bi bi-funnel"></i>
+    </button>
 
     @if (isLoadingTotalPendingLabelsPrint()) {
     <div class="clearfix mb-3">
@@ -85,7 +47,7 @@
     (submit)="onOrderFiltersFormSubmit()"></app-order-filters>
 @if(isActiveFilter()){
 <div class="col-lg-12 mb-3">Filtros:
-
+    
     @if(this.orderFilterDisplay().externalId != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().externalId }}</p>
     }
@@ -103,7 +65,7 @@
     }
     @if(this.orderFilterDisplay().productName != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productName }}</p>
-    }
+    }    
     @if(this.orderFilterDisplay().status != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().status }}</p>
     }
@@ -128,9 +90,6 @@
                 #{{ item.externalId }}
             </div>
             <div class="card-body">
-                <!-- <div class="card-title">
-                            <p class="fw-bold">{{ item.externalId }}</p>
-                        </div> -->
                 <div class="mb-1">
                     <div class="d-flex justify-content-between" style="width: 100%;">
                         <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.75rem;">
@@ -138,7 +97,6 @@
                         <p class="card-text text-end mb-0 text-body-secondary" style="font-size: 0.75rem;">
                             {{item.createdAt}}</p>
                     </div>
-
                     <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
                     @for (product of item.products; track $index) {
                     <div class="d-flex justify-content-between" style="width: 100%;">
@@ -175,7 +133,6 @@
                     }
                 </div>
             </div>
-
         </div>
     </div>
     }

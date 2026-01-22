@@ -1,4 +1,4 @@
-export interface MercadoLivreOath {
+export interface MercadoLivreOAuth {
     Code: string;
     UserPublicId: string;
 }
