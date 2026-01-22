@@ -9,7 +9,7 @@ export interface ProductBond {
     quantity: number;
     // availableQuantity: number;
     soldQuantity: number;
-    marketplace: string;
+    marketplace: number; // 1 para Mercado Livre, 2 para Shopee
     status: ProductStatusMercadoLivreBond;
     productId: number;
     statusText: string;

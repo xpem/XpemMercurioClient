@@ -36,4 +36,9 @@ export class ProductService {
     public getQuantityHistory(productId: number, page: number): Observable<ProductQuantityHistory[]> {
         return this.http.get<ProductQuantityHistory[]>(`${this.apiUrl}/${productId}/quantity/historic?page=${page}`);
     }
+
+    
+    public getProductBonds(productId: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/${productId}/Bond/List`);
+    }
 }

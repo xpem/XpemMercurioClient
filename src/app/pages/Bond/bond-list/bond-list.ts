@@ -184,7 +184,7 @@ export class BondList implements OnInit {
       return;
     }
 
-    this.mercadoLivreService.InactivateCredential(credentialId).subscribe({
+    this.userService.InactivateCredential(credentialId).subscribe({
       next: (response) => {
         console.log('Credential inactivated successfully:', response);
         this.toastService.showSuccess('Credencial desativada com sucesso!', 5000);

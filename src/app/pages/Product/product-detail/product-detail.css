@@ -4,3 +4,11 @@
     border-color: var(--mercado-livre-color);
     border-width: 1px;
 }
+
+
+.custom-outline-shopee{
+    color: var(--shopee-color);
+    border-style: solid;
+    border-color: var(--shopee-color);
+    border-width: 1px;
+}

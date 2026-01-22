@@ -24,10 +24,6 @@ export class MercadoLivreService {
         );
     }
 
-    public InactivateCredential(credentialid: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Auth/Credential/${credentialid}/Inactivate`, { responseType: 'text' });
-    }
-
     public importSingleOrder(orderId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Order/Import/${orderId}`);
     }
@@ -50,9 +46,5 @@ export class MercadoLivreService {
 
     public importAllProducts(): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import`, { responseType: 'text' });
-    }
-
-    public getProductBonds(productId: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Product/${productId}/Bond/List`);
     }
 }

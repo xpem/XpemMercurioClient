@@ -3,7 +3,7 @@ export interface Product {
     title: string;
     price: number;
     basePrice: number;
-    originalPrice?: number;
+    // originalPrice?: number;
     currencyId: string;
     quantity: number;
     availableQuantity: number;

@@ -14,14 +14,11 @@
 </div>
 }
 @else {
-<div class="d-flex justify-content-between mb-3 mt-3">
-    <div class="col-lg-6">
-        <!-- open the app-product-filters modal component -->
-        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
-            data-bs-target="#productFiltersModal">
-            <i class="bi bi-funnel"></i>
-        </button>
-    </div>
+<div class="d-flex justify-content-end mb-3 mt-3">
+    <!-- open the app-product-filters modal component -->
+    <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#productFiltersModal">
+        <i class="bi bi-funnel"></i>
+    </button>
 </div>
 <app-product-filters [FilterFormGroup]="productFilterForm" (submit)="onProductFiltersFormSubmit()"
     (clearFilters)="clearFilters()"></app-product-filters>
@@ -51,7 +48,6 @@
                 {{ item.title }}
             </div>
             <div class="card-body">
-
                 <div class="d-flex justify-content-between">
                     <div>
                         <p class="card-subtitle mb-1 text-body-secondary" style="font-size: 0.65rem;">Quantidade
@@ -63,7 +59,7 @@
                         <p class="card-subtitle mb-1 text-body-secondary" style="  font-size: 0.65rem;">Valor base
                         </p>
                         <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
-                            {{ item.basePrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                            {{ item.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-2">

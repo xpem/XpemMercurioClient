@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService } from '../../../services/product-api';
 import { Product } from '../../../models/product/product.model';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
 import { Router, RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ declare const bootstrap: any;
 
 @Component({
   selector: 'app-product-detail',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, MovementHistoryComponent],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, MovementHistoryComponent, NgStyle],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -57,7 +57,7 @@ export class ProductDetail implements OnInit {
           console.log('Product fetched successfully:', response);
           this.product.set(response);
 
-          this.mercadoLivreService.getProductBonds(response.id).subscribe({
+          this.productService.getProductBonds(response.id).subscribe({
             next: (bondResponse) => {
               console.log('Product bonds fetched successfully:', bondResponse);
 

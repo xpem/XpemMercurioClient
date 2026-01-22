@@ -149,50 +149,68 @@
     }
     @else {
     @if(productBonds().length > 0) {
-    @for (item of productBonds(); track $index) {
-    <div class="col-lg-6 card border-light text-bg-dark mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div style="color: var(--mercado-livre-color);">#{{item.externalProductId}}</div>
-            <div>
-                <span class="badge rounded-pill custom-outline-mercado-livre">
-                    Mercado Livre</span>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-lg-6">
-                    <label for="mlStatus">Status:</label>&nbsp;&nbsp;
-                    <span class="badge text-bg-{{item.statusClassColor}}"
-                        style="font-size: 1rem;">{{item.statusText}}</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlPreco-{{item.id}}"
-                        value="{{ item.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                    <label for="mlPreco-{{item.id}}">Preço</label>
-                </div>
-                <div class="col-lg-6 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlQuantity-{{item.id}}"
-                        value="{{item.quantity}}">
-                    <label for="mlQuantity-{{item.id}}">Quantidade</label>
-                </div>
-                <div class="col-lg-6 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlQuantityVisits-{{item.id}}"
-                        value="{{item.visits}}">
-                    <label for="mlQuantityVisits-{{item.id}}">Acessos</label>
-                </div>
-                <div class="col-lg-6 form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
-                        value="{{item.soldQuantity}}">
-                    <label for="mlSoldQuantity-{{item.id}}">Vendidos</label>
-                </div>
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        @for (item of productBonds(); track $index) {
+        <div class="col-lg-6 mb-3">
+            <div class="card text-bg-dark h-100 " id=`productBondCard-{{item.id}}`
+                [ngStyle]="{'border-color': item.marketplace === 1 ? 'var(--mercado-livre-color)' : item.marketplace === 2 ? 'var(--shopee-color)' : ''}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div
+                        [ngStyle]="{'color': item.marketplace === 1 ? 'var(--mercado-livre-color)' : item.marketplace === 2 ? 'var(--shopee-color)' : ''}">
+                        #{{item.externalProductId}}</div>
+                    <div>
 
+                        @if(item.marketplace === 2) {
+                        <span class="badge rounded-pill custom-outline-shopee">
+                            Shopee
+                        </span>
+                        }
+                        @else {
+                        <span class="badge rounded-pill custom-outline-mercado-livre">
+                            Mercado Livre
+                        </span>
+
+                        }
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="mlStatus">Status:</label>&nbsp;&nbsp;
+                            <span class="badge text-bg-{{item.statusClassColor}}"
+                                style="font-size: 1rem;">{{item.statusText}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlPreco-{{item.id}}"
+                                value="{{ item.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                            <label for="mlPreco-{{item.id}}">Preço</label>
+                        </div>
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlQuantity-{{item.id}}"
+                                value="{{item.quantity}}">
+                            <label for="mlQuantity-{{item.id}}">Quantidade</label>
+                        </div>
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlQuantityVisits-{{item.id}}"
+                                value="{{item.visits}}">
+                            <label for="mlQuantityVisits-{{item.id}}">Acessos</label>
+                        </div>
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlSoldQuantity-{{item.id}}"
+                                value="{{item.soldQuantity}}">
+                            <label for="mlSoldQuantity-{{item.id}}">Vendidos</label>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
+        }
     </div>
     }
     }
-    }
+
 </div>
 }

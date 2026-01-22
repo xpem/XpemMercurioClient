@@ -116,6 +116,14 @@ body {
     color: var(--text-light);
 }
 
+.card-border-color-mercado-livre {
+    border-color: var(--mercado-livre-color);
+}
+
+.card-border-color-shopee {
+    border-color: var(--shopee-color);
+}
+
 .background-custom {
     background-color: #272c35;
 }
