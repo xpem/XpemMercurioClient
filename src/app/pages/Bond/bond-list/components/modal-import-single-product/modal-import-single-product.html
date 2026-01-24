@@ -1,0 +1,55 @@
+<div class="modal fade" id="ImportSingleProductModal" tabindex="-1" aria-labelledby="ImportSingleProductModal"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Importar produto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="productId" class="form-label">Id do produto</label>
+                    <input type="text" class="form-control" id="productId" placeholder="Digite o ID do produto"
+                        (input)="productIdChange.emit($event.target.value)">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" (click)="importSingleProduct.emit()"><i
+                        class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal fade" tabindex="-1" id="ConfirmImportSingleProductModal" tabindex="-1"
+    aria-labelledby="ConfirmImportSingleProductModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--bs-success);">
+                <h5 class="modal-title">Produto importado com sucesso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+             <div class="modal-body">
+                <div class="mb-3">
+                    <br />
+                    <p class="fw-medium m-0">ID do Produto: <small class="fw-light m-0" style="font-size: medium;">{{
+                            SingleProduct()?.publicId }}</small></p>
+                    <p class="fw-medium m-0">Quantidade: <small class="fw-light m-0" style="font-size: medium;">{{
+                            SingleProduct()?.quantity }}</small></p>
+                    <p class="fw-medium m-0">Preço: <small class="fw-light m-0" style="font-size: medium;">R$
+                            {{ SingleProduct()?.price }}</small></p>
+                    <p class="fw-medium m-0">Quantidade vendidos: <small class="fw-light m-0"
+                            style="font-size: medium;">{{
+                            SingleProduct()?.soldQuantity }}</small></p>
+                </div>
+                <button class="btn btn-info btn-sm" (click)="goToProductDetail(SingleProduct()?.id)"><i
+                        class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
+                    Produto</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div> -->

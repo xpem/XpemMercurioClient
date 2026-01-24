@@ -1,0 +1,19 @@
+<div class="modal" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Importação de produtos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja importar todos os produtos desta conta {{ marketplace === 1 ? 'do Mercado Livre' : 'da Shopee' }}?</p>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
+                    Voltar</button>
+                <button type="button" class="btn btn-success" (click)="importAll.emit()"><i class="bi bi-check-lg"></i>
+                    Sim</button>
+            </div>
+        </div>
+    </div>
+</div>

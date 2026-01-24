@@ -59,8 +59,6 @@ export class AuthService {
         // Se o token for HTTP-Only, o navegador o anexa aqui.
         return this.http.get<any>(this.apiUrlStatus).pipe(
             map(response => {
-                console.log('Resposta de status da sessão:', response);
-
                 if (!!response?.email)
                     this.isAuthenticatedSignal.set(!!response?.email);
 

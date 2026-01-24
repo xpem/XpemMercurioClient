@@ -22,5 +22,15 @@ export class ShopeeApiService {
             timeout(6000)
         );
     }
+
+    public importSingleProduct(productId: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/Import/${productId}`, { responseType: 'text' });
+    }
+
+    public importAllProducts(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Product/Import`, { responseType: 'text' });
+    }
+
+
 }
 

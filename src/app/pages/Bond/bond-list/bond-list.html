@@ -74,28 +74,30 @@
     }
 </div>
 }
-<div class="col-sm-12 mb-3 mb-sm-0">
+<div class="col-sm-12 row mb-3 mb-sm-0">
     @if ((userProfile()?.mercadoLivreCredentialId) != null) {
     <div class="card mb-3" style="border-color: var(--mercado-livre-color);">
         <div class="row g-0">
             <div class="col-md-4" style="max-width: fit-content;">
-                <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy" style="width: 200px;">
+                <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy"
+                    style="width: 200px;">
             </div>
             <div class="col-md-8 ps-3 d-flex flex-column justify-content-center">
                 <h5 class="me-3">Mercado Livre</h5>
                 <div class="d-grid gap-2 d-md-block mb-3 mt-3">
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
+                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
                         Período</button>
-                    <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importProductsModal"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
-                        produtos
-                    </button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
                         data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
                         Única</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#ImportSingleProductModal"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                        (click)="callImportAllProducts(1)"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
+                        produtos
+                    </button>
+
+                    <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
+                        (click)="callImportSingleProduct(1)"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
                         Único</button>
                 </div>
                 <div class="d-grid gap-2 d-md-block">
@@ -110,23 +112,25 @@
     <div class="card mb-3" style="border-color: var(--shopee-color);">
         <div class="row g-0">
             <div class="col-md-4" style="max-width: fit-content;">
-                <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy" style="width: 200px;">
+                <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy"
+                    style="width: 200px;">
             </div>
             <div class="col-md-8 ps-3 d-flex flex-column justify-content-center">
                 <h5 class="me-3">Shopee</h5>
                 <div class="d-grid gap-2 d-md-block mb-3 mt-3">
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Por
+                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
                         Período</button>
-                    <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importProductsModal"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
-                        produtos
-                    </button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
                         data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
                         Única</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#ImportSingleProductModal"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
+                        (click)="callImportAllProducts(2)"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
+                        produtos
+                    </button>
+
+                    <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
+                        (click)="callImportSingleProduct(2)"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
                         Único</button>
                 </div>
                 <div class="d-grid gap-2 d-md-block">
@@ -141,25 +145,8 @@
 <!-- futuramente, possibilitar a opção de conectar com a shopee -->
 
 <!-- modal confirmação de importação geral de produtos -->
-<div class="modal" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Importação de produtos</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja importar todos os produtos desta conta do Mercado Livre?</p>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
-                    Voltar</button>
-                <button type="button" class="btn btn-danger" (click)="ImportAllProducts()"><i
-                        class="bi bi-check-lg"></i> Sim</button>
-            </div>
-        </div>
-    </div>
-</div>
+<app-modal-import-all-products (importAll)="importAllProducts()"
+    [marketplace]="selectedMarketplace()"></app-modal-import-all-products>
 
 <!-- modal confirmação de desvincular -->
 <div class="modal" id="unbondModal" tabindex="-1" aria-labelledby="unbondModal" aria-hidden="true">
@@ -182,6 +169,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal order -->
 <div class="modal fade" id="ImportSingleOrderModal" tabindex="-1" aria-labelledby="ImportSingleOrderModal"
     aria-hidden="true">
@@ -290,63 +278,10 @@
     </div>
 </div>
 
-<div class="modal fade" id="ImportSingleProductModal" tabindex="-1" aria-labelledby="ImportSingleProductModal"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Importar produto</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="productId" class="form-label">Id do produto</label>
-                    <input type="text" class="form-control" id="productId" placeholder="Digite o ID do produto">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" (click)="this.ImportSingleProduct()"><i
-                        class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
-            </div>
-        </div>
-    </div>
-</div>
+<app-modal-import-single-product (importSingleProduct)="this.importSingleProduct()"
+    (productIdChange)="this.onProductIdChange($event)"></app-modal-import-single-product>
 
-<div class="modal fade" tabindex="-1" id="ConfirmImportSingleProductModal" tabindex="-1"
-    aria-labelledby="ConfirmImportSingleProductModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: var(--bs-success);">
-                <h5 class="modal-title">Produto importado com sucesso</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <br />
-                    <p class="fw-medium m-0">ID do Produto: <small class="fw-light m-0" style="font-size: medium;">{{
-                            SingleProduct()?.publicId }}</small></p>
-                    <p class="fw-medium m-0">Quantidade: <small class="fw-light m-0" style="font-size: medium;">{{
-                            SingleProduct()?.quantity }}</small></p>
-                    <p class="fw-medium m-0">Preço: <small class="fw-light m-0" style="font-size: medium;">R$
-                            {{ SingleProduct()?.price }}</small></p>
-                    <p class="fw-medium m-0">Quantidade vendidos: <small class="fw-light m-0"
-                            style="font-size: medium;">{{
-                            SingleProduct()?.soldQuantity }}</small></p>
-                </div>
-                <button class="btn btn-info btn-sm" (click)="goToProductDetail(SingleProduct()?.id)"><i
-                        class="bi bi-arrow-right-square-fill"></i>&nbsp;&nbsp;Acessar
-                    Produto</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" tabindex="-1" id="ErrorImportSingleModal" tabindex="-1"
-    aria-labelledby="ErrorImportSingleModal">
+<div class="modal fade" tabindex="-1" id="ErrorImportModal" tabindex="-1" aria-labelledby="ErrorImportModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color: var(--bs-danger);">

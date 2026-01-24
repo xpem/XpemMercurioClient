@@ -6,12 +6,14 @@ import { Order } from '../../../models/order/order.model';
 import { Product } from '../../../models/product/product.model';
 import { ToastService } from '../../../services/toast.service';
 import { ShopeeApiService } from '../../../services/mercadoLivre/shopee-api';
+import { ModalImportAllProducts } from './components/modal-import-all-products/modal-import-all-products';
+import { ModalImportSingleProduct } from "./components/modal-import-single-product/modal-import-single-product";
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-bond-list',
-  imports: [],
+  imports: [ModalImportAllProducts, ModalImportSingleProduct],
   templateUrl: './bond-list.html',
   styleUrl: './bond-list.css',
 })
@@ -23,6 +25,8 @@ export class BondList implements OnInit {
   isLoading: WritableSignal<boolean> = signal(true);
   isImportLoading: WritableSignal<boolean> = signal(false);
   isConnecting: WritableSignal<boolean> = signal(false);
+  selectedMarketplace: WritableSignal<number> = signal(0);
+  productId: WritableSignal<string> = signal('');
 
   todayDate(): string {
     const today = new Date();
@@ -43,7 +47,6 @@ export class BondList implements OnInit {
     this.isLoading.set(true);
     this.userService.getUserProfile().subscribe({
       next: (response) => {
-        console.log('User profile:', response);
         const _userProfile = {} as UserProfile;
 
         if (response.mercadoLivreCredentialId) {
@@ -126,38 +129,45 @@ export class BondList implements OnInit {
     }
   }
 
-  ImportSingleProduct() {
-    const productIdInput = document.getElementById('productId') as HTMLInputElement;
-    const productId = productIdInput.value.trim();
+  onProductIdChange(productId: string) {
+    this.productId.set(productId);
+  }
+
+  callImportSingleProduct(marketplace: number) {
+    this.selectedMarketplace.set(marketplace);
+    this.showModal('ImportSingleProductModal');
+  }
+
+  importSingleProduct() {
+    if (this.selectedMarketplace() === 1) {
+      this.ImportSingleProduct(
+        (productId: string) => this.mercadoLivreService.importSingleProduct(productId)
+      );
+      return;
+    }
+
+    this.ImportSingleProduct(
+      (productId: string) => this.shopeeApiService.importSingleProduct(productId)
+    );
+  }
+
+
+  ImportSingleProduct(importObservable: any) {
+    const productId = this.productId();
     this.isImportLoading.set(true);
     this.errorMessage.set('');
     if (productId) {
 
       console.log('Importing product with ID:', productId);
-      this.mercadoLivreService.importSingleProduct(productId).subscribe({
-        next: (response) => {
-
-          const product: Product = response;
-
-          if (product === null) {
-            this.showModal('ErrorImportSingleModal');
-            this.hideModal('ImportSingleProductModal');
-            this.errorMessage.set('Produto não encontrado.');
-            return;
-          }
-          this.SingleProduct.set(product);
-
-          //external id of SingleOrder
-          const externalId = product.publicId;
-          console.log('External ID of imported order:', externalId);
-
-          this.showModal('ConfirmImportSingleProductModal');
+      importObservable(productId).subscribe({
+        next: (response: any) => {
+          this.toastService.showInfo('Produto importado com sucesso!', 5000);
           this.hideModal('ImportSingleProductModal');
           this.isImportLoading.set(false);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.log('Error object:', error.error.message);
-          this.showModal('ErrorImportSingleModal');
+          this.showModal('ErrorImportModal');
           this.hideModal('ImportSingleProductModal');
           this.isImportLoading.set(false);
           this.errorMessage.set(error?.error?.message || 'An error occurred while importing the product.');
@@ -227,20 +237,38 @@ export class BondList implements OnInit {
     });
   }
 
-  ImportAllProducts() {
+  callImportAllProducts(marketplace: number) {
+    this.selectedMarketplace.set(marketplace);
+    this.showModal('importProductsModal');
+  }
+
+  importAllProducts() {
+    if (this.selectedMarketplace() === 1) {
+      this.importAllProductsFromMarketplace(
+        this.mercadoLivreService.importAllProducts()
+      );
+      return;
+    }
+
+    this.importAllProductsFromMarketplace(
+       this.shopeeApiService.importAllProducts()
+    );
+  }
+
+  private importAllProductsFromMarketplace(importObservable: any) {
     this.isImportLoading.set(true);
     this.errorMessage.set('');
-    this.mercadoLivreService.importAllProducts().subscribe({
-      next: (response) => {
+    importObservable.subscribe({
+      next: (response: any) => {
         console.log('All products imported successfully:', response);
         this.toastService.showInfo('Importação de todos os produtos em processamento!', 5000);
-        this.hideModal('importProductsModal');
+        this.hideModal("importProductsModal");
         this.isImportLoading.set(false);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error importing all products:', error);
-        this.showModal('ErrorImportSingleModal');
-        this.hideModal('importProductsModal');
+        this.showModal('ErrorImportModal');
+        this.hideModal("importProductsModal");
         this.isImportLoading.set(false);
         this.errorMessage.set(error?.message || 'An error occurred while importing all products.');
       }
@@ -259,7 +287,7 @@ export class BondList implements OnInit {
   }
 
   showErrorModal(): void {
-    const modalElement = document.getElementById('ErrorImportSingleOrderModal');
+    const modalElement = document.getElementById('ErrorImportModal');
     if (modalElement) {
       const modal = new bootstrap.Modal(modalElement);
       modal.show();

@@ -123,8 +123,11 @@ export class Home implements OnInit {
         // Processa o perfil do usuário
         if (profile) {
           const profileData = {} as UserProfile;
-          if (profile.mercadoLivreCredentialId) {
+          if (profile.mercadoLivreCredentialId != null) {
             profileData.mercadoLivreCredentialId = profile.mercadoLivreCredentialId;
+          }
+          if (profile.shopeeCredentialId != null) {
+            profileData.shopeeCredentialId = profile.shopeeCredentialId;
           }
           this.userProfile.set(profileData);
         }
