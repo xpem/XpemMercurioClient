@@ -19,7 +19,6 @@ export class ShipmentPendingLabelsList implements OnInit {
 
   ordersWithPendingLabels: WritableSignal<Order[]> = signal([]);
 
-
   constructor(private toastService: ToastService, private shipmentService: ShipmentService, private mercadoLivreService: MercadoLivreService) { }
 
   toggleSelectAll() {

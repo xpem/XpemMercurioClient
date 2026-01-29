@@ -1,0 +1,33 @@
+<div style="display: flex; justify-content:center; flex-wrap: wrap; align-content: center; height: 100%; width:100%;">
+
+    @if(!submitted()) {
+    <div class="alert alert-info" role="alert">
+        Desconectando sua conta do Shopee...
+    </div>
+    }
+    @else{
+    @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+        {{ errorMessage() }}
+    </div>
+    }
+    @else {
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Shopee</h5>
+                    <p class="card-text"><i class="bi bi-link"></i>&nbsp;&nbsp;Desconexão feita com sucesso!</p>
+                    <!-- style="background-color: #ffe600;" -->
+                    <a class="btn btn-primary" routerLink="/bond-list"><i
+                            class="bi bi-check"></i>&nbsp;&nbsp;Continuar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    }
+</div>

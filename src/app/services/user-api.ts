@@ -15,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUserToken(userCredentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/session`, userCredentials,{ responseType: 'json' });
+    return this.http.post(`${this.apiUrl}/session`, userCredentials, { responseType: 'json' });
   }
 
   postCreateUser(userData: CreateUserPayload): Observable<any> {
@@ -34,7 +34,7 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/profile`);
   }
 
-   public InactivateCredential(credentialId: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Credential/${credentialId}/Inactivate`, { responseType: 'text' });
-    }
+  inactivateCredential(credentialId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Credential/${credentialId}/Inactivate`, { responseType: 'text' });
+  }
 }

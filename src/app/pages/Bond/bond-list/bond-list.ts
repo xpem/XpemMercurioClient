@@ -24,7 +24,7 @@ export class BondList implements OnInit {
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
   isImportLoading: WritableSignal<boolean> = signal(false);
-  isConnecting: WritableSignal<boolean> = signal(false);
+  isActionLoading: WritableSignal<boolean> = signal(false);
   selectedMarketplace: WritableSignal<number> = signal(0);
   productId: WritableSignal<string> = signal('');
 
@@ -138,6 +138,11 @@ export class BondList implements OnInit {
     this.showModal('ImportSingleProductModal');
   }
 
+  callUnbondCredential(marketplace: number) {
+    this.selectedMarketplace.set(marketplace);
+    this.showModal('unbondMercadoLivreCredentialModal');
+  }
+
   importSingleProduct() {
     if (this.selectedMarketplace() === 1) {
       this.ImportSingleProduct(
@@ -150,7 +155,6 @@ export class BondList implements OnInit {
       (productId: string) => this.shopeeApiService.importSingleProduct(productId)
     );
   }
-
 
   ImportSingleProduct(importObservable: any) {
     const productId = this.productId();
@@ -176,12 +180,12 @@ export class BondList implements OnInit {
     }
   }
 
-  conectarMercadoLivre() {
+  bondMercadoLivre() {
 
-    if (this.isConnecting()) {
+    if (this.isActionLoading()) {
       return; // Previne múltiplos cliques
     }
-    this.isConnecting.set(true);
+    this.isActionLoading.set(true);
     this.mercadoLivreService.getAuthUri().subscribe({
       next: (response) => {
         console.log('url de autenticação do Mercado Livre:', response);
@@ -190,17 +194,16 @@ export class BondList implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao conectar com o Mercado Livre:', error);
-        this.isConnecting.set(false);
+        this.isActionLoading.set(false);
       }
     });
   }
 
-  conectarShopee() {
-    if (this.isConnecting()) {
+  bondShopee() {
+    if (this.isActionLoading()) {
       return; // Previne múltiplos cliques
     }
-    this.isConnecting.set(true);
-
+    this.isActionLoading.set(true);
     this.shopeeApiService.getAuthUri().subscribe({
       next: (response) => {
         console.log('url de autenticação da Shopee:', response);
@@ -209,12 +212,40 @@ export class BondList implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao conectar com a Shopee:', error);
-        this.isConnecting.set(false);
+        this.isActionLoading.set(false);
       }
     });
   }
 
-  InactivateCredential(credentialId: string | undefined) {
+  unBondShopee() {
+    if (this.isActionLoading()) {
+      return; // Previne múltiplos cliques
+    }
+    
+    this.isActionLoading.set(true);
+
+    this.shopeeApiService.getCancelAuthUri().subscribe({
+      next: (response) => {
+        console.log('url de cancelamento de autenticação da Shopee:', response);
+        // a response é uma URL de redirecionamento
+        window.location.href = response;
+      },
+      error: (error) => {
+        console.error('Erro ao desconectar da Shopee:', error);
+        this.isActionLoading.set(false);
+      }
+    });
+  }
+
+  inactivateMercadoLivreCredential() {
+
+    var credentialId: string | null | undefined = null;
+
+    if (this.selectedMarketplace() === 1) {
+      credentialId = this.userProfile()?.mercadoLivreCredentialId;
+    } else if (this.selectedMarketplace() === 2) {
+      credentialId = this.userProfile()?.shopeeCredentialId;
+    }
 
     if (!credentialId) {
       console.error('Credential ID is undefined');
@@ -222,13 +253,13 @@ export class BondList implements OnInit {
       return;
     }
 
-    this.userService.InactivateCredential(credentialId).subscribe({
+    this.mercadoLivreService.inactivateCredential(credentialId).subscribe({
       next: (response) => {
         console.log('Credential inactivated successfully:', response);
         this.toastService.showSuccess('Credencial desativada com sucesso!', 5000);
         //dismiss modal
-        this.hideModal('unbondModal');
-        this.getUserProfile()
+        this.hideModal('unbondMercadoLivreCredentialModal');
+        this.getUserProfile();
       },
       error: (error) => {
         console.error('Error inactivating credential:', error);
@@ -251,7 +282,7 @@ export class BondList implements OnInit {
     }
 
     this.importAllProductsFromMarketplace(
-       this.shopeeApiService.importAllProducts()
+      this.shopeeApiService.importAllProducts()
     );
   }
 

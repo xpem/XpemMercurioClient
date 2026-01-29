@@ -18,6 +18,10 @@ export class MercadoLivreService {
         return this.http.get(`${this.apiUrl}/Auth/Link`, { responseType: 'text' });
     }
 
+    public inactivateCredential(credentialId : string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/Auth/Credential/${credentialId}`, { responseType: 'text' });
+    }
+
     public postUserCredential(mercadoLivreOAuth: MercadoLivreOAuth): Observable<any> {
         return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOAuth, { responseType: 'text' }).pipe(
             timeout(6000)

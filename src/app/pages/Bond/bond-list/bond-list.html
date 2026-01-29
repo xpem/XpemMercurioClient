@@ -5,12 +5,7 @@
 }
 @else {
 <h4 class="mb-4"><i class="bi bi-shop"></i> Marketplaces</h4>
-@if ((userProfile()?.mercadoLivreCredentialId) == null && (userProfile()?.shopeeCredentialId) == null) {
-<div class="alert alert-warning" role="alert">
-    Não há contas vinculadas. Conecte-se a um dos marketplaces abaixo para começar a importar suas vendas e
-    produtos.
-</div>
-}
+@if ((userProfile()?.mercadoLivreCredentialId) == null || (userProfile()?.shopeeCredentialId) == null) {
 <div class="row border border-white rounded-3 p-3 mb-4">
     @if((userProfile()?.mercadoLivreCredentialId) == null){
     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -27,10 +22,9 @@
                         <!-- style="background-color: #ffe600;" -->
                         <button class="btn btn-marketplace-hover"
                             style="background-color: var(--mercado-livre-color); color: black;"
-                            (click)="conectarMercadoLivre()" [disabled]="isConnecting()">
-                            @if (isConnecting()) {
-                            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span> &nbsp;&nbsp;
-                            Conectando...
+                            (click)="bondMercadoLivre()" [disabled]="isActionLoading()">
+                            @if (isActionLoading()) {
+                            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                             }
                             @else {
                             <i class="bi bi-link"></i> &nbsp;&nbsp;Permitir Conexão
@@ -56,11 +50,10 @@
                         </p>
                         <!-- style="background-color: #ffe600;" -->
                         <button class="btn btn-marketplace-hover"
-                            style="background-color: var(--shopee-color); color: black;" (click)="conectarShopee()"
-                            [disabled]="isConnecting()">
-                            @if (isConnecting()) {
-                            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span> &nbsp;&nbsp;
-                            Conectando...
+                            style="background-color: var(--shopee-color); color: black;" (click)="bondShopee()"
+                            [disabled]="isActionLoading()">
+                            @if (isActionLoading()) {
+                            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                             }
                             @else {
                             <i class="bi bi-link"></i> &nbsp;&nbsp;Permitir Conexão
@@ -74,9 +67,10 @@
     }
 </div>
 }
+}
 <div class="col-sm-12 row mb-3 mb-sm-0">
     @if ((userProfile()?.mercadoLivreCredentialId) != null) {
-    <div class="card mb-3" style="border-color: var(--mercado-livre-color);">
+    <div class="card mb-3" style="border-color: var(--mercado-livre-color); padding: 0;">
         <div class="row g-0">
             <div class="col-md-4" style="max-width: fit-content;">
                 <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy"
@@ -101,7 +95,7 @@
                         Único</button>
                 </div>
                 <div class="d-grid gap-2 d-md-block">
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unbondModal"><i
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" (click)="callUnbondCredential(1)"><i
                             class="bi bi-ban"></i> Desvincular</button>
                 </div>
             </div>
@@ -109,7 +103,7 @@
     </div>
     }
     @if ((userProfile()?.shopeeCredentialId) != null) {
-    <div class="card mb-3" style="border-color: var(--shopee-color);">
+    <div class="card mb-3" style="border-color: var(--shopee-color); padding: 0;">
         <div class="row g-0">
             <div class="col-md-4" style="max-width: fit-content;">
                 <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy"
@@ -134,8 +128,14 @@
                         Único</button>
                 </div>
                 <div class="d-grid gap-2 d-md-block">
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unbondModal"><i
-                            class="bi bi-ban"></i> Desvincular</button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" (click)="unBondShopee()">
+                        @if (isActionLoading()) {
+                        <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                        }
+                        @else {
+                        <i class="bi bi-ban"></i> Desvincular
+                        }
+                    </button>
                 </div>
             </div>
         </div>
@@ -148,12 +148,12 @@
 <app-modal-import-all-products (importAll)="importAllProducts()"
     [marketplace]="selectedMarketplace()"></app-modal-import-all-products>
 
-<!-- modal confirmação de desvincular -->
-<div class="modal" id="unbondModal" tabindex="-1" aria-labelledby="unbondModal" aria-hidden="true">
+<div class="modal" id="unbondMercadoLivreCredentialModal" tabindex="-1"
+    aria-labelledby="unbondMercadoLivreCredentialModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Desvincular Mercado Livre</h5>
+                <h5 class="modal-title">Desvincular do Mercado Livre</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -162,9 +162,8 @@
             <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
                     Cancelar</button>
-                <button type="button" class="btn btn-danger"
-                    (click)="InactivateCredential(userProfile()?.mercadoLivreCredentialId ?? '')"><i
-                        class="bi bi-check-lg"></i> Sim</button>
+                <button type="button" class="btn btn-danger" (click)="inactivateMercadoLivreCredential()"
+                    data-bs-dismiss="modal"><i class="bi bi-check-lg"></i> Sim</button>
             </div>
         </div>
     </div>
