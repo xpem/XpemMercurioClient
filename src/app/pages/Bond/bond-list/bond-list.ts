@@ -239,7 +239,7 @@ export class BondList implements OnInit {
 
   inactivateMercadoLivreCredential() {
 
-    var credentialId: string | null | undefined = null;
+    let credentialId: string | null | undefined = null;
 
     if (this.selectedMarketplace() === 1) {
       credentialId = this.userProfile()?.mercadoLivreCredentialId;
