@@ -1,5 +1,5 @@
 export interface ShopeeAuth {
     Code: string;
-    UserPublicId: string;
+    Token: string;
     ShopId: string;
 }

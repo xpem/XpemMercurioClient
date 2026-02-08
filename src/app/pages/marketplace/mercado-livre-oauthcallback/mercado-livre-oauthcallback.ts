@@ -35,7 +35,7 @@ export class MercadoLivreOAuthCallback implements OnInit {
     console.log('Código recebido do Mercado Livre:', code);
     console.log('State recebido do Mercado Livre:', state);
 
-    this.mercadoLivreService.postUserCredential({ Code: code, UserPublicId: state })
+    this.mercadoLivreService.postUserCredential({ Code: code, Token: state })
       .subscribe({
         next: (response) => {
           console.log('Credenciais enviadas com sucesso:', response);

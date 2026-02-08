@@ -12,6 +12,7 @@ import { ProductDetail } from './pages/product/product-detail/product-detail';
 import { ShipmentPendingLabelsList } from './pages/shipment/shipment-pending-labels-list/shipment-pending-labels-list';
 import { MercadoLivreOAuthCallback } from './pages/marketplace/mercado-livre-oauthcallback/mercado-livre-oauthcallback';
 import { ShopeeOAuthCallback } from './pages/marketplace/shopee-oauthcallback/shopee-oauthcallback';
+import { ShopeeCancelOauthcallback } from './pages/marketplace/shopee-cancel-oauthcallback/shopee-cancel-oauthcallback';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'user/password-send-email', component: PasswordSendEmail },
   { path: 'MercadoLivre/OAuthCallback', component: MercadoLivreOAuthCallback },
   { path: 'Shopee/OAuthCallback', component: ShopeeOAuthCallback },
+  { path: 'Shopee/OAuthCallback/Cancel', component: ShopeeCancelOauthcallback },
   { path: 'bond-list', component: BondList, canActivate: [authGuard] },
   { path: 'order', component: OrderDetail, canActivate: [authGuard] },
   { path: 'product-list', component: ProductList, canActivate: [authGuard] },

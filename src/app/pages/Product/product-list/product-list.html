@@ -24,10 +24,10 @@
     (clearFilters)="clearFilters()"></app-product-filters>
 @if(isActiveFilter()){
 @if(this.productFilterDisplay().productSKU) {
-<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productSKU }}</p>
+<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-2">{{ productFilterDisplay().productSKU }}</p>
 }
 @if(this.productFilterDisplay().productTitle) {
-<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ productFilterDisplay().productTitle }}</p>
+<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-2">{{ productFilterDisplay().productTitle }}</p>
 }
 <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
     (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>

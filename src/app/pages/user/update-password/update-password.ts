@@ -9,7 +9,6 @@ import { ToastService } from '../../../services/toast.service';
   imports: [ReactiveFormsModule],
   templateUrl: './update-password.html',
   styleUrl: './update-password.css',
-  standalone: true
 })
 export class UpdatePassword implements OnInit {
 
@@ -17,7 +16,8 @@ export class UpdatePassword implements OnInit {
   submitted = false;
   errorMessage: WritableSignal<string> = signal('');
 
-  constructor(private fb: FormBuilder, private userService: UserService,
+  constructor(private fb: FormBuilder,
+    private userService: UserService,
     private toastService: ToastService,
     private router: Router) { }
 
@@ -59,7 +59,7 @@ export class UpdatePassword implements OnInit {
       return;
     }
 
-        this.errorMessage.set('');
+    this.errorMessage.set('');
 
     //recuperar o token da query string
     const urlParams = new URLSearchParams(window.location.search);

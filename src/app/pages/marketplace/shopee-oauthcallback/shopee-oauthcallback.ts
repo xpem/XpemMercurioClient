@@ -18,14 +18,14 @@ export class ShopeeOAuthCallback implements OnInit {
   ngOnInit(): void {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const id = urlParams.get('id');
+    const token = urlParams.get('id');
     const shopId = urlParams.get('shop_id');
 
     console.log('Código recebido do Shopee:', code);
-    console.log('ID público recebido do Shopee:', id);
+    console.log('ID público recebido do Shopee:', token);
     console.log('Shop ID recebido do Shopee:', shopId);
 
-    this.shopeeApiService.postUserCredential({ Code: code!, UserPublicId: id!, ShopId: shopId! })
+    this.shopeeApiService.postUserCredential({ Code: code!, Token: token!, ShopId: shopId! })
       .subscribe({
         next: (response) => {
           console.log('Credenciais enviadas com sucesso:', response);

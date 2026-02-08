@@ -218,13 +218,14 @@ export class BondList implements OnInit {
   }
 
   unBondShopee() {
+
     if (this.isActionLoading()) {
       return; // Previne múltiplos cliques
     }
     
     this.isActionLoading.set(true);
 
-    this.shopeeApiService.getCancelAuthUri().subscribe({
+    this.shopeeApiService.getCancelAuthUri(this.userProfile()?.shopeeCredentialId || '').subscribe({
       next: (response) => {
         console.log('url de cancelamento de autenticação da Shopee:', response);
         // a response é uma URL de redirecionamento

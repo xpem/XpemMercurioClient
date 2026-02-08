@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user-api';
 
 @Component({
   selector: 'app-shopee-cancel-oauthcallback',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './shopee-cancel-oauthcallback.html',
   styleUrl: './shopee-cancel-oauthcallback.css',
 })

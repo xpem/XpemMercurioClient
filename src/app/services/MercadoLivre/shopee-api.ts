@@ -17,13 +17,14 @@ export class ShopeeApiService {
         return this.http.get(`${this.apiUrl}/Auth/Link`, { responseType: 'text' });
     }
 
-    public getCancelAuthUri(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/Auth/Link/Cancel`, { responseType: 'text' });
+    public getCancelAuthUri(credencialId: string): Observable<any> {
+        console.log('Solicitando URL de cancelamento de autenticação para credencial ID:', credencialId);
+        return this.http.get(`${this.apiUrl}/Auth/Link/Cancel/${credencialId}`, { responseType: 'text' });
     }
 
     public postUserCredential(shopeeAuth: ShopeeAuth): Observable<any> {
         return this.http.post(`${this.apiUrl}/Auth/Credential`, shopeeAuth, { responseType: 'text' }).pipe(
-            timeout(6000)
+            timeout(12000)
         );
     }
 
