@@ -14,22 +14,19 @@ export class OrderService {
 
     constructor(private http: HttpClient) { }
 
-    public getTotalOrders(isActiveFilter: boolean, filter: OrderFilter, marketPlace: number): Observable<Total> {
-        if (isActiveFilter) {
-            return this.http.post<Total>(`${this.apiUrl}/totals?marketPlace=${marketPlace}`, filter);
-        } else {
-            return this.http.get<Total>(`${this.apiUrl}/totals?marketPlace=${marketPlace}`);
-        }
+    public getTotalOrders(filter: OrderFilter, marketPlace: number | null): Observable<Total> {
+
+        filter.marketplace = marketPlace;
+
+        return this.http.post<Total>(`${this.apiUrl}/totals`, filter);
     }
 
-    public get(page: number, filter: OrderFilter, isActiveFilter: boolean, marketPlace: number): Observable<Order[]> {
-        if (isActiveFilter) {
-            return this.http.post<Order[]>(`${this.apiUrl}?page=${page}&marketPlace=${marketPlace}`, filter);
-        } else {
-            return this.http.get<Order[]>(`${this.apiUrl}?page=${page}&marketPlace=${marketPlace}`);
-        }
+    public get(page: number, filter: OrderFilter, marketPlace: number | null): Observable<Order[]> {
+        filter.marketplace = marketPlace;
+
+        return this.http.post<Order[]>(`${this.apiUrl}?page=${page}`, filter);
     }
-    
+
     public getbyId(id: number): Observable<Order> {
         return this.http.get<Order>(`${this.apiUrl}/${id}`);
     }

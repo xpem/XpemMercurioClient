@@ -9,6 +9,7 @@ export interface OrderFilter {
     productName?: string;
     orderStatus?: OrderStatus[];
     productSKU?: string;
+    marketplace?: number | null;
 }
 
 export interface OrderFilterDisplay {
@@ -19,4 +20,5 @@ export interface OrderFilterDisplay {
   productSKU: string;
   productName: string;
   status: string;
+  marketplace: string;
 }

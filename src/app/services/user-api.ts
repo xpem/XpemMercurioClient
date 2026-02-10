@@ -18,6 +18,11 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/session`, userCredentials, { responseType: 'json' });
   }
 
+  getSuperAdminUserToken(userSuperAdminCredentials: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/SuperAdminSession`, userSuperAdminCredentials, { responseType: 'json' });
+  }
+
+
   postCreateUser(userData: CreateUserPayload): Observable<any> {
     return this.http.post(`${this.apiUrl}`, userData);
   }

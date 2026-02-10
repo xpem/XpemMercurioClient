@@ -47,3 +47,20 @@
 .rounded-badge-danger:hover {
     color: white !important;
 }
+
+.card-mercado-livre:hover {
+   border-color: var(--mercado-livre-color);
+}
+
+.card-mercado-livre .card-header {
+    color: var(--mercado-livre-color);
+}
+
+
+.card-shopee:hover {
+   border-color: var(--shopee-color);
+}
+
+.card-shopee .card-header {
+    color: var(--shopee-color);
+}

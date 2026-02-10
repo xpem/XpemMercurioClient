@@ -31,7 +31,7 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
-  
+
   //filters
   orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
     externalId: '',
@@ -40,19 +40,31 @@ export class Home implements OnInit {
     productId: '',
     productSKU: '',
     productName: '',
-    status: ''
+    status: '',
+    marketplace: '',
   });
 
   isActiveFilter: WritableSignal<boolean> = signal(false);
+  marketplace: WritableSignal<number | null> = signal(null);
   orderFilterForm: FormGroup;
   pages = computed(() => {
     const tp = this.totalPages();
+    const current = this.currentPage();
+    const windowSize = 5;
+    const halfWindow = Math.floor(windowSize / 2);
+
+    let start = Math.max(1, current - halfWindow);
+    let end = Math.min(tp, start + windowSize - 1);
+
+    if (end - start + 1 < windowSize) {
+      start = Math.max(1, end - windowSize + 1);
+    }
+
     const arr: number[] = [];
-    for (let i = 1; i <= tp; i++) arr.push(i);
+    for (let i = start; i <= end; i++) arr.push(i);
     return arr;
   });
   //por enquantro fixo como 1 (Mercado Livre)
-  marketplace: number = 1;
 
   constructor(
     private toastService: ToastService,
@@ -106,7 +118,7 @@ export class Home implements OnInit {
           return of(null);
         })
       ),
-      totals: this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).pipe(
+      totals: this.orderService.getTotalOrders(this.orderFilter(), this.marketplace()).pipe(
         catchError(error => {
           console.error('Error loading order totals:', error);
           return of({ totalItems: 0, totalPages: 0 });
@@ -148,7 +160,7 @@ export class Home implements OnInit {
 
   initLoadOrders() {
     this.isLoading.set(true);
-    this.orderService.getTotalOrders(this.isActiveFilter(), this.orderFilter(), this.marketplace).subscribe({
+    this.orderService.getTotalOrders(this.orderFilter(), this.marketplace()).subscribe({
       next: (response) => {
         const totalOrders = response.totalItems;
         const totalPages = response.totalPages;
@@ -171,8 +183,13 @@ export class Home implements OnInit {
     this.router.navigate(['/shipment-pending-labels-list']);
   }
 
-    goToCredentialBondList() {
+  goToCredentialBondList() {
     this.router.navigate(['/bond-list']);
+  }
+
+  setMarketplace(marketplace: number | null) {
+    this.marketplace.set(marketplace);
+    this.initLoadOrders();
   }
 
   clearFilters(): void {
@@ -191,7 +208,8 @@ export class Home implements OnInit {
       productId: '',
       productSKU: '',
       productName: '',
-      status: ''
+      status: '',
+      marketplace: '',
     });
     this.orderFilterForm.value.orderStatus = [] as number[];
     this.orderFilterForm.reset();
@@ -249,6 +267,7 @@ export class Home implements OnInit {
       productName: this.orderFilterForm.value.orderProductName,
       orderStatus: this.orderFilterForm.value.orderStatus,
       productSKU: this.orderFilterForm.value.orderProductSKU,
+      marketplace: this.marketplace(),
     });
 
     this.initLoadOrders();
@@ -261,7 +280,7 @@ export class Home implements OnInit {
 
   loadPaginatedOrders(page: number) {
     this.isLoading.set(true);
-    this.orderService.get(page, this.orderFilter(), this.isActiveFilter(), this.marketplace).subscribe({
+    this.orderService.get(page, this.orderFilter(), this.marketplace()).subscribe({
       next: (response) => {
         this.orders.set(response);
         this.currentPage.set(page);

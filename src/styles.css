@@ -94,7 +94,13 @@ body {
 }
 
 .card-custom:hover .card-title {
-    color: var(--primary-green-light);
+    /* color: var(--primary-green-light); */
+    transition: all 0.2s ease-in-out;
+}
+
+.card-custom:hover .card-total-value {
+    /* color: var(--primary-green-light); */
+    transition: all 0.2s ease-in-out;
 }
 
 .card-custom .card-header {
@@ -104,7 +110,7 @@ body {
 }
 
 .card-custom:hover .card-header {
-    color: var(--primary-green-light);
+    transition: all 0.2s ease-in-out;
 }
 
 .card-custom .card-text {

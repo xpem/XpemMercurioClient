@@ -11,43 +11,60 @@
             <i class="bi bi-exclamation-triangle" style="font-size: 50px;"></i>
             <p class="mt-3">Nenhum marketplace conectado. Conecte-se a um marketplace para começar a importar suas
                 vendas.</p>
-            <a (click)="goToCredentialBondList()" class="btn btn-light"><i class="bi bi-plug"></i> Conectar
-                Marketplace</a>
+            <button type="button" (click)="goToCredentialBondList()" class="btn btn-light">
+                <i class="bi bi-plug"></i>
+                Conectar Marketplace</button>
         </div>
     </div>
 </div>
 }
-<div class="d-flex justify-content-end mb-3 mt-3">
-    <!-- open the app-order-filters modal component -->
-    <button type="button" class="btn btn-outline-light me-3" data-bs-toggle="modal" data-bs-target="#orderFiltersModal">
-        <i class="bi bi-funnel"></i>
-    </button>
+<div class="d-flex justify-content-between mb-3 mt-3">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnAll" autocomplete="off"
+            [checked]="marketplace() === null" (change)="setMarketplace(null)">
+        <label class="btn btn-outline-secondary" for="btnAll">Todas</label>
 
-    @if (isLoadingTotalPendingLabelsPrint()) {
-    <div class="clearfix mb-3">
-        <div class="spinner-grow  spinner-grow-sm text-info float-end" role="status">
-            <span class="visually-hidden">Loading Total Pending Labels Print...</span>
-        </div>
+        <input type="radio" class="btn-check" name="btnradio" id="btnMercadoLivre" autocomplete="off"
+            [checked]="marketplace() === 1" (change)="setMarketplace(1)">
+        <label class="btn btn-outline-secondary" for="btnMercadoLivre">Mercado Livre</label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnShopee" autocomplete="off"
+            [checked]="marketplace() === 2" (change)="setMarketplace(2)">
+        <label class="btn btn-outline-secondary" for="btnShopee">Shopee</label>
     </div>
-    }
-    @else {
-    <div class="mb-3 mb-sm-0 text-end float-end">
-        <button type="button" class="btn btn-light position-relative" (click)="goToShipmentPendingLabelsList()">
-            <i class="bi bi-printer"></i>&nbsp;&nbsp;
-            Etiquetas pendentes
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ totalPendingLabelsPrint() }}
-                <span class="visually-hidden">Etiquetas pendentes</span>
-            </span>
+    <div>
+        <!-- open the app-order-filters modal component -->
+        <button type="button" class="btn btn-outline-light me-3" data-bs-toggle="modal"
+            data-bs-target="#orderFiltersModal">
+            <i class="bi bi-funnel"></i>
         </button>
+
+        @if (isLoadingTotalPendingLabelsPrint()) {
+        <div class="clearfix mb-3">
+            <div class="spinner-grow  spinner-grow-sm text-info float-end" role="status">
+                <span class="visually-hidden">Loading Total Pending Labels Print...</span>
+            </div>
+        </div>
+        }
+        @else {
+        <div class="mb-3 mb-sm-0 text-end float-end">
+            <button type="button" class="btn btn-light position-relative" (click)="goToShipmentPendingLabelsList()">
+                <i class="bi bi-printer"></i>&nbsp;&nbsp;
+                Etiquetas pendentes
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ totalPendingLabelsPrint() }}
+                    <span class="visually-hidden">Etiquetas pendentes</span>
+                </span>
+            </button>
+        </div>
+        }
     </div>
-    }
 </div>
 <app-order-filters [FilterFormGroup]="orderFilterForm" (clearFilters)="clearFilters()"
     (submit)="onOrderFiltersFormSubmit()"></app-order-filters>
 @if(isActiveFilter()){
 <div class="col-lg-12 mb-3">Filtros:
-    
+
     @if(this.orderFilterDisplay().externalId != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().externalId }}</p>
     }
@@ -65,7 +82,7 @@
     }
     @if(this.orderFilterDisplay().productName != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().productName }}</p>
-    }    
+    }
     @if(this.orderFilterDisplay().status != '') {
     <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-0">{{ orderFilterDisplay().status }}</p>
     }
@@ -85,7 +102,8 @@
     @else{
     @for (item of orders(); track $index) {
     <div class="col" (click)="goToOrderDetail(item.id)">
-        <div class="card h-100 linked-card card-custom">
+        <div class="card h-100 linked-card card-custom" id="cardOrder"
+            [class.card-mercado-livre]="item.marketPlace == '1'" [class.card-shopee]="item.marketPlace == '2'">
             <div class="card-header fw-bold">
                 #{{ item.externalId }}
             </div>
@@ -107,7 +125,7 @@
                     </div>
                     }
                     <div class="d-flex justify-content-between" style="width: 100%;">
-                        <p class="mb-0 status-badge">{{item.status}}</p>
+                        <span class="badge text-bg-light">{{item.status}}</span>
                         <p class="card-text text-end mb-0" style="color: var(--primary-green); font-weight: 600;">
                             {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                     </div>

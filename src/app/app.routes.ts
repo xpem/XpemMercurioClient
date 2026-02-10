@@ -13,11 +13,13 @@ import { ShipmentPendingLabelsList } from './pages/shipment/shipment-pending-lab
 import { MercadoLivreOAuthCallback } from './pages/marketplace/mercado-livre-oauthcallback/mercado-livre-oauthcallback';
 import { ShopeeOAuthCallback } from './pages/marketplace/shopee-oauthcallback/shopee-oauthcallback';
 import { ShopeeCancelOauthcallback } from './pages/marketplace/shopee-cancel-oauthcallback/shopee-cancel-oauthcallback';
+import { SignInSuperAdmin } from './pages/user/sign-in-super-admin/sign-in-super-admin';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
   { path: 'user/signin', component: Signin },
   { path: 'user/signup', component: Signup },
+  { path: 'user/signin-super-admin', component: SignInSuperAdmin },
   { path: 'user/update-password', component: UpdatePassword },
   { path: 'user/password-send-email', component: PasswordSendEmail },
   { path: 'MercadoLivre/OAuthCallback', component: MercadoLivreOAuthCallback },
@@ -28,5 +30,5 @@ export const routes: Routes = [
   { path: 'product-list', component: ProductList, canActivate: [authGuard] },
   { path: 'product-detail', component: ProductDetail, canActivate: [authGuard] },
   { path: 'shipment-pending-labels-list', component: ShipmentPendingLabelsList, canActivate: [authGuard] },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
