@@ -1,11 +1,10 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService } from '../../../services/product-api';
 import { Product } from '../../../models/product/product.model';
-import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
+import { CurrencyPipe, NgStyle } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
-import { Router, RouterLink } from '@angular/router';
-import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { RouterLink } from '@angular/router';
 import { ProductBond } from '../../../models/product/product-Bond.model';
 import { ProductQuantityHistory } from '../../../models/product/product-quantity-history.model';
 import { MovementHistoryComponent } from './components/movement-history/movement-history';
@@ -36,8 +35,8 @@ export class ProductDetail implements OnInit {
   currentPageProductQuantityHistory: number = 1;
 
   constructor(private productService: ProductService,
-    private router: Router, private fb: FormBuilder,
-    private toastService: ToastService, private mercadoLivreService: MercadoLivreService) { }
+    private fb: FormBuilder,
+    private toastService: ToastService) { }
 
   ngOnInit(): void {
 

@@ -28,7 +28,7 @@ export const routes: Routes = [
   { path: 'bond-list', component: BondList, canActivate: [authGuard] },
   { path: 'order', component: OrderDetail, canActivate: [authGuard] },
   { path: 'product-list', component: ProductList, canActivate: [authGuard] },
-  { path: 'product-detail', component: ProductDetail, canActivate: [authGuard] },
+  { path: 'Product/Detail', component: ProductDetail, canActivate: [authGuard] },
   { path: 'shipment-pending-labels-list', component: ShipmentPendingLabelsList, canActivate: [authGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

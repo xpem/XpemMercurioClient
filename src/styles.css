@@ -76,9 +76,14 @@ body {
 .card-custom {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    /* border-radius: 12px; */
     transition: all 0.3s ease;
     color: var(--text-light);
+}
+
+.card-custom .card-body {
+    background-color: #272c35;
+    border-radius: var(--bs-card-border-radius);
 }
 
 .card-custom:hover {
@@ -104,7 +109,8 @@ body {
 }
 
 .card-custom .card-header {
-    color: var(--primary-green);
+    /* color: var(--primary-green); */
+    font-size: 0.85rem;
     font-weight: 600;
     transition: color 0.2s ease;
 }
@@ -114,7 +120,7 @@ body {
 }
 
 .card-custom .card-text {
-    color: var(--text-muted);
+    /* color: var(--text-muted); */
     transition: color 0.2s ease;
 }
 

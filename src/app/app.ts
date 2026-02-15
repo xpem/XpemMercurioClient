@@ -27,7 +27,7 @@ export class App implements OnInit, OnDestroy {
     // Reage às mudanças no estado de autenticação
     effect(() => {
       const isAuthenticated = this.authService.isAuthenticated();
-      
+
       if (isAuthenticated) {
         this.startNotificationPolling();
       } else {
@@ -147,14 +147,13 @@ export class App implements OnInit, OnDestroy {
   }
 
   clearAll() {
-    this.notifications.set([]);
-    this.notReadNotificationsCount.set(0);
+    // this.notifications.set([]);
+    // this.notReadNotificationsCount.set(0);
 
     const ids = this.notifications().map(n => n.id);
     this.notificationApi.markAsRead(ids).subscribe({
       next: () => {
-        // Notificações marcadas como lidas com sucesso
-        console.log("Todas as notificações foram marcadas como lidas");
+        this.loadTotalNotificationsUnread();
       },
       error: (e) => {
         console.error("Erro ao marcar todas as notificações como lidas", e);

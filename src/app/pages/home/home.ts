@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
+import { Directive, Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
 import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
@@ -12,13 +12,18 @@ import { OrderFilters } from "./components/order-filters/order-filters";
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { forkJoin, catchError, of } from 'rxjs';
+import { TooltipDirective } from '../../components/TooltipDirective';
+
 
 @Component({
   selector: 'app-home',
-  imports: [CurrencyPipe, OrderFilters, RouterModule],
+  imports: [CurrencyPipe, OrderFilters, RouterModule,TooltipDirective],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
+
+
+
 export class Home implements OnInit {
 
   userProfile: WritableSignal<UserProfile | null> = signal(null);
@@ -31,7 +36,7 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
-
+  isEnabledPendingLabelsPrint: WritableSignal<boolean> = signal(false);
   //filters
   orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
     externalId: '',
@@ -87,24 +92,6 @@ export class Home implements OnInit {
       },
       { validators: this.dateRangeValidator() }
     );
-  }
-
-  // Validador customizado que compara datas
-  private dateRangeValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const parent = control as FormGroup;
-      if (!parent.get) return null;
-
-      const startDate = parent.get('orderDateStart')?.value;
-      const endDate = parent.get('orderDateEnd')?.value;
-
-      // Se ambos os campos estão preenchidos, valida se startDate < endDate
-      if (startDate && endDate && startDate > endDate) {
-        return { dateRangeInvalid: true };
-      }
-
-      return null;
-    };
   }
 
   ngOnInit(): void {
@@ -175,6 +162,25 @@ export class Home implements OnInit {
     });
   }
 
+
+  // Validador customizado que compara datas
+  private dateRangeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control as FormGroup;
+      if (!parent.get) return null;
+
+      const startDate = parent.get('orderDateStart')?.value;
+      const endDate = parent.get('orderDateEnd')?.value;
+
+      // Se ambos os campos estão preenchidos, valida se startDate < endDate
+      if (startDate && endDate && startDate > endDate) {
+        return { dateRangeInvalid: true };
+      }
+
+      return null;
+    };
+  }
+
   goToOrderDetail(id: number) {
     this.router.navigate(['/order'], { queryParams: { id } });
   }
@@ -188,6 +194,11 @@ export class Home implements OnInit {
   }
 
   setMarketplace(marketplace: number | null) {
+
+    if (this.marketplace == null)
+      this.isEnabledPendingLabelsPrint.set(false);
+    else this.isEnabledPendingLabelsPrint.set(true);
+
     this.marketplace.set(marketplace);
     this.initLoadOrders();
   }

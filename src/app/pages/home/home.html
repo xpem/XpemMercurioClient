@@ -18,8 +18,9 @@
     </div>
 </div>
 }
-<div class="d-flex justify-content-between mb-3 mt-3">
-    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+<div class="row mt-3">
+    <div class="col-lg-4 btn-group mb-3" style="max-width: 400px;" role="group"
+        aria-label="Basic radio toggle button group">
         <input type="radio" class="btn-check" name="btnradio" id="btnAll" autocomplete="off"
             [checked]="marketplace() === null" (change)="setMarketplace(null)">
         <label class="btn btn-outline-secondary" for="btnAll">Todas</label>
@@ -32,23 +33,26 @@
             [checked]="marketplace() === 2" (change)="setMarketplace(2)">
         <label class="btn btn-outline-secondary" for="btnShopee">Shopee</label>
     </div>
-    <div>
-        <!-- open the app-order-filters modal component -->
+    <div class="col-lg-8 d-flex justify-content-end align-items-center mb-3">
         <button type="button" class="btn btn-outline-light me-3" data-bs-toggle="modal"
             data-bs-target="#orderFiltersModal">
             <i class="bi bi-funnel"></i>
         </button>
 
         @if (isLoadingTotalPendingLabelsPrint()) {
-        <div class="clearfix mb-3">
+        <div class="clearfix">
             <div class="spinner-grow  spinner-grow-sm text-info float-end" role="status">
                 <span class="visually-hidden">Loading Total Pending Labels Print...</span>
             </div>
         </div>
         }
         @else {
-        <div class="mb-3 mb-sm-0 text-end float-end">
-            <button type="button" class="btn btn-light position-relative" (click)="goToShipmentPendingLabelsList()">
+        <div class="mb-sm-0 text-end float-end">
+            <!-- <span class="d-inline-block" tabindex="0" appTooltip data-bs-toggle="tooltip" data-bs-title="Disabled tooltip">
+                <button class="btn btn-primary" type="button" disabled>Disabled button</button>
+            </span> -->
+            <button type="button" class="btn btn-light position-relative" [disabled]="!isEnabledPendingLabelsPrint()"
+                (click)="goToShipmentPendingLabelsList()">
                 <i class="bi bi-printer"></i>&nbsp;&nbsp;
                 Etiquetas pendentes
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -58,6 +62,7 @@
             </button>
         </div>
         }
+
     </div>
 </div>
 <app-order-filters [FilterFormGroup]="orderFilterForm" (clearFilters)="clearFilters()"
@@ -118,7 +123,7 @@
                     <!-- <p class="mb-0 status-badge">{{item.status}}</p> -->
                     @for (product of item.products; track $index) {
                     <div class="d-flex justify-content-between" style="width: 100%;">
-                        <p class="card-text mb-0">{{product.title}}</p>
+                        <p class="card-text mb-0" style="font-size: 0.75rem;">{{product.title}}</p>
                         <p class="card-text text-end mb-0" style="font-weight: 600;">
                             {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                         </p>

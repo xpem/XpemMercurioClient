@@ -1,4 +1,5 @@
 import { Injectable, inject, PLATFORM_ID, computed, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service'; // <-- Novo import
@@ -7,6 +8,7 @@ import { CookieService } from 'ngx-cookie-service'; // <-- Novo import
 export class AuthService {
     private http = inject(HttpClient);
     private cookieService = inject(CookieService);
+    private platformId = inject(PLATFORM_ID);
     private isAuthenticatedSignal = signal<boolean>(false);
 
     private readonly TOKEN_KEY = 'auth_token';
@@ -20,8 +22,12 @@ export class AuthService {
     }
 
     private checkAuthentication(): void {
-        const token = this.cookieService.get(this.TOKEN_KEY);
+        if (!isPlatformBrowser(this.platformId)) {
+            this.isAuthenticatedSignal.set(false);
+            return;
+        }
 
+        const token = this.cookieService.get(this.TOKEN_KEY);
         this.isAuthenticatedSignal.set(!!token);
 
     }
@@ -29,7 +35,10 @@ export class AuthService {
 
     // 1. Obtém o token (se estiver em um cookie NÃO HTTP-ONLY)
     public getToken(): string | null {
-        // console.log(this.cookieService.get(this.TOKEN_KEY));
+        if (!isPlatformBrowser(this.platformId)) {
+            return null;
+        }
+
         // Verifica se o cookie existe
         return this.cookieService.get(this.TOKEN_KEY) || null;
     }
@@ -39,9 +48,10 @@ export class AuthService {
     public saveToken(token: string): void {
         // Configuração do cookie no frontend (usar apenas se não for HTTP-Only)
         this.cookieService.set(this.TOKEN_KEY, token, {
-            expires: 1, // Expira em 1 dia
+            expires: 3, // Expira em 3 dias
             secure: true, // Apenas via HTTPS
-            sameSite: 'Lax'
+            sameSite: 'Lax',
+            path: '/'
         });
 
         this.isAuthenticatedSignal.set(true);
@@ -49,7 +59,7 @@ export class AuthService {
 
     // 3. Remove o token (Logout)
     public logout(): void {
-        this.cookieService.delete(this.TOKEN_KEY);
+        this.cookieService.delete(this.TOKEN_KEY, '/');
         this.isAuthenticatedSignal.set(false);
     }
 
@@ -59,12 +69,16 @@ export class AuthService {
         // Se o token for HTTP-Only, o navegador o anexa aqui.
         return this.http.get<any>(this.apiUrlStatus).pipe(
             map(response => {
-                if (!!response?.email)
-                    this.isAuthenticatedSignal.set(!!response?.email);
-
-                return !!response?.email;
+                const hasSession = !!response?.email;
+                this.isAuthenticatedSignal.set(hasSession);
+                return hasSession;
             }), // Retorna true se a sessão estiver ativa
-            catchError(() => of(false)) // Retorna false em caso de erro
+            catchError((error) => {
+                console.error('Erro ao verificar status da sessão:', error);
+                this.isAuthenticatedSignal.set(false);
+                return of(false);
+            }
+        ) // Retorna false em caso de erro
         );
     }
 }
