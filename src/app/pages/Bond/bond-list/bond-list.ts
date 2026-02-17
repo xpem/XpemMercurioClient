@@ -68,7 +68,20 @@ export class BondList implements OnInit {
     });
   }
 
-  ImportSingleOrder() {
+  importSingleOrder() {
+    if (this.selectedMarketplace() === 1) {
+      this.executeImportSingleOrder(
+        (orderId: string) => this.mercadoLivreService.importSingleOrder(orderId)
+      );
+      return;
+    }
+
+    this.executeImportSingleOrder(
+      (orderId: string) => this.shopeeApiService.importSingleOrder(orderId)
+    );
+  }
+
+  executeImportSingleOrder(importObservable: any) {
     this.isImportLoading.set(true);
     const orderIdInput = document.getElementById('orderId') as HTMLInputElement;
     const orderId = orderIdInput.value.trim();
@@ -76,18 +89,25 @@ export class BondList implements OnInit {
     if (orderId) {
 
       console.log('Importing order with ID:', orderId);
-      this.mercadoLivreService.importSingleOrder(orderId).subscribe({
-        next: (response) => {
+      importObservable(orderId).subscribe({
+        next: (response: any) => {
 
-          const orders: Order[] = response;
-          this.SingleImportOrders.set(orders);
+          const responseData = Array.isArray(response) ? response : JSON.parse(response);
+
+          this.SingleImportOrders.set(responseData);
+
+          console.log('Order imported successfully:', this.SingleImportOrders());
+
+          for (let order of this.SingleImportOrders() || []) {
+            console.log(`Importação do pedido ${order.externalId} em processamento!`);
+          }
 
           //external id of SingleOrder
           this.showModal('ConfirmImportSingleOrderModal');
           this.hideModal('ImportSingleOrderModal');
           this.isImportLoading.set(false);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error importing single order:', error);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('ImportSingleOrderModal');
@@ -98,7 +118,20 @@ export class BondList implements OnInit {
     }
   }
 
-  ImportOrdersByPeriod() {
+  importOrdersByPeriod() {
+    if (this.selectedMarketplace() === 1) {
+      this.executeImportOrdersByPeriod(
+        (startDate: string, endDate: string) => this.mercadoLivreService.importOrdersByPeriod(startDate, endDate)
+      );
+      return;
+    }
+
+    this.executeImportOrdersByPeriod(
+      (startDate: string, endDate: string) => this.shopeeApiService.importOrdersByPeriod(startDate, endDate)
+    );
+  }
+
+  executeImportOrdersByPeriod(importObservable: any) {
     const startDateInput = document.getElementById('startDate') as HTMLInputElement;
     const endDateInput = document.getElementById('endDate') as HTMLInputElement;
     const startDate = startDateInput.value;
@@ -112,14 +145,14 @@ export class BondList implements OnInit {
       }
 
       console.log('Importing orders from', startDate, 'to', endDate);
-      this.mercadoLivreService.importOrdersByPeriod(startDate, endDate).subscribe({
-        next: (response) => {
+      importObservable(startDate, endDate).subscribe({
+        next: (response: any) => {
           console.log('Orders imported successfully:', response);
           this.toastService.showInfo('Importação de pedidos em processamento!', 5000);
           this.hideModal('importOrdersByPeriodModal');
           this.getUserProfile()
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error importing orders by period:', error);
           this.showModal('ErrorImportSingleModal');
           this.hideModal('importOrdersByPeriodModal');
@@ -143,20 +176,30 @@ export class BondList implements OnInit {
     this.showModal('unbondMercadoLivreCredentialModal');
   }
 
+  callImportOrdersByPeriodModal(marketplace: number) {
+    this.selectedMarketplace.set(marketplace);
+    this.showModal('importOrdersByPeriodModal');
+  }
+
+  callImportSingleOrderModal(marketplace: number) {
+    this.selectedMarketplace.set(marketplace);
+    this.showModal('ImportSingleOrderModal');
+  }
+
   importSingleProduct() {
     if (this.selectedMarketplace() === 1) {
-      this.ImportSingleProduct(
+      this.executeImportSingleProduct(
         (productId: string) => this.mercadoLivreService.importSingleProduct(productId)
       );
       return;
     }
 
-    this.ImportSingleProduct(
+    this.executeImportSingleProduct(
       (productId: string) => this.shopeeApiService.importSingleProduct(productId)
     );
   }
 
-  ImportSingleProduct(importObservable: any) {
+  executeImportSingleProduct(importObservable: any) {
     const productId = this.productId();
     this.isImportLoading.set(true);
     this.errorMessage.set('');
@@ -222,7 +265,7 @@ export class BondList implements OnInit {
     if (this.isActionLoading()) {
       return; // Previne múltiplos cliques
     }
-    
+
     this.isActionLoading.set(true);
 
     this.shopeeApiService.getCancelAuthUri(this.userProfile()?.shopeeCredentialId || '').subscribe({

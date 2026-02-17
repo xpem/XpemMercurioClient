@@ -17,7 +17,7 @@ import { TooltipDirective } from '../../components/TooltipDirective';
 
 @Component({
   selector: 'app-home',
-  imports: [CurrencyPipe, OrderFilters, RouterModule,TooltipDirective],
+  imports: [CurrencyPipe, OrderFilters, RouterModule, TooltipDirective],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -36,7 +36,7 @@ export class Home implements OnInit {
   totalPendingLabelsPrint: WritableSignal<number> = signal(0);
   orderFilter: WritableSignal<OrderFilter> = signal({});
   isLoadingTotalPendingLabelsPrint: WritableSignal<boolean> = signal(true);
-  isEnabledPendingLabelsPrint: WritableSignal<boolean> = signal(false);
+  isEnabledPendingLabelsPrint: WritableSignal<boolean> = signal(true);
   //filters
   orderFilterDisplay: WritableSignal<OrderFilterDisplay> = signal({
     externalId: '',
@@ -156,8 +156,6 @@ export class Home implements OnInit {
         this.totalPages.set(totalPages);
 
         this.loadPaginatedOrders(1);
-
-
       }
     });
   }
@@ -195,7 +193,7 @@ export class Home implements OnInit {
 
   setMarketplace(marketplace: number | null) {
 
-    if (this.marketplace == null)
+    if (this.totalPendingLabelsPrint() === 0)
       this.isEnabledPendingLabelsPrint.set(false);
     else this.isEnabledPendingLabelsPrint.set(true);
 

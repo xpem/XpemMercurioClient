@@ -4,7 +4,6 @@
 </div>
 }
 @else {
-<h4 class="mb-4"><i class="bi bi-shop"></i> Marketplaces</h4>
 @if ((userProfile()?.mercadoLivreCredentialId) == null || (userProfile()?.shopeeCredentialId) == null) {
 <div class="row border border-white rounded-3 p-3 mb-4">
     @if((userProfile()?.mercadoLivreCredentialId) == null){
@@ -72,18 +71,18 @@
     @if ((userProfile()?.mercadoLivreCredentialId) != null) {
     <div class="card mb-3" style="border-color: var(--mercado-livre-color); padding: 0;">
         <div class="row g-0">
-            <div class="col-md-4" style="max-width: fit-content;">
+            <div class="col-md-4" style="max-width: 150px; align-content: center;">
                 <img src="/MercadoLivreIcon.png" class="img-fluid rounded-start" alt="Mercado Livre" loading="lazy"
-                    style="width: 200px;">
+                    style="width: 150px;">
             </div>
-            <div class="col-md-8 ps-3 d-flex flex-column justify-content-center">
+            <div class="col-md-8 ps-3 pb-1 d-flex flex-column justify-content-center">
                 <h5 class="me-3">Mercado Livre</h5>
                 <div class="d-grid gap-2 d-md-block mb-3 mt-3">
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
+                        (click)="callImportOrdersByPeriodModal(1)"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
                         Período</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
+                        (click)="callImportSingleOrderModal(1)"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
                         Única</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
                         (click)="callImportAllProducts(1)"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
@@ -105,24 +104,23 @@
     @if ((userProfile()?.shopeeCredentialId) != null) {
     <div class="card mb-3" style="border-color: var(--shopee-color); padding: 0;">
         <div class="row g-0">
-            <div class="col-md-4" style="max-width: fit-content;">
+            <div class="col-md-4" style="max-width: 150px; align-content: center;">
                 <img src="/ShopeeIcon.jpg" class="img-fluid rounded-start" alt="Shopee" loading="lazy"
-                    style="width: 200px;">
+                    style="width: 150px;">
             </div>
-            <div class="col-md-8 ps-3 d-flex flex-column justify-content-center">
+            <div class="col-md-8 ps-3 pb-1 d-flex flex-column justify-content-center">
                 <h5 class="me-3">Shopee</h5>
                 <div class="d-grid gap-2 d-md-block mb-3 mt-3">
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#importOrdersByPeriodModal"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
+                        (click)="callImportOrdersByPeriodModal(2)"><i class="bi bi-files"></i>&nbsp;&nbsp;Vendas por
                         Período</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
-                        data-bs-target="#ImportSingleOrderModal"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
+                        (click)="callImportSingleOrderModal(2)"><i class="bi bi-file-earmark"></i>&nbsp;&nbsp;Venda
                         Única</button>
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
                         (click)="callImportAllProducts(2)"><i class="bi bi-boxes"></i>&nbsp;&nbsp;Todos os
                         produtos
                     </button>
-
                     <button class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal"
                         (click)="callImportSingleProduct(2)"><i class="bi bi-box2"></i>&nbsp;&nbsp;Produto
                         Único</button>
@@ -188,7 +186,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
 
                 @if(!isImportLoading()){
-                <button type="button" class="btn btn-primary" (click)="this.ImportSingleOrder()"><i
+                <button type="button" class="btn btn-primary" (click)="this.importSingleOrder()"><i
                         class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
                 } @else {
                 <button class="btn btn-success" type="button" disabled>
@@ -230,7 +228,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" (click)="this.ImportOrdersByPeriod()"><i
+                <button type="button" class="btn btn-primary" (click)="this.importOrdersByPeriod()"><i
                         class="bi bi-arrow-down-square-fill"></i>&nbsp;&nbsp;Importar</button>
             </div>
         </div>

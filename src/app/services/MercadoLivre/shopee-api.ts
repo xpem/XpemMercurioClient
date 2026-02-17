@@ -28,6 +28,14 @@ export class ShopeeApiService {
         );
     }
 
+    public importSingleOrder(orderId: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Order/Import/${orderId}`, { responseType: 'text' });
+    }
+
+     public importOrdersByPeriod(startDate: string, endDate: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/Order/Import/ByPeriod?startDate=${startDate}&endDate=${endDate}`, { responseType: 'text' });
+    }
+
     public importSingleProduct(productId: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/Product/Import/${productId}`, { responseType: 'text' });
     }

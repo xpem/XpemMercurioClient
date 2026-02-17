@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, signal, WritableSignal, effect } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Toasts } from "./components/toasts/toasts";
 import { Sidebar } from "./components/sidebar/sidebar";
 import { AuthService } from './services/auth.service';
 import { NotificationsList } from "./components/notifications-list/notifications-list";
 import { AppNotification, NotificationObjectType, NotificationType } from './models/appNotification.model';
 import { NotificationApi } from './services/notification-api';
-import { map } from 'rxjs';
+import { map, filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,14 +16,14 @@ import { map } from 'rxjs';
 })
 
 export class App implements OnInit, OnDestroy {
-  protected readonly title = signal('XpemMercurioClient');
+  protected readonly pageTitle = signal('...');
   notifications = signal<AppNotification[]>([]);
   notReadNotificationsCount = signal(0);
   isLoadingNotifications: WritableSignal<boolean> = signal(false);
 
   private notificationInterval: any;
 
-  constructor(public authService: AuthService, private notificationApi: NotificationApi) {
+  constructor(public authService: AuthService, private notificationApi: NotificationApi, private router: Router) {
     // Reage às mudanças no estado de autenticação
     effect(() => {
       const isAuthenticated = this.authService.isAuthenticated();
@@ -39,6 +39,32 @@ export class App implements OnInit, OnDestroy {
   ngOnInit() {
     // Verifica o estado de autenticação através da API
     this.authService.checkSessionStatus().subscribe();
+
+    // Escuta as mudanças de rota para atualizar o título
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      const routeData = this.getRouteData();
+      if (routeData && routeData['title']) {
+        this.pageTitle.set(routeData['title']);
+      } else {
+        this.pageTitle.set('Xpem Mercúrio');
+      }
+    });
+
+    // Define o título inicial
+    const initialRouteData = this.getRouteData();
+    if (initialRouteData && initialRouteData['title']) {
+      this.pageTitle.set(initialRouteData['title']);
+    }
+  }
+
+  private getRouteData() {
+    let route = this.router.routerState.root;
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+    return route.snapshot.data;
   }
 
   ngOnDestroy() {

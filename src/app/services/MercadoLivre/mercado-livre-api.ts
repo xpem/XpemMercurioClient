@@ -24,7 +24,7 @@ export class MercadoLivreService {
 
     public postUserCredential(mercadoLivreOAuth: MercadoLivreOAuth): Observable<any> {
         return this.http.post(`${this.apiUrl}/Auth/Credential`, mercadoLivreOAuth, { responseType: 'text' }).pipe(
-            timeout(6000)
+            timeout(12000)
         );
     }
 
