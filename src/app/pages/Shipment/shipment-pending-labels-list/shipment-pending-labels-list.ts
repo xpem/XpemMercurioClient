@@ -35,27 +35,27 @@ export class ShipmentPendingLabelsList implements OnInit {
       return;
     }
     console.log('Label IDs to print:', this.selectedLabels().join(','));
-    this.mercadoLivreService.printShipmentLabels(this.selectedLabels()).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `shipment_labels_batch.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+    // this.mercadoLivreService.printShipmentLabels(this.selectedLabels()).subscribe({
+    //   next: (blob) => {
+    //     const url = window.URL.createObjectURL(blob);
+    //     const a = document.createElement('a');
+    //     a.href = url;
+    //     a.download = `shipment_labels_batch.pdf`;
+    //     document.body.appendChild(a);
+    //     a.click();
+    //     document.body.removeChild(a);
+    //     window.URL.revokeObjectURL(url);
 
-        // const printUrl = this.shipmentService.getPrintLabelsUrl(labelIds);
-        this.toastService.showSuccess(`Lote de etiquetas gerado.`);
+    //     // const printUrl = this.shipmentService.getPrintLabelsUrl(labelIds);
+    //     this.toastService.showSuccess(`Lote de etiquetas gerado.`);
 
-        this.getOrdersWithPendingLabels();
-      },
-      error: (error) => {
-        this.toastService.showError('Erro ao gerar lote de etiquetas.');
-        console.error('Erro ao gerar lote de etiquetas:', error);
-      }
-    });
+    //     this.getOrdersWithPendingLabels();
+    //   },
+    //   error: (error) => {
+    //     this.toastService.showError('Erro ao gerar lote de etiquetas.');
+    //     console.error('Erro ao gerar lote de etiquetas:', error);
+    //   }
+    // });
   }
 
 

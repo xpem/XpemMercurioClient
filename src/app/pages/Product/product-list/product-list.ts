@@ -29,7 +29,8 @@ export class ProductList implements OnInit {
   constructor(private ProductService: ProductService, private fb: FormBuilder) {
     this.productFilterForm = this.fb.group({
       productTitle: [''],
-      productSKU: ['']
+      productSKU: [''],
+      productBondExternalId: ['']
     });
   }
 
@@ -141,11 +142,16 @@ export class ProductList implements OnInit {
       currentDisplay.productTitle = `Nome do produto: ${this.productFilterForm.value.productTitle}`;
     }
 
+    if (this.productFilterForm.value.productBondExternalId !== null && this.productFilterForm.value.productBondExternalId !== '') {
+      currentDisplay.productBondExternalId = `Id no Marketplace: ${this.productFilterForm.value.productBondExternalId}`;
+    }
+
     this.productFilterDisplay.set(currentDisplay);
 
     this.productFilter.set({
       productSKU: this.productFilterForm.value.productSKU,
-      productTitle: this.productFilterForm.value.productTitle
+      productTitle: this.productFilterForm.value.productTitle,
+      productBondExternalId: this.productFilterForm.value.productBondExternalId
     });
 
     this.initLoadProducts();

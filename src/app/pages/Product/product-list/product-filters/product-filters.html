@@ -10,17 +10,22 @@
             <form [formGroup]="FilterFormGroup">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-6 col-lg-12">
+                        <div class="mb-6 col-lg-4">
                             <label for="productSKU" class="form-label fw-bold">SKU</label>
                             <input type="text" class="form-control form-control-sm" id="productSKU"
-                                formControlName="productSKU" placeholder="Digite o SKU do produto">
+                                formControlName="productSKU">
+                        </div>
+                                <div class="mb-6 col-lg-6">
+                            <label for="productBondExternalId" class="form-label fw-bold">Id no Marketplace</label>
+                            <input type="text" class="form-control form-control-sm" id="productBondExternalId"
+                                formControlName="productBondExternalId">
                         </div>
                     </div>
                     <div class="row">
                         <div class="mb-6 col-lg-12">
                             <label for="productTitle" class="form-label fw-bold">Nome</label>
                             <input type="text" class="form-control form-control-sm" id="productTitle"
-                                formControlName="productTitle" placeholder="Digite o nome do produto">
+                                formControlName="productTitle">
                         </div>
                     </div>
                 </div>

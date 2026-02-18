@@ -20,17 +20,17 @@
             </div>
             <div class="d-flex gap-4">
                 @if (item.formattedType === 'entrada') {
-                <span class="text-success"><i class="bi bi-graph-up-arrow"></i></span>
+                <span class="text-danger"><i class="bi bi-graph-up-arrow"></i></span>
                 } @else {
-                <span class="text-danger"><i class="bi bi-graph-down-arrow"></i></span>
+                <span class="text-success"><i class="bi bi-graph-down-arrow"></i></span>
                 }
                 <div style="flex: 1 1 0%;">
                     <span>
                         @if (item.type === 0) {
-                        <span class="badge rounded-pill custom-outline-green">
+                        <span class="badge rounded-pill custom-outline-red">
                             +{{item.movedQuantity}} un</span>
                         } @else {
-                        <span class="badge rounded-pill custom-outline-red">
+                        <span class="badge rounded-pill custom-outline-green">
                             -{{item.movedQuantity}} un</span>
                         }
                         <span> {{item.reason}}</span>

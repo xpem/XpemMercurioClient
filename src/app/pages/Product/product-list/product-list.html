@@ -28,6 +28,9 @@
 @if(this.productFilterDisplay().productTitle) {
 <p class="ms-2 badge rounded-pill rounded-badge-secondary mb-2">{{ productFilterDisplay().productTitle }}</p>
 }
+@if(this.productFilterDisplay().productBondExternalId) {
+<p class="ms-2 badge rounded-pill rounded-badge-secondary mb-2">{{ productFilterDisplay().productBondExternalId }}</p>
+}
 <button class="ms-2 badge text-danger btn btn-outline-danger btn-sm rounded-pill rounded-badge-danger"
     (click)="clearFilters()"><i class="bi bi-x-lg"></i> Limpar</button>
 }
