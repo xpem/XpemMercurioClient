@@ -13,7 +13,7 @@
         <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
             <div class="card form-card">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-building"></i> Dados da Empresa</h5>
+                    <h5 class="card-title"><i class="bi bi-building text-success"></i> Dados da Empresa</h5>
                     <div class="row">
                         <div class="col-lg-6 mb-2">
                             <div class="form-group">
@@ -33,8 +33,7 @@
                         <div class="col-lg-6 mb-2">
                             <div class="form-group">
                                 <label for="inputTradeName">Nome Fantasia</label>
-                                <input type="text" class="form-control" id="inputTradeName"
-                                    formControlName="tradeName"
+                                <input type="text" class="form-control" id="inputTradeName" formControlName="tradeName"
                                     [class.is-invalid]="submitted && f['tradeName'].invalid || f['tradeName'].touched && f['tradeName'].invalid" />
 
                                 @if((f['tradeName'].touched || submitted) && f['tradeName'].errors) {
@@ -80,140 +79,215 @@
                 </div>
             </div>
 
+            <div formGroupName="address">
+                <div class="card form-card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-geo text-success"></i> Endereço</h5>
+                        <div class="row">
+                            <div class="col-lg-6 mb-2">
+                                <div class="form-group">
+                                    <label for="inputStreet">Rua</label>
+                                    <input type="text" class="form-control" id="inputStreet" formControlName="street"
+                                        [class.is-invalid]="submitted && af['street'].invalid || af['street'].touched && af['street'].invalid" />
+
+                                    @if((af['street'].touched || submitted) && af['street'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['street'].errors['required']) {
+                                        <div>Rua é obrigatória</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-2 mb-2">
+                                <div class="form-group">
+                                    <label for="inputNumber">Número</label>
+                                    <input type="number" class="form-control" id="inputNumber" formControlName="number"
+                                        maxlength="10"
+                                        [class.is-invalid]="submitted && af['number'].invalid || af['number'].touched && af['number'].invalid" />
+
+                                    @if((af['number'].touched || submitted) && af['number'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['number'].errors['required']) {
+                                        <div>Número é obrigatório</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-2">
+                                <div class="form-group">
+                                    <label for="inputComplement">Complemento</label>
+                                    <input type="text" class="form-control" id="inputComplement"
+                                        formControlName="complement" />
+
+                                    @if((af['complement'].touched || submitted) && af['complement'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['complement'].errors['required']) {
+                                        <div>Complemento é obrigatório</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-2">
+                                <div class="form-group">
+                                    <label for="inputNeighborhood">Bairro</label>
+                                    <input type="text" class="form-control" id="inputNeighborhood"
+                                        formControlName="neighborhood" />
+
+                                    @if((af['neighborhood'].touched || submitted) && af['neighborhood'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['neighborhood'].errors['required']) {
+                                        <div>Bairro é obrigatório</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-2">
+                                <div class="form-group">
+                                    <label for="inputCity">Cidade</label>
+                                    <input type="text" class="form-control" id="inputCity" formControlName="city" />
+
+                                    @if((af['city'].touched || submitted) && af['city'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['city'].errors['required']) {
+                                        <div>Cidade é obrigatória</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-3 mb-2">
+                                <div class="form-group">
+                                    <label for="inputCityCode">Código IBGE</label>
+                                    <input type="text" class="form-control" id="inputCityCode"
+                                        formControlName="cityCode" />
+
+                                    @if((af['cityCode'].touched || submitted) && af['cityCode'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['cityCode'].errors['required']) {
+                                        <div>Código IBGE é obrigatório</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-1 mb-2">
+                                <div class="form-group">
+                                    <label for="inputState">Estado</label>
+                                    <select class="form-control" id="inputState" formControlName="state"
+                                        [class.is-invalid]="submitted && af['state'].invalid || af['state'].touched && af['state'].invalid">
+                                        <option value=""></option>
+                                        <option [ngValue]="12">AC</option>
+                                        <option [ngValue]="27">AL</option>
+                                        <option [ngValue]="16">AP</option>
+                                        <option [ngValue]="13">AM</option>
+                                        <option [ngValue]="29">BA</option>
+                                        <option [ngValue]="23">CE</option>
+                                        <option [ngValue]="53">DF</option>
+                                        <option [ngValue]="32">ES</option>
+                                        <option [ngValue]="52">GO</option>
+                                        <option [ngValue]="21">MA</option>
+                                        <option [ngValue]="51">MT</option>
+                                        <option [ngValue]="50">MS</option>
+                                        <option [ngValue]="31">MG</option>
+                                        <option [ngValue]="15">PA</option>
+                                        <option [ngValue]="25">PB</option>
+                                        <option [ngValue]="41">PR</option>
+                                        <option [ngValue]="26">PE</option>
+                                        <option [ngValue]="22">PI</option>
+                                        <option [ngValue]="33">RJ</option>
+                                        <option [ngValue]="24">RN</option>
+                                        <option [ngValue]="43">RS</option>
+                                        <option [ngValue]="11">RO</option>
+                                        <option [ngValue]="14">RR</option>
+                                        <option [ngValue]="42">SC</option>
+                                        <option [ngValue]="35">SP</option>
+                                        <option [ngValue]="28">SE</option>
+                                        <option [ngValue]="17">TO</option>
+                                        <option [ngValue]="91">AN</option>
+                                        <option [ngValue]="92">SVRS</option>
+                                        <option [ngValue]="99">EX</option>
+                                    </select>
+                                    @if((af['state'].touched || submitted) && af['state'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['state'].errors['required']) {
+                                        <div>Estado é obrigatório</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card form-card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-telephone text-success"></i> Contatos</h5>
+                        <div class="row">
+                            <div class="col-lg-2 mb-2">
+                                <div class="form-group">
+                                    <label for="inputPhone">Telefone</label>
+                                    <input type="text" class="form-control" id="inputPhone" formControlName="phone"
+                                        maxlength="15" (input)="onPhoneInput($event)"
+                                        [class.is-invalid]="submitted && af['phone'].invalid || af['phone'].touched && af['phone'].invalid" />
+                                    @if((af['phone'].touched || submitted) && af['phone'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['phone'].errors['required']) {
+                                        <div>Telefone é obrigatório</div>
+                                        }
+                                        @if (af['phone'].errors['pattern']) {
+                                        <div>Telefone deve ser válido (apenas números, com DDD opcional)</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <div class="form-group">
+                                    <label for="inputEmail">Email</label>
+                                    <input type="text" class="form-control" id="inputEmail" formControlName="email"
+                                        [class.is-invalid]="(submitted && af['email'].invalid) || (af['email'].touched && af['email'].invalid)" />
+                                    @if((af['email'].touched || submitted) && af['email'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if(submitted && af['email'].errors){
+                                        @if (af['email'].errors['required']) {
+                                        <div>Email é obrigatório.</div>
+                                        }
+                                        @if (af['email'].errors['email']) {
+                                        <div>Email deve ser válido.</div>
+                                        }
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card form-card mt-3">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-geo"></i> Endereço</h5>
+                    <h5 class="card-title"><i class="bi bi-file-earmark-text text-success"></i> Informações Fiscais</h5>
                     <div class="row">
                         <div class="col-lg-6 mb-2">
                             <div class="form-group">
-                                <label for="inputStreet">Rua</label>
-                                <input type="text" class="form-control" id="inputStreet" formControlName="street"
-                                    [class.is-invalid]="submitted && f['street'].invalid || f['street'].touched && f['street'].invalid" />
-
-                                @if((f['street'].touched || submitted) && f['street'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['street'].errors['required']) {
-                                    <div>Rua é obrigatória</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-2 mb-2">
-                            <div class="form-group">
-                                <label for="inputNumber">Número</label>
-                                <input type="number" class="form-control" id="inputNumber" formControlName="number"
-                                    maxlength="10"
-                                    [class.is-invalid]="submitted && f['number'].invalid || f['number'].touched && f['number'].invalid" />
-
-                                @if((f['number'].touched || submitted) && f['number'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['number'].errors['required']) {
-                                    <div>Número é obrigatório</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-2">
-                            <div class="form-group">
-                                <label for="inputComplement">Complemento</label>
-                                <input type="text" class="form-control" id="inputComplement"
-                                    formControlName="complement" />
-
-                                @if((f['complement'].touched || submitted) && f['complement'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['complement'].errors['required']) {
-                                    <div>Complemento é obrigatório</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-2">
-                            <div class="form-group">
-                                <label for="inputNeighborhood">Bairro</label>
-                                <input type="text" class="form-control" id="inputNeighborhood"
-                                    formControlName="neighborhood" />
-
-                                @if((f['neighborhood'].touched || submitted) && f['neighborhood'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['neighborhood'].errors['required']) {
-                                    <div>Bairro é obrigatório</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-2">
-                            <div class="form-group">
-                                <label for="inputCity">Cidade</label>
-                                <input type="text" class="form-control" id="inputCity" formControlName="city" />
-
-                                @if((f['city'].touched || submitted) && f['city'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['city'].errors['required']) {
-                                    <div>Cidade é obrigatória</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-2">
-                            <div class="form-group">
-                                <label for="inputCityCode">Código IBGE</label>
-                                <input type="text" class="form-control" id="inputCityCode" formControlName="cityCode" />
-
-                                @if((f['cityCode'].touched || submitted) && f['cityCode'].errors) {
-                                <div class="invalid-feedback d-block">
-                                    @if (f['cityCode'].errors['required']) {
-                                    <div>Código IBGE é obrigatório</div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-lg-1 mb-2">
-                            <div class="form-group">
-                                <label for="inputState">Estado</label>
-                                <select class="form-control" id="inputState" formControlName="state"
-                                    [class.is-invalid]="submitted && f['state'].invalid || f['state'].touched && f['state'].invalid">
+                                <label for="inputCRT">Regime Tributário</label>
+                                <select class="form-control" id="inputCRT" formControlName="crt"
+                                    [class.is-invalid]="submitted && f['crt'].invalid || f['crt'].touched && f['crt'].invalid">
                                     <option value=""></option>
-                                    <option [ngValue]="12">AC</option>
-                                    <option [ngValue]="27">AL</option>
-                                    <option [ngValue]="16">AP</option>
-                                    <option [ngValue]="13">AM</option>
-                                    <option [ngValue]="29">BA</option>
-                                    <option [ngValue]="23">CE</option>
-                                    <option [ngValue]="53">DF</option>
-                                    <option [ngValue]="32">ES</option>
-                                    <option [ngValue]="52">GO</option>
-                                    <option [ngValue]="21">MA</option>
-                                    <option [ngValue]="51">MT</option>
-                                    <option [ngValue]="50">MS</option>
-                                    <option [ngValue]="31">MG</option>
-                                    <option [ngValue]="15">PA</option>
-                                    <option [ngValue]="25">PB</option>
-                                    <option [ngValue]="41">PR</option>
-                                    <option [ngValue]="26">PE</option>
-                                    <option [ngValue]="22">PI</option>
-                                    <option [ngValue]="33">RJ</option>
-                                    <option [ngValue]="24">RN</option>
-                                    <option [ngValue]="43">RS</option>
-                                    <option [ngValue]="11">RO</option>
-                                    <option [ngValue]="14">RR</option>
-                                    <option [ngValue]="42">SC</option>
-                                    <option [ngValue]="35">SP</option>
-                                    <option [ngValue]="28">SE</option>
-                                    <option [ngValue]="17">TO</option>
-                                    <option [ngValue]="91">AN</option>
-                                    <option [ngValue]="92">SVRS</option>
-                                    <option [ngValue]="99">EX</option>
+                                    <option [ngValue]="1">Simples Nacional</option>
+                                    <option [ngValue]="2">Simples Nacional - Excesso de Sublimite de Receita Bruta
+                                    </option>
+                                    <option [ngValue]="3">Regime Normal</option>
                                 </select>
-                                @if((f['state'].touched || submitted) && f['state'].errors) {
+                                @if((f['crt'].touched || submitted) && f['crt'].errors) {
                                 <div class="invalid-feedback d-block">
-                                    @if (f['state'].errors['required']) {
-                                    <div>Estado é obrigatório</div>
+                                    @if (f['crt'].errors['required']) {
+                                    <div>Regime Tributário é obrigatório</div>
                                     }
                                 </div>
                                 }
@@ -222,11 +296,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card form-card mt-3">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-telephone"></i> Contatos</h5>
-                </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-success"><i class="bi bi-check"></i>&nbsp;&nbsp;Confirmar</button>
             </div>
         </form>
     </div>

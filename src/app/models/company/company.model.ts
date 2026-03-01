@@ -6,6 +6,7 @@ export interface Company {
     address?: CompanyAddress;
     stateRegistration?: string;
     publicId: string;
+    crt?: number;
 }
 
 export interface CompanyAddress {
@@ -15,7 +16,8 @@ export interface CompanyAddress {
     neighborhood: string;
     city: string;
     cityCode: number;
-    state: number;
+    stateCode: number;
     postalCode: string;
     phone: string;
+    email: string;
 }
