@@ -176,10 +176,12 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-lg-6">
-                            <label for="mlStatus">Status:</label>&nbsp;&nbsp;
+                            <label for="mlStatus">Status:</label>
+                            <br />
                             <span class="badge text-bg-{{item.statusClassColor}}"
                                 style="font-size: 1rem;">{{item.statusText}}</span>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-6 form-floating">
@@ -202,7 +204,20 @@
                                 value="{{item.soldQuantity}}">
                             <label for="mlSoldQuantity-{{item.id}}">Vendidos</label>
                         </div>
-
+                        @if(item.kitQuantity != null) {
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlKitQuantity-{{item.id}}"
+                                value="{{item.kitQuantity}}">
+                            <label for="mlKitQuantity-{{item.id}}">Kit</label>
+                        </div>
+                        }
+                        @if(item.modelTitle) {
+                        <div class="col-lg-6 form-floating">
+                            <input type="text" readonly class="form-control-plaintext" id="mlModelTitle-{{item.id}}"
+                                value="{{item.modelTitle}}">
+                            <label for="mlModelTitle-{{item.id}}">Modelo</label>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>

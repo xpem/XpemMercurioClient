@@ -15,6 +15,9 @@ export interface ProductBond {
     statusText: string;
     statusClassColor?: string;
     visits: number;
+    //case is null define as 0
+    kitQuantity: number | null;
+    modelTitle?: string;
 }
 
 export enum ProductStatusMercadoLivreBond {

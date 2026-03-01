@@ -1,0 +1,234 @@
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+}
+@else {
+<div class="container-fluid">
+    <div class="col-lg-12 d-flex justify-content-between">
+        <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
+                class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
+    </div>
+    <div class="col-lg-12">
+        <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+            <div class="card form-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-building"></i> Dados da Empresa</h5>
+                    <div class="row">
+                        <div class="col-lg-6 mb-2">
+                            <div class="form-group">
+                                <label for="inputName">Razão Social</label>
+                                <input type="text" class="form-control" id="inputName" formControlName="name"
+                                    [class.is-invalid]="submitted && f['name'].invalid || f['name'].touched && f['name'].invalid" />
+
+                                @if((f['name'].touched || submitted) && f['name'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['name'].errors['required']) {
+                                    <div>Razão Social é obrigatória</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-2">
+                            <div class="form-group">
+                                <label for="inputTradeName">Nome Fantasia</label>
+                                <input type="text" class="form-control" id="inputTradeName"
+                                    formControlName="tradeName"
+                                    [class.is-invalid]="submitted && f['tradeName'].invalid || f['tradeName'].touched && f['tradeName'].invalid" />
+
+                                @if((f['tradeName'].touched || submitted) && f['tradeName'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['tradeName'].errors['required']) {
+                                    <div>Nome Fantasia é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-2">
+                            <div class="form-group">
+                                <label for="inputCNPJ">CNPJ</label>
+                                <input type="text" class="form-control" id="inputCNPJ" formControlName="cnpj"
+                                    [class.is-invalid]="submitted && f['cnpj'].invalid || f['cnpj'].touched && f['cnpj'].invalid" />
+                                @if((f['cnpj'].touched || submitted) && f['cnpj'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['cnpj'].errors['required']) {
+                                    <div>CNPJ é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-2">
+                            <div class="form-group">
+                                <label for="inputStateRegistration">Inscrição Estadual</label>
+                                <input type="text" class="form-control" id="inputStateRegistration"
+                                    formControlName="stateRegistration"
+                                    [class.is-invalid]="submitted && f['stateRegistration'].invalid || f['stateRegistration'].touched && f['stateRegistration'].invalid" />
+
+                                @if((f['stateRegistration'].touched || submitted) && f['stateRegistration'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['stateRegistration'].errors['required']) {
+                                    <div>Inscrição Estadual é obrigatória</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card form-card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-geo"></i> Endereço</h5>
+                    <div class="row">
+                        <div class="col-lg-6 mb-2">
+                            <div class="form-group">
+                                <label for="inputStreet">Rua</label>
+                                <input type="text" class="form-control" id="inputStreet" formControlName="street"
+                                    [class.is-invalid]="submitted && f['street'].invalid || f['street'].touched && f['street'].invalid" />
+
+                                @if((f['street'].touched || submitted) && f['street'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['street'].errors['required']) {
+                                    <div>Rua é obrigatória</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-2 mb-2">
+                            <div class="form-group">
+                                <label for="inputNumber">Número</label>
+                                <input type="number" class="form-control" id="inputNumber" formControlName="number"
+                                    maxlength="10"
+                                    [class.is-invalid]="submitted && f['number'].invalid || f['number'].touched && f['number'].invalid" />
+
+                                @if((f['number'].touched || submitted) && f['number'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['number'].errors['required']) {
+                                    <div>Número é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                            <div class="form-group">
+                                <label for="inputComplement">Complemento</label>
+                                <input type="text" class="form-control" id="inputComplement"
+                                    formControlName="complement" />
+
+                                @if((f['complement'].touched || submitted) && f['complement'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['complement'].errors['required']) {
+                                    <div>Complemento é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                            <div class="form-group">
+                                <label for="inputNeighborhood">Bairro</label>
+                                <input type="text" class="form-control" id="inputNeighborhood"
+                                    formControlName="neighborhood" />
+
+                                @if((f['neighborhood'].touched || submitted) && f['neighborhood'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['neighborhood'].errors['required']) {
+                                    <div>Bairro é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                            <div class="form-group">
+                                <label for="inputCity">Cidade</label>
+                                <input type="text" class="form-control" id="inputCity" formControlName="city" />
+
+                                @if((f['city'].touched || submitted) && f['city'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['city'].errors['required']) {
+                                    <div>Cidade é obrigatória</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-3 mb-2">
+                            <div class="form-group">
+                                <label for="inputCityCode">Código IBGE</label>
+                                <input type="text" class="form-control" id="inputCityCode" formControlName="cityCode" />
+
+                                @if((f['cityCode'].touched || submitted) && f['cityCode'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['cityCode'].errors['required']) {
+                                    <div>Código IBGE é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-1 mb-2">
+                            <div class="form-group">
+                                <label for="inputState">Estado</label>
+                                <select class="form-control" id="inputState" formControlName="state"
+                                    [class.is-invalid]="submitted && f['state'].invalid || f['state'].touched && f['state'].invalid">
+                                    <option value=""></option>
+                                    <option [ngValue]="12">AC</option>
+                                    <option [ngValue]="27">AL</option>
+                                    <option [ngValue]="16">AP</option>
+                                    <option [ngValue]="13">AM</option>
+                                    <option [ngValue]="29">BA</option>
+                                    <option [ngValue]="23">CE</option>
+                                    <option [ngValue]="53">DF</option>
+                                    <option [ngValue]="32">ES</option>
+                                    <option [ngValue]="52">GO</option>
+                                    <option [ngValue]="21">MA</option>
+                                    <option [ngValue]="51">MT</option>
+                                    <option [ngValue]="50">MS</option>
+                                    <option [ngValue]="31">MG</option>
+                                    <option [ngValue]="15">PA</option>
+                                    <option [ngValue]="25">PB</option>
+                                    <option [ngValue]="41">PR</option>
+                                    <option [ngValue]="26">PE</option>
+                                    <option [ngValue]="22">PI</option>
+                                    <option [ngValue]="33">RJ</option>
+                                    <option [ngValue]="24">RN</option>
+                                    <option [ngValue]="43">RS</option>
+                                    <option [ngValue]="11">RO</option>
+                                    <option [ngValue]="14">RR</option>
+                                    <option [ngValue]="42">SC</option>
+                                    <option [ngValue]="35">SP</option>
+                                    <option [ngValue]="28">SE</option>
+                                    <option [ngValue]="17">TO</option>
+                                    <option [ngValue]="91">AN</option>
+                                    <option [ngValue]="92">SVRS</option>
+                                    <option [ngValue]="99">EX</option>
+                                </select>
+                                @if((f['state'].touched || submitted) && f['state'].errors) {
+                                <div class="invalid-feedback d-block">
+                                    @if (f['state'].errors['required']) {
+                                    <div>Estado é obrigatório</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card form-card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-telephone"></i> Contatos</h5>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+}

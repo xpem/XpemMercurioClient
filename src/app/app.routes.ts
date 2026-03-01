@@ -14,6 +14,7 @@ import { MercadoLivreOAuthCallback } from './pages/marketplace/mercado-livre-oau
 import { ShopeeOAuthCallback } from './pages/marketplace/shopee-oauthcallback/shopee-oauthcallback';
 import { ShopeeCancelOauthcallback } from './pages/marketplace/shopee-cancel-oauthcallback/shopee-cancel-oauthcallback';
 import { SignInSuperAdmin } from './pages/user/sign-in-super-admin/sign-in-super-admin';
+import { CompanyEdit } from './pages/company/company-edit/company-edit';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard], data: { title: '<i class="bi bi-house"></i> Principal' } },
@@ -28,7 +29,8 @@ export const routes: Routes = [
   { path: 'bond-list', component: BondList, canActivate: [authGuard], data: { title: '<i class="bi bi-shop-window"></i> Marketplaces' } },
   { path: 'order', component: OrderDetail, canActivate: [authGuard], data: { title: '<i class="bi bi-receipt"></i> Detalhes do Pedido' } },
   { path: 'product-list', component: ProductList, canActivate: [authGuard], data: { title: '<i class="bi bi-box2"></i> Produtos' } },
-  { path: 'Product/Detail', component: ProductDetail, canActivate: [authGuard], data: { title: '<i class="bi bi-box2"></i> Detalhes do Produto' } },
+  { path: 'product/detail', component: ProductDetail, canActivate: [authGuard], data: { title: '<i class="bi bi-box2"></i> Detalhes do Produto' } },
   { path: 'shipment-pending-labels-list', component: ShipmentPendingLabelsList, canActivate: [authGuard], data: { title: '<i class="bi bi-truck"></i> Etiquetas Pendentes' } },
+  { path: 'company/company-edit', component: CompanyEdit, canActivate: [authGuard], data: { title: '<i class="bi bi-building"></i> Editar Empresa' } },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

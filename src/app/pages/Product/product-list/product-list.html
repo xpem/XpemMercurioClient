@@ -4,15 +4,6 @@
 </div>
 }
 @else {
-@if (products().length === 0) {
-<div class="col-lg-12 d-flex justify-content-center align-items-center" style="height: 300px;">
-    <div class="text-center text-body-secondary">
-        <i class="bi bi-box-seam" style="font-size: 50px;"></i>
-        <p class="mt-3">Nenhum produto vinculado, conecte-se a um marketplace e importe seus produtos.</p>
-    </div>
-</div>
-}
-@else {
 <div class="d-flex justify-content-end mb-3 mt-3">
     <!-- open the app-product-filters modal component -->
     <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#productFiltersModal">
@@ -133,5 +124,4 @@
         Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }}
     </div>
 </nav>
-}
 }
