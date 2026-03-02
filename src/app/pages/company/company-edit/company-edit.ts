@@ -3,6 +3,7 @@ import { Company } from '../../../models/company/company.model';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../services/toast.service';
+import { CompanyService } from '../../../services/company-api';
 
 @Component({
   selector: 'app-company-edit',
@@ -17,8 +18,9 @@ export class CompanyEdit implements OnInit {
   submitted = false;
   // errorMessage: string = '';
   errorMessage: WritableSignal<string> = signal('');
+  isCreateMode: boolean = true; // Determina se estamos criando ou editando uma empresa
 
-  constructor(private fb: FormBuilder, private router: Router, private toastService: ToastService) { }
+  constructor(private fb: FormBuilder, private router: Router, private toastService: ToastService, private companyService: CompanyService) { }
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -36,10 +38,10 @@ export class CompanyEdit implements OnInit {
         city: ['', [Validators.required]],
         cityCode: ['', [Validators.required]],
         state: ['', [Validators.required]],
-        postalCode: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
+        postalCode: ['', [Validators.required, this.postalCodeValidator()]],
         phone: [
           '',
-          [Validators.required, Validators.pattern(/^(\d{10,11}|\(\d{2}\)\s\d{4,5}-\d{4})$/)],
+          [Validators.required, this.phoneValidator()],
         ],
         email: ['', [Validators.required, Validators.email]],
       }),
@@ -49,27 +51,9 @@ export class CompanyEdit implements OnInit {
 
     //mock company data
 
-    this.company.set({} as Company
-    //   {
-    //   cnpj: '12345678000100',
-    //   name: 'Empresa de Teste LTDA',
-    //   tradeName: 'Empresa de Teste',
-    //   crt: 1,
-    //   address: {
-    //     street: 'Rua de Teste',
-    //     number: '123',
-    //     neighborhood: 'Bairro de Teste',
-    //     city: 'Cidade de Teste',
-    //     cityCode: 12345,
-    //     stateCode: 31,
-    //     postalCode: '12345678',
-    //     phone: '11999999999',
-    //     email: 'teste@teste.com',
-    //   },
-    //   stateRegistration: '123456789',
-    //   publicId: '12345678-1234-1234-1234-123456789012'
-    // }
-  );
+    this.company.set({} as Company);
+
+    this.isCreateMode = true; // Definir como modo de criação para o exemplo
 
     this.companyForm.patchValue({
       cnpj: this.company().cnpj,
@@ -104,14 +88,55 @@ export class CompanyEdit implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.errorMessage.set('');
+
     if (this.companyForm.invalid) {
       return;
     }
+
     const formData = this.companyForm.value;
 
-    this.toastService.showSuccess('Empresa criada com sucesso!', 5000);
+    console.log('Formulário válido enviado:', formData);
 
-    this.router.navigate(['/company']);
+    const companyPayload: Company = {
+      cnpj: formData.cnpj,
+      name: formData.name,
+      tradeName: formData.tradeName,
+      stateRegistration: formData.stateRegistration,
+      crt: formData.crt,
+      address: {
+        street: formData.address.street,
+        number: formData.address.number,
+        complement: formData.address.complement,
+        neighborhood: formData.address.neighborhood,
+        city: formData.address.city,
+        cityCode: formData.address.cityCode,
+        stateCode: formData.address.state,
+        postalCode: formData.address.postalCode,
+        phone: formData.address.phone,
+        email: formData.address.email,
+      },
+    };
+
+    //retirar pontos, traços e barras do cnpj
+    companyPayload.cnpj = companyPayload.cnpj.replace(/[.\-\/]/g, '');
+
+    if (companyPayload.address) {
+      companyPayload.address.postalCode = companyPayload.address?.postalCode.replace(/[-]/g, '');
+      companyPayload.address.phone = companyPayload.address?.phone.replace(/[\(\)\-\s]/g, '');
+    }
+    //console log em formato de json
+    console.log('Payload a ser enviado para a API:', JSON.stringify(companyPayload, null, 2));
+
+    this.companyService.postCompany(companyPayload).subscribe({
+      next: (response) => {
+        this.toastService.showSuccess('Empresa criada com sucesso!', 5000);
+        this.router.navigate(['/company']);
+      },
+      error: (error) => {
+        this.toastService.showError('Erro ao criar empresa.', 5000);
+        console.error('Erro ao criar empresa:', error);
+      },
+    });
   }
 
   onPhoneInput(event: Event): void {
@@ -120,6 +145,7 @@ export class CompanyEdit implements OnInit {
 
     if (!digits) {
       input.value = '';
+      this.companyForm.get('address.phone')?.setValue('', { emitEvent: false });
       return;
     }
 
@@ -140,5 +166,51 @@ export class CompanyEdit implements OnInit {
     }
 
     input.value = masked;
+    this.companyForm.get('address.phone')?.setValue(masked, { emitEvent: false });
+  }
+
+  onInputPostalCode(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 8);
+    if (!digits) {
+      input.value = '';
+      this.companyForm.get('address.postalCode')?.setValue('', { emitEvent: false });
+      return;
+    }
+    let masked = digits;
+    if (digits.length > 5) {
+      masked = `${digits.slice(0, 5)}-${digits.slice(5)}`;
+    }
+    input.value = masked;
+    this.companyForm.get('address.postalCode')?.setValue(masked, { emitEvent: false });
+  }
+
+  private phoneValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = (control.value ?? '').toString();
+
+      if (!value) {
+        return null;
+      }
+
+      const digits = value.replace(/\D/g, '');
+      const isValid = digits.length === 10 || digits.length === 11;
+
+      return isValid ? null : { phoneInvalid: true };
+    };
+  }
+
+  private postalCodeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = (control.value ?? '').toString();
+
+      if (!value) {
+        return null;
+      }
+
+      const digits = value.replace(/\D/g, '');
+      const isValid = digits.length === 8;
+      return isValid ? null : { postalCodeInvalid: true };
+    };
   }
 }

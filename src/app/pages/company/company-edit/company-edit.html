@@ -13,7 +13,7 @@
         <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
             <div class="card form-card">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-building text-success"></i> Dados da Empresa</h5>
+                    <h5 class="card-title"><i class="bi bi-building text-success"></i> Empresa</h5>
                     <div class="row">
                         <div class="col-lg-6 mb-2">
                             <div class="form-group">
@@ -45,7 +45,7 @@
                                 }
                             </div>
                         </div>
-                        <div class="col-lg-6 mb-2">
+                        <div class="col-lg-3 mb-2">
                             <div class="form-group">
                                 <label for="inputCNPJ">CNPJ</label>
                                 <input type="text" class="form-control" id="inputCNPJ" formControlName="cnpj"
@@ -59,7 +59,7 @@
                                 }
                             </div>
                         </div>
-                        <div class="col-lg-6 mb-2">
+                        <div class="col-lg-3 mb-2">
                             <div class="form-group">
                                 <label for="inputStateRegistration">Inscrição Estadual</label>
                                 <input type="text" class="form-control" id="inputStateRegistration"
@@ -145,6 +145,24 @@
                                     }
                                 </div>
                             </div>
+                            <div class="col-lg-2 mb-2">
+                                <div class="form-group">
+                                    <label for="inputPostalCode">CEP</label>
+                                    <input type="text" class="form-control" id="inputPostalCode"
+                                        formControlName="postalCode" (input)="onInputPostalCode($event)" />
+
+                                    @if((af['postalCode'].touched || submitted) && af['postalCode'].errors) {
+                                    <div class="invalid-feedback d-block">
+                                        @if (af['postalCode'].errors['required']) {
+                                        <div>CEP é obrigatório</div>
+                                        }
+                                        @if (af['postalCode'].errors['postalCodeInvalid']) {
+                                        <div>CEP deve ser válido (apenas números, 8 dígitos)</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
                             <div class="col-lg-4 mb-2">
                                 <div class="form-group">
                                     <label for="inputCity">Cidade</label>
@@ -159,6 +177,7 @@
                                     }
                                 </div>
                             </div>
+
                             <div class="col-lg-3 mb-2">
                                 <div class="form-group">
                                     <label for="inputCityCode">Código IBGE</label>
@@ -239,7 +258,7 @@
                                         @if (af['phone'].errors['required']) {
                                         <div>Telefone é obrigatório</div>
                                         }
-                                        @if (af['phone'].errors['pattern']) {
+                                        @if (af['phone'].errors['phoneInvalid']) {
                                         <div>Telefone deve ser válido (apenas números, com DDD opcional)</div>
                                         }
                                     </div>
@@ -278,7 +297,7 @@
                                 <label for="inputCRT">Regime Tributário</label>
                                 <select class="form-control" id="inputCRT" formControlName="crt"
                                     [class.is-invalid]="submitted && f['crt'].invalid || f['crt'].touched && f['crt'].invalid">
-                                    <option value=""></option>
+                                    <option value="" selected>Selecione</option>
                                     <option [ngValue]="1">Simples Nacional</option>
                                     <option [ngValue]="2">Simples Nacional - Excesso de Sublimite de Receita Bruta
                                     </option>

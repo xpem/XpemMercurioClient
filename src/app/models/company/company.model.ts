@@ -5,13 +5,13 @@ export interface Company {
     tradeName?: string;
     address?: CompanyAddress;
     stateRegistration?: string;
-    publicId: string;
+    publicId?: string;
     crt?: number;
 }
 
 export interface CompanyAddress {
     street: string;
-    number: string;
+    number: number;
     complement?: string;
     neighborhood: string;
     city: string;
