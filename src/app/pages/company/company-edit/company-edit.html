@@ -165,12 +165,11 @@
                             </div>
                             <div class="col-lg-4 mb-2">
                                 <div class="form-group">
-                                    <label for="inputCity">Cidade</label>
-                                    <input type="text" class="form-control" id="inputCity" formControlName="city" />
-
-                                    @if((af['city'].touched || submitted) && af['city'].errors) {
+                                    <label for="inputCityName">Cidade</label>
+                                    <input type="text" class="form-control" id="inputCityName" formControlName="cityName" />
+                                    @if((af['cityName'].touched || submitted) && af['cityName'].errors) {
                                     <div class="invalid-feedback d-block">
-                                        @if (af['city'].errors['required']) {
+                                        @if (af['cityName'].errors['required']) {
                                         <div>Cidade é obrigatória</div>
                                         }
                                     </div>

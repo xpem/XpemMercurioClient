@@ -18,7 +18,7 @@ export class CompanyEdit implements OnInit {
   submitted = false;
   // errorMessage: string = '';
   errorMessage: WritableSignal<string> = signal('');
-  isCreateMode: boolean = true; // Determina se estamos criando ou editando uma empresa
+  isCreateMode: WritableSignal<boolean> = signal(true); // Determina se estamos criando ou editando uma empresa
 
   constructor(private fb: FormBuilder, private router: Router, private toastService: ToastService, private companyService: CompanyService) { }
 
@@ -35,7 +35,7 @@ export class CompanyEdit implements OnInit {
         number: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(10)]],
         complement: [''],
         neighborhood: [''],
-        city: ['', [Validators.required]],
+        cityName: ['', [Validators.required]],
         cityCode: ['', [Validators.required]],
         state: ['', [Validators.required]],
         postalCode: ['', [Validators.required, this.postalCodeValidator()]],
@@ -49,33 +49,48 @@ export class CompanyEdit implements OnInit {
       crt: ['', [Validators.required]],
     });
 
-    //mock company data
-
-    this.company.set({} as Company);
-
-    this.isCreateMode = true; // Definir como modo de criação para o exemplo
-
-    this.companyForm.patchValue({
-      cnpj: this.company().cnpj,
-      name: this.company().name,
-      tradeName: this.company().tradeName,
-      stateRegistration: this.company().stateRegistration,
-      address: {
-        street: this.company().address?.street,
-        number: this.company().address?.number,
-        complement: this.company().address?.complement,
-        neighborhood: this.company().address?.neighborhood,
-        city: this.company().address?.city,
-        cityCode: this.company().address?.cityCode,
-        state: this.company().address?.stateCode,
-        postalCode: this.company().address?.postalCode,
-        phone: this.company().address?.phone,
-        email: this.company().address?.email,
+    this.companyService.getCompany().subscribe({
+      next: (response) => {
+        if (response) {
+          this.company.set(response);
+          this.isCreateMode.set(false); // Se a empresa existe, estamos em modo de edição
+          this.populateForm(response);
+        } else {
+          this.isCreateMode.set(true); // Se não existe, estamos em modo de criação 
+          this.populateForm({} as Company); // Preencher o formulário com valores vazios 
+        }
+        this.isLoading.set(false);
       },
-      crt: this.company().crt,
+      error: (error) => {
+        this.toastService.showError('Erro ao carregar empresa.', 5000);
+        console.error('Erro ao carregar empresa:', error);
+        this.isLoading.set(false);
+      },
     });
+  }
 
-    this.isLoading.set(false);
+  private populateForm(company: Company): void {
+    if (company) {
+      this.companyForm.patchValue({
+        cnpj: company.cnpj,
+        name: company.name,
+        tradeName: company.tradeName,
+        stateRegistration: company.stateRegistration,
+        address: {
+          street: company.address?.street,
+          number: company.address?.number,
+          complement: company.address?.complement,
+          neighborhood: company.address?.neighborhood,
+          cityName: company.address?.cityName,
+          cityCode: company.address?.cityCode,
+          state: company.address?.state,
+          postalCode: company.address?.postalCode,
+          phone: company.address?.phone,
+          email: company.address?.email,
+        },
+        crt: company.crt,
+      });
+    }
   }
 
   // Getter para facilitar o acesso aos controles do formulário no template
@@ -108,9 +123,9 @@ export class CompanyEdit implements OnInit {
         number: formData.address.number,
         complement: formData.address.complement,
         neighborhood: formData.address.neighborhood,
-        city: formData.address.city,
+        cityName: formData.address.cityName,
         cityCode: formData.address.cityCode,
-        stateCode: formData.address.state,
+        state: formData.address.state,
         postalCode: formData.address.postalCode,
         phone: formData.address.phone,
         email: formData.address.email,
@@ -127,17 +142,35 @@ export class CompanyEdit implements OnInit {
     //console log em formato de json
     console.log('Payload a ser enviado para a API:', JSON.stringify(companyPayload, null, 2));
 
-    this.companyService.postCompany(companyPayload).subscribe({
+    this.companyService.saveCompany(companyPayload, this.isCreateMode()).subscribe({
       next: (response) => {
-        this.toastService.showSuccess('Empresa criada com sucesso!', 5000);
+        if (this.isCreateMode()) {
+          this.toastService.showSuccess('Empresa criada com sucesso!', 5000);
+        } else {
+          this.toastService.showSuccess('Empresa atualizada com sucesso!', 5000);
+        }
         this.router.navigate(['/company']);
       },
       error: (error) => {
-        this.toastService.showError('Erro ao criar empresa.', 5000);
-        console.error('Erro ao criar empresa:', error);
+        if (error.status === 400 && error.error && error.error.message) {
+          this.errorMessage.set(error.error.message);
+          this.toastService.showError(error.error.message, 5000);
+        } else {
+          if (this.isCreateMode()) {
+            this.errorMessage.set('Erro ao criar empresa.');
+            this.toastService.showError('Erro ao criar empresa.', 5000);
+            console.error('Erro ao criar empresa:', error);
+          } else {
+            this.errorMessage.set('Erro ao atualizar empresa.');
+            this.toastService.showError('Erro ao atualizar empresa.', 5000);
+            console.error('Erro ao atualizar empresa:', error);
+          }
+        }
       },
     });
   }
+
+
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;

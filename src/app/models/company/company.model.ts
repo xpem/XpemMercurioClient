@@ -14,9 +14,9 @@ export interface CompanyAddress {
     number: number;
     complement?: string;
     neighborhood: string;
-    city: string;
+    cityName: string;
     cityCode: number;
-    stateCode: number;
+    state: number;
     postalCode: string;
     phone: string;
     email: string;

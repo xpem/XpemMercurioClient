@@ -12,7 +12,15 @@ export class CompanyService {
 
     constructor(private http: HttpClient) { }
 
-    public postCompany(company: Company): Observable<Company> {
-        return this.http.post<Company>(this.apiUrl, company);
-    }   
+    public saveCompany(company: Company, isCreate: boolean): Observable<Company> {
+        if (isCreate) {
+            return this.http.post<Company>(this.apiUrl, company);
+        } else {
+            return this.http.put<Company>(this.apiUrl, company);
+        }
+    }
+
+    public getCompany(): Observable<Company> {
+        return this.http.get<Company>(this.apiUrl);
+    }
 }
