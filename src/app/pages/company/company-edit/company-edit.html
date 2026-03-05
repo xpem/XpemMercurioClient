@@ -166,7 +166,8 @@
                             <div class="col-lg-4 mb-2">
                                 <div class="form-group">
                                     <label for="inputCityName">Cidade</label>
-                                    <input type="text" class="form-control" id="inputCityName" formControlName="cityName" />
+                                    <input type="text" class="form-control" id="inputCityName"
+                                        formControlName="cityName" />
                                     @if((af['cityName'].touched || submitted) && af['cityName'].errors) {
                                     <div class="invalid-feedback d-block">
                                         @if (af['cityName'].errors['required']) {
@@ -315,9 +316,70 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                <button type="submit" class="btn btn-success"><i class="bi bi-check"></i>&nbsp;&nbsp;Confirmar</button>
+                <button type="submit" class="btn btn-success"><i class="bi bi-floppy"></i>&nbsp;&nbsp;Salvar
+                    Empresa</button>
             </div>
         </form>
+        @if (!uploadCertificatePanelIsVisible()) {
+        <div class="card form-card mt-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-file-earmark-lock text-success"></i> Certificado Digital</h5>
+                <p class="card-text">A empresa já possui um certificado digital cadastrado.</p>
+                <button type="button" class="btn btn-warning" (click)="uploadCertificatePanelIsVisible.set(true)"><i
+                        class="bi bi-pencil"></i>&nbsp;&nbsp;Atualizar Certificado</button>
+            </div>
+        </div>
+        }
+        @else {
+        <!--upload ou atualização de certificado-->
+        <div class="card form-card mt-3" [formGroup]="certificateForm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-file-earmark-lock text-success"></i> Certificado Digital</h5>
+                <div class="row">
+                    <div class="col-lg-6 mb-2">
+                        <div class="form-group">
+                            <label for="inputCertificate">Arquivo do Certificado (PFX/P12)</label>
+                            <input type="file" class="form-control" id="inputCertificate"
+                                (change)="onFileSelected($event)"
+                                [class.is-invalid]="(certificateSubmitted && cf['certificateFile'].invalid) || (cf['certificateFile'].touched && cf['certificateFile'].invalid)" />
+                            @if((cf['certificateFile'].touched || certificateSubmitted) && cf['certificateFile'].errors)
+                            {
+                            <div class="invalid-feedback d-block">
+                                @if (cf['certificateFile'].errors['required']) {
+                                <div>Arquivo do certificado é obrigatório</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-2">
+                        <div class="form-group">
+                            <label for="inputCertificatePassword">Senha do Certificado</label>
+                            <input type="password" class="form-control" id="inputCertificatePassword"
+                                formControlName="certificatePassword"
+                                [class.is-invalid]="(certificateSubmitted && cf['certificatePassword'].invalid) || (cf['certificatePassword'].touched && cf['certificatePassword'].invalid)" />
+                            @if((cf['certificatePassword'].touched || certificateSubmitted) &&
+                            cf['certificatePassword'].errors) {
+                            <div class="invalid-feedback d-block">
+                                @if (cf['certificatePassword'].errors['required']) {
+                                <div>Senha do certificado é obrigatória</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-2 d-flex justify-content-between">
+                        <button type="button" class="btn btn-light me-2" (click)="uploadCertificatePanelIsVisible.set(false)"><i
+                                class="bi bi-x"></i>&nbsp;&nbsp;Cancelar</button>
+                        
+
+                        <button type="button" class="btn btn-success" (click)="uploadCertificate()"><i
+                                class="bi bi-upload"></i>&nbsp;&nbsp;Upload do Certificado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
     </div>
 </div>
 }

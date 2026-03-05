@@ -23,4 +23,11 @@ export class CompanyService {
     public getCompany(): Observable<Company> {
         return this.http.get<Company>(this.apiUrl);
     }
+
+    public uploadCertificate(file: File, password: string): Observable<any> {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("password", password);
+        return this.http.post(`${this.apiUrl}/certificate`, formData, { responseType: 'text' });
+    }
 }

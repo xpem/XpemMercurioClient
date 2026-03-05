@@ -15,11 +15,14 @@ export class CompanyEdit implements OnInit {
   company: WritableSignal<Company> = signal({} as Company);
   isLoading: WritableSignal<boolean> = signal(true);
   companyForm!: FormGroup;
+  certificateForm!: FormGroup;
   submitted = false;
+  certificateSubmitted = false;
   // errorMessage: string = '';
   errorMessage: WritableSignal<string> = signal('');
-  isCreateMode: WritableSignal<boolean> = signal(true); // Determina se estamos criando ou editando uma empresa
-
+  // Determina se estamos criando ou editando uma empresa
+  isCreateMode: WritableSignal<boolean> = signal(true);
+  uploadCertificatePanelIsVisible: WritableSignal<boolean> = signal(false);
   constructor(private fb: FormBuilder, private router: Router, private toastService: ToastService, private companyService: CompanyService) { }
 
   ngOnInit(): void {
@@ -49,11 +52,21 @@ export class CompanyEdit implements OnInit {
       crt: ['', [Validators.required]],
     });
 
+    this.certificateForm = this.fb.group({
+      certificateFile: [null, [Validators.required]],
+      certificatePassword: ['', [Validators.required]],
+    });
+
     this.companyService.getCompany().subscribe({
       next: (response) => {
         if (response) {
           this.company.set(response);
           this.isCreateMode.set(false); // Se a empresa existe, estamos em modo de edição
+
+          if (response.hasCertificate) {
+            this.uploadCertificatePanelIsVisible.set(false);
+          }
+
           this.populateForm(response);
         } else {
           this.isCreateMode.set(true); // Se não existe, estamos em modo de criação 
@@ -67,6 +80,10 @@ export class CompanyEdit implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  ShowUploadCertificatePanel(): void {
+    this.uploadCertificatePanelIsVisible.set(true);
   }
 
   private populateForm(company: Company): void {
@@ -98,6 +115,10 @@ export class CompanyEdit implements OnInit {
 
   get af() {
     return (this.companyForm.get('address') as FormGroup).controls;
+  }
+
+  get cf() {
+    return this.certificateForm.controls;
   }
 
   onSubmit() {
@@ -246,4 +267,40 @@ export class CompanyEdit implements OnInit {
       return isValid ? null : { postalCodeInvalid: true };
     };
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length > 0 ? input.files[0] : null;
+    this.certificateForm.patchValue({ certificateFile: file });
+    this.certificateForm.get('certificateFile')?.markAsTouched();
+    this.certificateForm.get('certificateFile')?.updateValueAndValidity();
+  }
+
+  uploadCertificate(): void {
+    this.certificateSubmitted = true;
+
+    if (this.certificateForm.invalid) {
+      return;
+    }
+
+    const certificateFile = this.certificateForm.get('certificateFile')?.value as File | null;
+    const certificatePassword = this.certificateForm.get('certificatePassword')?.value as string;
+
+    if (!certificateFile) {
+      return;
+    }
+
+    this.companyService.uploadCertificate(certificateFile, certificatePassword).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Certificado enviado com sucesso!', 5000);
+        this.certificateForm.reset();
+        this.certificateSubmitted = false;
+      },
+      error: (error) => {
+        this.toastService.showError('Erro ao enviar certificado.', 5000);
+        console.error('Erro ao enviar certificado:', error);
+      },
+    });
+  }
+
 }

@@ -7,6 +7,7 @@ export interface Company {
     stateRegistration?: string;
     publicId?: string;
     crt?: number;
+    hasCertificate?: boolean;
 }
 
 export interface CompanyAddress {
