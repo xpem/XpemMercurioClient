@@ -17,7 +17,11 @@ export class ShipmentService {
     }
 
     /*get the last 40 orders with pending labels to print*/
-    public getOrdersWithPendingLabels(): Observable<Order[]> {
-        return this.http.get<Order[]>(`${this.apiUrl}/Orders/Pending/PrintLabels`);
+    public getOrdersWithPendingLabels(marketplace: number | null): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.apiUrl}/Orders/Pending/PrintLabels`, {
+            params: {
+                marketplace: marketplace !== null ? marketplace.toString() : ''
+            }
+        });
     }
 }

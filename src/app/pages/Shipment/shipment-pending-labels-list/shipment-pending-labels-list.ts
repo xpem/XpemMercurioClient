@@ -3,12 +3,11 @@ import { ToastService } from '../../../services/toast.service';
 import { ShipmentService } from '../../../services/shipment-api';
 import { Order } from '../../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
-import { RouterLink } from "@angular/router";
 import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 
 @Component({
   selector: 'app-shipment-pending-labels-list',
-  imports: [CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe],
   templateUrl: './shipment-pending-labels-list.html',
   styleUrl: './shipment-pending-labels-list.css',
 })
@@ -16,8 +15,23 @@ export class ShipmentPendingLabelsList implements OnInit {
   isLoading: WritableSignal<boolean> = signal(true);
   selectedLabels: WritableSignal<string[]> = signal([]);
   totalSelectedLabels = computed(() => this.selectedLabels().length);
-
+  marketplace: WritableSignal<number | null> = signal(null);
   ordersWithPendingLabels: WritableSignal<Order[]> = signal([]);
+
+  private readonly printStatusBadgeClassMap: Record<number, string> = {
+    0: 'text-bg-secondary',
+    1: 'text-bg-success',
+  };
+
+  private readonly nFeStatusBadgeClassMap: Record<number, string> = {
+    0: 'text-bg-secondary',
+    1: 'text-bg-primary',
+    2: 'text-bg-success',
+    4: 'text-bg-primary',
+    5: 'text-bg-success',
+    3: 'text-bg-danger',
+    6: 'text-bg-danger',
+  };
 
   constructor(private toastService: ToastService, private shipmentService: ShipmentService, private mercadoLivreService: MercadoLivreService) { }
 
@@ -58,9 +72,35 @@ export class ShipmentPendingLabelsList implements OnInit {
     // });
   }
 
+  setMarketplace(marketplace: number | null) {
+
+    // if (this.totalPendingLabelsPrint() === 0)
+    //   this.isEnabledPendingLabelsPrint.set(false);
+    // else this.isEnabledPendingLabelsPrint.set(true);
+
+    this.marketplace.set(marketplace);
+
+    this.getOrdersWithPendingLabels();
+  }
 
   ngOnInit(): void {
     this.getOrdersWithPendingLabels();
+  }
+
+  getPrintStatusBadgeClass(status: number | null | undefined): string {
+    if (status == null) {
+      return 'text-bg-secondary';
+    }
+
+    return this.printStatusBadgeClassMap[status] ?? 'text-bg-warning';
+  }
+
+  getNFeStatusBadgeClass(status: number | null | undefined): string {
+    if (status == null) {
+      return 'text-bg-secondary';
+    }
+
+    return this.nFeStatusBadgeClassMap[status] ?? 'text-bg-warning';
   }
 
   toggleLabelSelection(shipmentExternalId: string, event: Event): void {
@@ -80,7 +120,7 @@ export class ShipmentPendingLabelsList implements OnInit {
 
   getOrdersWithPendingLabels() {
     this.isLoading.set(true);
-    this.shipmentService.getOrdersWithPendingLabels().subscribe({
+    this.shipmentService.getOrdersWithPendingLabels(this.marketplace()).subscribe({
       next: (response) => {
         console.log('Orders with pending labels:', response);
         this.ordersWithPendingLabels.set(response);

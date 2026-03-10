@@ -1,0 +1,86 @@
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+}
+@else {
+<div class="container-fluid">
+    <div class="col-lg-12 d-flex justify-content-between">
+        <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
+                class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
+    </div>
+    <div class="col-lg-12">
+        <form [formGroup]="taxInfoForm" (ngSubmit)="saveTaxInfo()">
+            <div class="card form-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-hash text-success"></i> Numeração - Produção</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Numeração e lote para o ambiente oficial (produção). Notas
+                        possuem validade fiscal.</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="nFeNumber" class="form-label">Próximo número da NFe</label>
+                            <input type="number" id="nFeNumber" formControlName="nFeNumber" class="form-control" style="width: 150px;"
+                                [class.is-invalid]="taxInfoForm.get('nFeNumber')?.invalid && taxInfoForm.get('nFeNumber')?.touched">
+                            @if(taxInfoForm.get('nFeNumber')?.invalid && taxInfoForm.get('nFeNumber')?.touched) {
+                            <div class="invalid-feedback">
+                                Próximo número da NFe é obrigatório e deve ser um número positivo.
+                            </div>
+                            }
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="batchNumber" class="form-label">Próximo número do Lote</label>
+                            <input type="number" id="batchNumber" formControlName="batchNumber" class="form-control" style="width: 150px;"
+                                [class.is-invalid]="taxInfoForm.get('batchNumber')?.invalid && taxInfoForm.get('batchNumber')?.touched">
+                            @if (taxInfoForm.get('batchNumber')?.invalid && taxInfoForm.get('batchNumber')?.touched) {
+                            <div class="invalid-feedback">
+                                Próximo número do Lote é obrigatório e deve ser um número positivo.
+                            </div>
+                            }
+                        </div>
+                        <p class="text-muted">Estes valores serão incrementados automaticamente a cada emissão no
+                            ambiente de produção.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card form-card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-hash text-success"></i> Numeração - Homologação</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Numeração e lote para o ambiente de homologação.</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="nFeNumberHomol" class="form-label">Próximo número da NFe Homologação</label>
+                            <input type="number" id="nFeNumberHomol" formControlName="nFeNumberHomol"
+                                class="form-control" style="width: 150px;"
+                                [class.is-invalid]="taxInfoForm.get('nFeNumberHomol')?.invalid && taxInfoForm.get('nFeNumberHomol')?.touched">
+                            @if(taxInfoForm.get('nFeNumberHomol')?.invalid &&
+                            taxInfoForm.get('nFeNumberHomol')?.touched) {
+                            <div class="invalid-feedback">
+                                Próximo número da NFe Homologação deve ser um número positivo.
+                            </div>
+                            }
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="batchNumberHomol" class="form-label">Próximo número do Lote Homologação</label>
+                            <input type="number" id="batchNumberHomol" formControlName="batchNumberHomol"
+                                class="form-control" style="width: 150px;"
+                                [class.is-invalid]="taxInfoForm.get('batchNumberHomol')?.invalid && taxInfoForm.get('batchNumberHomol')?.touched">
+                            @if (taxInfoForm.get('batchNumberHomol')?.invalid &&
+                            taxInfoForm.get('batchNumberHomol')?.touched) {
+                            <div class="invalid-feedback">
+                                Próximo número do Lote Homologação deve ser um número positivo.
+                            </div>
+                            }
+                        </div>
+                        <p class="text-muted">Estes valores serão incrementados automaticamente a cada emissão no
+                            ambiente de homologação.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-success" [disabled]="taxInfoForm.invalid"><i
+                        class="bi bi-floppy"></i> Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+}

@@ -5,17 +5,16 @@
 }
 @else {
 <div class="container-fluid">
+
+
     <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex justify-start align-items-center">
-            <a routerLink="/home" class="btn btn-sm btn-outline-info m-0"><i
-                    class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
             <div class="ms-3">
                 <p class="mb-0">Etiquetas Pendentes</p>
                 <p class="text-body-secondary m-0" style="font-size: 0.75rem;">
                     No máximo 40 etiquetas podem ser baixadas por vez.
                 </p>
             </div>
-
         </div>
         <div>
             <button type="button " class="btn btn-success position-relative m-0" (click)="printSelectedLabels()"
@@ -26,7 +25,20 @@
             </button>
         </div>
     </div>
+    <div class="col-lg-4 btn-group mb-3" style="max-width: 400px;" role="group"
+        aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnAll" autocomplete="off"
+            [checked]="marketplace() === null" (change)="setMarketplace(null)">
+        <label class="btn btn-outline-secondary" for="btnAll">Todas</label>
 
+        <input type="radio" class="btn-check" name="btnradio" id="btnMercadoLivre" autocomplete="off"
+            [checked]="marketplace() === 1" (change)="setMarketplace(1)">
+        <label class="btn btn-outline-secondary" for="btnMercadoLivre">Mercado Livre</label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnShopee" autocomplete="off"
+            [checked]="marketplace() === 2" (change)="setMarketplace(2)">
+        <label class="btn btn-outline-secondary" for="btnShopee">Shopee</label>
+    </div>
     <div class="col-lg-12 ">
         @if(ordersWithPendingLabels().length > 0){
         <div class="card mb-3">
@@ -57,7 +69,6 @@
                                 #{{ item.externalId }}
                             </label>
                         </div>
-
                     </div>
                     <div class="card-body">
                         <div class="mb-1">
@@ -83,22 +94,15 @@
                                     {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                             </div>
                             <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
-                                @switch(item.printStatus) {
-                                @case (null) {
-                                <p class=" status-badge badge rounded-pill text-bg-secondary mb-0"> <i
-                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
+                                <p [class]="'status-badge badge rounded-pill mb-0 ' + getPrintStatusBadgeClass(item.printStatus)">
+                                    <i class="bi bi-tag-fill"></i> {{item.printStatusText}}
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                                <p [class]="'status-badge badge rounded-pill mb-0 ' + getNFeStatusBadgeClass(item.nFeStatus)">
+                                    <i class="bi bi-file-earmark-ruled"></i> {{item.nFeStatusText}}
+                                </p>
 
-                                }
-                                @case (1) {
-                                <p class=" status-badge badge rounded-pill text-bg-success mb-0"> <i
-                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-
-                                }
-                                @default {
-                                <p class=" status-badge badge rounded-pill text-bg-warning mb-0"> <i
-                                        class="bi bi-tag-fill"></i> {{item.printStatusText}}</p>
-                                }
-                                }
                             </div>
                         </div>
                     </div>
@@ -112,7 +116,6 @@
             Nenhuma etiqueta pendente para imprimir.
         </div>
         }
-
     </div>
 </div>
 }

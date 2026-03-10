@@ -18,6 +18,8 @@ export interface Order {
     shippingBuyerCost: number;
     liquidAmount: number;
     externalPackId?: string;
+    nFeStatus: OrderNFeStatus;
+    nFeStatusText: string;
 }
 
 export enum OrderStatus {
@@ -50,4 +52,14 @@ export enum OrderShipmentLabelPrintStatus {
     Printed = 1,
     Undefined = 2,
     Stale = 3,
+}
+
+export enum OrderNFeStatus {
+    Pending = 0,
+    IssuanceInProgress = 1,
+    Issued = 2,
+    IssuanceFailed = 3,
+    CancellationInProgress = 4,
+    Cancelled = 5,
+    CancellationFailed = 6
 }

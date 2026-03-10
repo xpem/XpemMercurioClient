@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 import { Company } from "../models/company/company.model";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { CompanyTaxInfo } from "../models/company/company-tax-info.model";
 
 @Injectable({
     providedIn: "root",
@@ -29,5 +30,13 @@ export class CompanyService {
         formData.append("file", file);
         formData.append("password", password);
         return this.http.post(`${this.apiUrl}/certificate`, formData, { responseType: 'text' });
+    }
+
+    public getCompanyTaxInfo(): Observable<CompanyTaxInfo> {
+        return this.http.get<CompanyTaxInfo>(`${this.apiUrl}/taxInformation`);
+    }
+
+    public saveCompanyTaxInfo(taxInfo: CompanyTaxInfo): Observable<string> {
+        return this.http.post(`${this.apiUrl}/taxInformation`, taxInfo, { responseType: 'text' });
     }
 }

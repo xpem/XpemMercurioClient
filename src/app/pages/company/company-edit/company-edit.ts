@@ -1,9 +1,9 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { Company } from '../../../models/company/company.model';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../services/toast.service';
 import { CompanyService } from '../../../services/company-api';
+import { Company } from '../../../models/company/company.model';
 
 @Component({
   selector: 'app-company-edit',
@@ -60,6 +60,7 @@ export class CompanyEdit implements OnInit {
     this.companyService.getCompany().subscribe({
       next: (response) => {
         if (response) {
+
           this.company.set(response);
           this.isCreateMode.set(false); // Se a empresa existe, estamos em modo de edição
 
@@ -68,10 +69,14 @@ export class CompanyEdit implements OnInit {
           }
 
           this.populateForm(response);
-        } else {
-          this.isCreateMode.set(true); // Se não existe, estamos em modo de criação 
-          this.populateForm({} as Company); // Preencher o formulário com valores vazios 
         }
+        else {
+          this.isCreateMode.set(true);
+          this.uploadCertificatePanelIsVisible.set(true);
+
+          this.populateForm({} as Company); // Preencher o formulário com valores vazios
+        }
+
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -190,8 +195,6 @@ export class CompanyEdit implements OnInit {
       },
     });
   }
-
-
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
