@@ -1,0 +1,15 @@
+.mercado-livre-header {
+    color: var(--mercado-livre-color);
+}
+
+.shopee-header {
+   color: var(--shopee-color);
+}
+
+.mercado-livre-border {
+    border-color: var(--mercado-livre-color) !important;
+}
+
+.shopee-border {
+   border-color: var(--shopee-color) !important;
+}

@@ -44,6 +44,33 @@ export class OrderDetail implements OnInit {
     }
   }
 
+  PrintLabelIsEnabled(): boolean {
+    return this.order().marketPlace == "1" /*Mercado Livre*/ &&
+      this.order().shipmentExternalId != null &&
+      this.order().shipmentExternalId !== '' &&
+      this.order().printStatus != null &&
+      this.order().nFeStatus != null &&
+      this.order().nFeStatus == 1 /*Emitida*/;
+  }
+
+  getNFeStatusBadgeClass(status: number | null | undefined): string {
+    if (status == null) {
+      return 'text-bg-secondary';
+    }
+
+    return this.nFeStatusBadgeClassMap[status] ?? 'text-bg-warning';
+  }
+
+  private readonly nFeStatusBadgeClassMap: Record<number, string> = {
+    0: 'text-bg-secondary',
+    1: 'text-bg-primary',
+    2: 'text-bg-success',
+    4: 'text-bg-primary',
+    5: 'text-bg-success',
+    3: 'text-bg-danger',
+    6: 'text-bg-danger',
+  };
+
   printShipmentLabel(): void {
 
     //verify if order.shipmentId is not null or empty
