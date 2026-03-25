@@ -298,6 +298,7 @@ export class CompanyEdit implements OnInit {
         this.toastService.showSuccess('Certificado enviado com sucesso!', 5000);
         this.certificateForm.reset();
         this.certificateSubmitted = false;
+        this.uploadCertificatePanelIsVisible.set(true);
       },
       error: (error) => {
         this.toastService.showError('Erro ao enviar certificado.', 5000);

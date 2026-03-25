@@ -15,6 +15,7 @@ export class CompanyTaxInformationEdit implements OnInit {
   submitted = false;
   isLoading: WritableSignal<boolean> = signal(true);
   errorMessage: WritableSignal<string> = signal('');
+  companyNotFound = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +33,6 @@ export class CompanyTaxInformationEdit implements OnInit {
       nFeNumberHomol: ['', [Validators.min(1)]],
       batchNumberHomol: ['', [Validators.min(1)]]
     });
-
     this.loadTaxInfo();
   }
 
@@ -43,16 +43,28 @@ export class CompanyTaxInformationEdit implements OnInit {
   private loadTaxInfo(): void {
     this.companyService.getCompanyTaxInfo().subscribe({
       next: (taxInfo) => {
-        this.taxInfoForm.patchValue({
-          nFeNumber: taxInfo.nFeNumber || '',
-          batchNumber: taxInfo.batchNumber || '',
-          nFeNumberHomol: taxInfo.nFeNumberHomol || '',
-          batchNumberHomol: taxInfo.batchNumberHomol || ''
-        });
+
+        this.companyNotFound.set(false);
+
+        if (taxInfo) {
+          this.taxInfoForm.patchValue({
+            nFeNumber: taxInfo.nFeNumber || '',
+            batchNumber: taxInfo.batchNumber || '',
+            nFeNumberHomol: taxInfo.nFeNumberHomol || '',
+            batchNumberHomol: taxInfo.batchNumberHomol || ''
+          });
+        }
+
         this.isLoading.set(false);
       },
       error: (err) => {
-        this.toastService.showError('Failed to load tax information');
+        //error code equals 2 indicates that company was not found, so we can assume that tax info is not set up yet
+        if (err.error.errorCode === 2) {
+          this.toastService.showInfo('Cadastre a empresa antes de configurar as informações fiscais');
+          this.companyNotFound.set(true);
+        } else {
+          this.toastService.showError('Failed to load tax information');
+        }
         this.isLoading.set(false);
       }
     });

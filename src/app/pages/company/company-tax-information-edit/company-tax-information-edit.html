@@ -4,6 +4,13 @@
 </div>
 }
 @else {
+@if(companyNotFound()) {
+<div class="alert alert-warning mt-3" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;&nbsp;Empresa não encontrada. Cadastre a empresa antes de
+    configurar as informações fiscais.
+</div>
+}
+@else {
 <div class="container-fluid">
     <div class="col-lg-12 d-flex justify-content-between">
         <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
@@ -12,14 +19,15 @@
     <div class="col-lg-12">
         <form [formGroup]="taxInfoForm" (ngSubmit)="saveTaxInfo()">
             <div class="card form-card">
-                <div class="card-body col-lg-6">
+                <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-hash text-success"></i> Numeração - Produção</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Numeração e lote para o ambiente oficial (produção). Notas
                         possuem validade fiscal.</h6>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nFeNumber" class="form-label">Próximo número da NFe</label>
-                            <input type="number" id="nFeNumber" formControlName="nFeNumber" class="form-control" style="width: 150px;"
+                            <input type="number" id="nFeNumber" formControlName="nFeNumber" class="form-control"
+                                style="width: 150px;"
                                 [class.is-invalid]="taxInfoForm.get('nFeNumber')?.invalid && taxInfoForm.get('nFeNumber')?.touched">
                             @if(taxInfoForm.get('nFeNumber')?.invalid && taxInfoForm.get('nFeNumber')?.touched) {
                             <div class="invalid-feedback">
@@ -29,7 +37,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="batchNumber" class="form-label">Próximo número do Lote</label>
-                            <input type="number" id="batchNumber" formControlName="batchNumber" class="form-control" style="width: 150px;"
+                            <input type="number" id="batchNumber" formControlName="batchNumber" class="form-control"
+                                style="width: 150px;"
                                 [class.is-invalid]="taxInfoForm.get('batchNumber')?.invalid && taxInfoForm.get('batchNumber')?.touched">
                             @if (taxInfoForm.get('batchNumber')?.invalid && taxInfoForm.get('batchNumber')?.touched) {
                             <div class="invalid-feedback">
@@ -43,7 +52,7 @@
                 </div>
             </div>
             <div class="card form-card mt-2">
-                <div class="card-body col-lg-6">
+                <div class="card-body ">
                     <h5 class="card-title"><i class="bi bi-hash text-success"></i> Numeração - Homologação</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Numeração e lote para o ambiente de homologação.</h6>
                     <div class="row">
@@ -83,4 +92,5 @@
         </form>
     </div>
 </div>
+}
 }
