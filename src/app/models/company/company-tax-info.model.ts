@@ -4,4 +4,5 @@ export interface CompanyTaxInfo {
     batchNumber?: number;
     nFeNumberHomol?: number;
     batchNumberHomol?: number;
+    ibptCode: string;
 }

@@ -117,23 +117,22 @@
             </div>
         </div>
     </div>
+    @if(order().nFeStatus != null) {
     <div class="card form-card mt-3">
         <div class="card-body">
             <div class="row">
-
                 <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                     <p>Nota Fiscal Eletrônica</p>
                     <div>
                         <span style="font-size: 0.8rem;"
                             [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().nFeStatus)">
-                             {{this.order().nFeStatusText}}
+                            {{this.order().nFeStatusText}}
                         </span>
                     </div>
-                    
                 </div>
-
             </div>
         </div>
     </div>
+    }
 </div>
 }

@@ -52,6 +52,9 @@ export enum OrderShipmentLabelPrintStatus {
     Printed = 1,
     Undefined = 2,
     Stale = 3,
+    InvoicePending = 4,
+    LogisticsInProcess = 5,
+    AwaitingCarrierConfirmation = 6
 }
 
 export enum OrderNFeStatus {
