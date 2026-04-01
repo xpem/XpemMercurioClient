@@ -17,6 +17,9 @@ export class ShipmentPendingLabelsList implements OnInit {
   totalSelectedLabels = computed(() => this.selectedLabels().length);
   marketplace: WritableSignal<number | null> = signal(null);
   ordersWithPendingLabels: WritableSignal<Order[]> = signal([]);
+  ordersWithPendingNFe: WritableSignal<Order[]> = signal([]);
+  //0 para etiquetas, 1 para NFe
+  pageFunction: WritableSignal<number> = signal(0);
 
   private readonly printStatusBadgeClassMap: Record<number, string> = {
     0: 'text-bg-secondary',
@@ -83,6 +86,15 @@ export class ShipmentPendingLabelsList implements OnInit {
     this.getOrdersWithPendingLabels();
   }
 
+  setPageFunction(pageFunction: number) {
+
+    // if (this.totalPendingLabelsPrint() === 0)
+    //   this.isEnabledPendingLabelsPrint.set(false);
+    // else this.isEnabledPendingLabelsPrint.set(true);
+
+    this.pageFunction.set(pageFunction);
+  }
+
   ngOnInit(): void {
     this.getOrdersWithPendingLabels();
   }
@@ -125,7 +137,7 @@ export class ShipmentPendingLabelsList implements OnInit {
         console.log('Orders with pending labels:', response);
         this.ordersWithPendingLabels.set(response);
 
-        this.toggleSelectAll();
+        this.selectedLabels.set(this.ordersWithPendingLabels().map(order => order.shipmentExternalId!));
         this.isLoading.set(false);
       },
       error: (error) => {

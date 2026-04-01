@@ -25,7 +25,7 @@
     --border-light: #525252;
     /* Status colors */
     --status-em-uso: #166534;
-    --status-guardado: #1e40af;
+    --status-guardado: #1f3785;
     --status-defeito: #dc2626;
     --status-revendido: #7c3aed;
     --status-dispensado: #6b7280;
@@ -36,7 +36,6 @@
 html,
 body {
     height: 100%;
-
 }
 
 body {

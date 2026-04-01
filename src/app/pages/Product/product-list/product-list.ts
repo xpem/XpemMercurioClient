@@ -112,7 +112,7 @@ export class ProductList implements OnInit {
 
   goToDetail(id: any) {
     //navegar para a pagina order passando o externalId como parametro
-    window.location.href = `Product/Detail?id=${id}`;
+    window.location.href = `product/detail?id=${id}`;
   }
 
   clearFilters(): void {

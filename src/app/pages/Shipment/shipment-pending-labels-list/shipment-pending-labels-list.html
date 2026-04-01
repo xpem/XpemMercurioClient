@@ -5,8 +5,6 @@
 }
 @else {
 <div class="container-fluid">
-
-
     <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex justify-start align-items-center">
             <div class="ms-3">
@@ -20,24 +18,34 @@
             <button type="button " class="btn btn-success position-relative m-0" (click)="printSelectedLabels()"
                 disabled>
                 <!--  [disabled]="totalSelectedLabels() == 0" -->
-                <i class="bi bi-download"></i>&nbsp;&nbsp;
-                Baixar Etiquetas ({{ totalSelectedLabels() }})
+                <i class="bi bi-tags-fill"></i>&nbsp;&nbsp;
+                Gerar Etiquetas ({{ totalSelectedLabels() }})
             </button>
         </div>
     </div>
     <div class="col-lg-4 btn-group mb-3" style="max-width: 400px;" role="group"
         aria-label="Basic radio toggle button group">
-        <input type="radio" class="btn-check" name="btnradio" id="btnAll" autocomplete="off"
+        <input type="radio" class="btn-check" name="btnMarketplaceRadio" id="btnAllRadio" autocomplete="off"
             [checked]="marketplace() === null" (change)="setMarketplace(null)">
-        <label class="btn btn-outline-secondary" for="btnAll">Todas</label>
+        <label class="btn btn-outline-secondary" for="btnAllRadio">Todas</label>
 
-        <input type="radio" class="btn-check" name="btnradio" id="btnMercadoLivre" autocomplete="off"
+        <input type="radio" class="btn-check" name="btnMarketplaceRadio" id="btnMercadoLivreRadio" autocomplete="off"
             [checked]="marketplace() === 1" (change)="setMarketplace(1)">
-        <label class="btn btn-outline-secondary" for="btnMercadoLivre">Mercado Livre</label>
+        <label class="btn btn-outline-secondary" for="btnMercadoLivreRadio">Mercado Livre</label>
 
-        <input type="radio" class="btn-check" name="btnradio" id="btnShopee" autocomplete="off"
+        <input type="radio" class="btn-check" name="btnMarketplaceRadio" id="btnShopeeRadio" autocomplete="off"
             [checked]="marketplace() === 2" (change)="setMarketplace(2)">
-        <label class="btn btn-outline-secondary" for="btnShopee">Shopee</label>
+        <label class="btn btn-outline-secondary" for="btnShopeeRadio">Shopee</label>
+    </div>
+    <div class="col-lg-12 btn-group mb-3" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradiofunction" id="btnPendingLabelsRadio" autocomplete="off"
+            [checked]="pageFunction() === 0" (change)="setPageFunction(0)">
+        <label class="btn btn-outline-success" style="max-width: 400px;" for="btnPendingLabelsRadio"> <i
+                class="bi bi-tags-fill"></i>&nbsp;&nbsp;Etiquetas pendentes ({{ ordersWithPendingLabels().length }})</label>
+        <input type="radio" class="btn-check" style="max-width: 400px;" name="btnradiofunction" id="btnPendingNFeRadio"
+            autocomplete="off" [checked]="pageFunction() === 1" (change)="setPageFunction(1)">
+        <label class="btn btn-outline-danger" style="max-width: 400px;" for="btnPendingNFeRadio"> <i
+                class="bi bi-file-earmark-text-fill"></i>&nbsp;&nbsp;NFe pendentes ({{ ordersWithPendingNFe().length }})</label>
     </div>
     <div class="col-lg-12 ">
         @if(ordersWithPendingLabels().length > 0){
@@ -80,7 +88,7 @@
                             </div>
                             @for (product of item.products; track $index) {
                             <div class="d-flex justify-content-between" style="width: 100%;">
-                                <p class="card-text mb-0">{{product.title}}</p>
+                                <p class="card-text mb-0" style="font-size: 0.75rem;">{{product.title}}</p>
                                 <p class="card-text text-end mb-0" style="font-weight: 600;">
                                     {{product.quantity}} x {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR'
                                     }}
@@ -94,15 +102,19 @@
                                     {{ item.totalAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
                             </div>
                             <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
-                                <p [class]="'status-badge badge rounded-pill mb-0 ' + getPrintStatusBadgeClass(item.printStatus)">
+                                <p
+                                    [class]="'status-badge badge rounded-pill mb-0 ' + getPrintStatusBadgeClass(item.printStatus)">
                                     <i class="bi bi-tag-fill"></i> {{item.printStatusText}}
                                 </p>
                             </div>
+                            @if(item.nFeStatusText != null && item.nFeStatusText != '') {
                             <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
-                                <p [class]="'status-badge badge rounded-pill mb-0 ' + getNFeStatusBadgeClass(item.nFeStatus)">
+                                <p
+                                    [class]="'status-badge badge rounded-pill mb-0 ' + getNFeStatusBadgeClass(item.nFeStatus)">
                                     <i class="bi bi-file-earmark-ruled"></i> {{item.nFeStatusText}}
                                 </p>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>
