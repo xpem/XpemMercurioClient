@@ -4,13 +4,16 @@ import { ShipmentService } from '../../../services/shipment-api';
 import { Order } from '../../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { ShipmentGroupedTotalsRes } from '../../../models/shipment/shipment.totals.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-shipment-pending-labels-list',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './shipment-pending-labels-list.html',
   styleUrl: './shipment-pending-labels-list.css',
 })
+
 export class ShipmentPendingLabelsList implements OnInit {
   isLoading: WritableSignal<boolean> = signal(true);
   selectedLabels: WritableSignal<string[]> = signal([]);
@@ -20,6 +23,7 @@ export class ShipmentPendingLabelsList implements OnInit {
   ordersWithPendingNFe: WritableSignal<Order[]> = signal([]);
   //0 para etiquetas, 1 para NFe
   pageFunction: WritableSignal<number> = signal(0);
+  groupedTotalsPendingShipments = signal<ShipmentGroupedTotalsRes | null>(null);
 
   private readonly printStatusBadgeClassMap: Record<number, string> = {
     0: 'text-bg-secondary',
@@ -46,33 +50,18 @@ export class ShipmentPendingLabelsList implements OnInit {
     }
   }
 
+
+  ngOnInit(): void {
+    this.getOrdersWithPendingLabels();
+    this.getGroupedTotalsPendingShipmentsToPrintLabels();
+  }
+
   printSelectedLabels() {
     if (this.selectedLabels().length === 0) {
       this.toastService.showWarning('Nenhuma etiqueta selecionada para impressão.');
       return;
     }
     console.log('Label IDs to print:', this.selectedLabels().join(','));
-    // this.mercadoLivreService.printShipmentLabels(this.selectedLabels()).subscribe({
-    //   next: (blob) => {
-    //     const url = window.URL.createObjectURL(blob);
-    //     const a = document.createElement('a');
-    //     a.href = url;
-    //     a.download = `shipment_labels_batch.pdf`;
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    //     window.URL.revokeObjectURL(url);
-
-    //     // const printUrl = this.shipmentService.getPrintLabelsUrl(labelIds);
-    //     this.toastService.showSuccess(`Lote de etiquetas gerado.`);
-
-    //     this.getOrdersWithPendingLabels();
-    //   },
-    //   error: (error) => {
-    //     this.toastService.showError('Erro ao gerar lote de etiquetas.');
-    //     console.error('Erro ao gerar lote de etiquetas:', error);
-    //   }
-    // });
   }
 
   setMarketplace(marketplace: number | null) {
@@ -84,6 +73,7 @@ export class ShipmentPendingLabelsList implements OnInit {
     this.marketplace.set(marketplace);
 
     this.getOrdersWithPendingLabels();
+    this.getGroupedTotalsPendingShipmentsToPrintLabels();
   }
 
   setPageFunction(pageFunction: number) {
@@ -93,10 +83,8 @@ export class ShipmentPendingLabelsList implements OnInit {
     // else this.isEnabledPendingLabelsPrint.set(true);
 
     this.pageFunction.set(pageFunction);
-  }
-
-  ngOnInit(): void {
     this.getOrdersWithPendingLabels();
+    this.getGroupedTotalsPendingShipmentsToPrintLabels();
   }
 
   getPrintStatusBadgeClass(status: number | null | undefined): string {
@@ -130,9 +118,22 @@ export class ShipmentPendingLabelsList implements OnInit {
     }
   }
 
+  getGroupedTotalsPendingShipmentsToPrintLabels() {
+    this.shipmentService.getGroupedTotalsPendingShipmentsToPrintLabels(this.marketplace()).subscribe({
+      next: (response) => {
+        console.log('Grouped totals for pending shipments to print labels:', response);
+        this.groupedTotalsPendingShipments.set(response);
+      },
+      error: (error) => {
+        console.error('Error fetching grouped totals for pending shipments to print labels:', error);
+        this.toastService.showError('Error fetching grouped totals for pending shipments to print labels.');
+      }
+    });
+  }
+
   getOrdersWithPendingLabels() {
     this.isLoading.set(true);
-    this.shipmentService.getOrdersWithPendingLabels(this.marketplace()).subscribe({
+    this.shipmentService.getOrdersWithPendingLabels(this.marketplace(), this.pageFunction()).subscribe({
       next: (response) => {
         console.log('Orders with pending labels:', response);
         this.ordersWithPendingLabels.set(response);

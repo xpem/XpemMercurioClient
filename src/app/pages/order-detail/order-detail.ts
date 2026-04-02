@@ -7,6 +7,8 @@ import { ToastService } from '../../services/toast.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 
+declare const bootstrap: any;
+
 @Component({
   selector: 'app-order',
   imports: [CurrencyPipe, RouterLink],
@@ -99,5 +101,30 @@ export class OrderDetail implements OnInit {
         }
       });
     }
+  }
+
+  showModal(modalId: string): void {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  hideModal(modalId: string): void {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+  }
+
+  callModalConfirmationInvoiceIssue() {
+    this.showModal('confirmationInvoiceIssueModal');
+  }
+
+  issueNFe(): void {
   }
 }

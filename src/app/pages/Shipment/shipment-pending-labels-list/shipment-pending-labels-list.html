@@ -7,6 +7,8 @@
 <div class="container-fluid">
     <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex justify-start align-items-center">
+            <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
+                    class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
             <div class="ms-3">
                 <p class="mb-0">Etiquetas Pendentes</p>
                 <p class="text-body-secondary m-0" style="font-size: 0.75rem;">
@@ -15,12 +17,22 @@
             </div>
         </div>
         <div>
-            <button type="button " class="btn btn-success position-relative m-0" (click)="printSelectedLabels()"
+            <!-- temporariamente desativado até termos a emissão de notas fiscais finalizada -->
+            @if(this.pageFunction() === 0) {
+            <button type="button" class="btn btn-success position-relative m-0" (click)="printSelectedLabels()"
                 disabled>
                 <!--  [disabled]="totalSelectedLabels() == 0" -->
                 <i class="bi bi-tags-fill"></i>&nbsp;&nbsp;
                 Gerar Etiquetas ({{ totalSelectedLabels() }})
             </button>
+            }
+            @else {
+            <button type="button" class="btn btn-danger position-relative m-0" (click)="printSelectedLabels()" disabled>
+                <!--  [disabled]="totalSelectedLabels() == 0" -->
+                <i class="bi bi-file-earmark-text-fill"></i>&nbsp;&nbsp;
+                Gerar Notas Fiscais ({{ totalSelectedLabels() }})
+            </button>
+            }
         </div>
     </div>
     <div class="col-lg-4 btn-group mb-3" style="max-width: 400px;" role="group"
@@ -41,11 +53,13 @@
         <input type="radio" class="btn-check" name="btnradiofunction" id="btnPendingLabelsRadio" autocomplete="off"
             [checked]="pageFunction() === 0" (change)="setPageFunction(0)">
         <label class="btn btn-outline-success" style="max-width: 400px;" for="btnPendingLabelsRadio"> <i
-                class="bi bi-tags-fill"></i>&nbsp;&nbsp;Etiquetas pendentes ({{ ordersWithPendingLabels().length }})</label>
+                class="bi bi-tags-fill"></i>&nbsp;&nbsp;Etiquetas pendentes ({{
+            groupedTotalsPendingShipments()?.pendingLabels ?? 0 }})</label>
         <input type="radio" class="btn-check" style="max-width: 400px;" name="btnradiofunction" id="btnPendingNFeRadio"
             autocomplete="off" [checked]="pageFunction() === 1" (change)="setPageFunction(1)">
         <label class="btn btn-outline-danger" style="max-width: 400px;" for="btnPendingNFeRadio"> <i
-                class="bi bi-file-earmark-text-fill"></i>&nbsp;&nbsp;NFe pendentes ({{ ordersWithPendingNFe().length }})</label>
+                class="bi bi-file-earmark-text-fill"></i>&nbsp;&nbsp;NFe pendentes ({{
+            groupedTotalsPendingShipments()?.pendingInvoiceIssue ?? 0 }})</label>
     </div>
     <div class="col-lg-12 ">
         @if(ordersWithPendingLabels().length > 0){
@@ -122,9 +136,15 @@
             }
         </div>
         } @else {
+        @if (pageFunction() === 0) {
         <div class="alert alert-info" role="alert">
             Nenhuma etiqueta pendente para imprimir.
         </div>
+        }@else {
+        <div class="alert alert-info" role="alert">
+            Nenhuma NFe pendente para emitir.
+        </div>
+        }
         }
     </div>
 </div>

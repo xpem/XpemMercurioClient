@@ -136,11 +136,11 @@
                     </div>
                     <!-- Status da etiqueta -->
                     <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
-                        <p class=" status-badge badge text-bg-secondary mb-0"> <i class="bi bi-tag-fill"></i>
+                        <p class="status-badge rounded-pill badge text-bg-warning mb-0"> <i class="bi bi-tag-fill"></i>
                             {{item.printStatusText}}</p>
                     </div>
                     @if(item.externalPackId != null && item.externalPackId != '') {
-                    <p class=" status-badge badge text-bg-info mb-0"> <i class="bi bi-box-seam"></i>
+                    <p class="status-badge rounded-pill badge text-bg-info mb-0"> <i class="bi bi-box-seam"></i>
                         Pacote: {{item.externalPackId}}</p>
                     }
                 </div>

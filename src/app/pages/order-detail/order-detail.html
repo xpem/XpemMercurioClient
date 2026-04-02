@@ -9,8 +9,9 @@
         <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
         <div>
-            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px"><i
-                    class="bi bi-file-earmark-ruled"></i>&nbsp;&nbsp;Emitir NF-e</button>
+            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px" [disabled]="order().printStatus != 4"
+                (click)="callModalConfirmationInvoiceIssue()"><i class="bi bi-file-earmark-ruled"></i>&nbsp;&nbsp;Emitir
+                NF-e</button>
             <button class="btn btn-sm btn-primary mb-3" style="margin-top: 20px" (click)="printShipmentLabel()"
                 [disabled]="!PrintLabelIsEnabled()"><i class="bi bi-printer"></i>&nbsp;&nbsp;
                 @if(order().printStatus == 1 || order().printStatus == 3) {
@@ -136,3 +137,30 @@
     }
 </div>
 }
+<!-- modals -->
+<!-- modal para confirmação para inicio do processo de emissão de nfe e envio dela ao marketplace-->
+<div class="modal fade" id="confirmationInvoiceIssueModal" tabindex="-1" aria-labelledby="confirmInvoisseIssueLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirmInvoisseIssueLabel"><i
+                        class="bi bi-file-earmark-ruled"></i>&nbsp;Confirmar emissão de NF-e</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p> Tem certeza que deseja emitir a NF-e para este pedido? </p>
+                <p>O processo de emissão pode levar alguns
+                    minutos e a etiqueta de envio só poderá ser impressa após a conclusão da emissão.</p>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                        class="bi bi-x"></i>&nbsp;&nbsp;Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="issueNFe()"><i
+                        class="bi bi-check"></i>&nbsp;&nbsp;Emitir NF-e</button>
+            </div>
+        </div>
+    </div>
+
+</div>
