@@ -8,6 +8,8 @@ export interface Company {
     publicId?: string;
     crt?: number;
     hasCertificate?: boolean;
+    //duas casas decimais para o valor do IBPT
+    ibpt?: number;
 }
 
 export interface CompanyAddress {

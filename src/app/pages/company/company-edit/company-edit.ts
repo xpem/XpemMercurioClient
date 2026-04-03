@@ -50,6 +50,7 @@ export class CompanyEdit implements OnInit {
       }),
       stateRegistration: [''],
       crt: ['', [Validators.required]],
+      ibpt: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
     });
 
     this.certificateForm = this.fb.group({
@@ -111,8 +112,24 @@ export class CompanyEdit implements OnInit {
           email: company.address?.email,
         },
         crt: company.crt,
+        ibpt: company.ibpt,
       });
     }
+  }
+
+  onIBPTInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9.,]/g, '').replace(',', '.');
+    const parts = value.split('.');
+
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    if (parts[1]?.length > 2) {
+      value = parts[0] + '.' + parts[1].slice(0, 2);
+    }
+    input.value = value;
+    this.companyForm.get('ibpt')?.setValue(value, { emitEvent: false });
   }
 
   // Getter para facilitar o acesso aos controles do formulário no template
@@ -156,6 +173,7 @@ export class CompanyEdit implements OnInit {
         phone: formData.address.phone,
         email: formData.address.email,
       },
+      ibpt: formData.ibpt,
     };
 
     //retirar pontos, traços e barras do cnpj

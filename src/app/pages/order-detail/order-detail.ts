@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { OrderService } from '../../services/order-api';
+import { InvoiceService } from '../../services/invoice-api';
 import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-api';
 import { Order } from '../../models/order/order.model';
 import { ToastService } from '../../services/toast.service';
@@ -21,7 +22,7 @@ export class OrderDetail implements OnInit {
   isLoading: WritableSignal<boolean> = signal(true);
 
 
-  constructor(private orderService: OrderService,
+  constructor(private orderService: OrderService, private invoiceService: InvoiceService,
     private mercadoLivreService: MercadoLivreService, private toastService: ToastService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -125,6 +126,18 @@ export class OrderDetail implements OnInit {
     this.showModal('confirmationInvoiceIssueModal');
   }
 
-  issueNFe(): void {
+  issueInvoice(): void {
+    this.hideModal('confirmationInvoiceIssueModal');
+    this.invoiceService.issueNFe(this.order().id).subscribe({
+      next: (response) => {
+        console.log('NF-e issued successfully:', response);
+        this.toastService.showSuccess('NF-e emitida com sucesso!', 5000);
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Error issuing NF-e:', error);
+        this.toastService.showError('Erro ao emitir a NF-e. Por favor, tente novamente mais tarde.', 5000);
+      }
+    });
   }
 }

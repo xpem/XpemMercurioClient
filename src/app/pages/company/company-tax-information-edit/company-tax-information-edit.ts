@@ -70,6 +70,9 @@ export class CompanyTaxInformationEdit implements OnInit {
     });
   }
 
+  // emitTestNFe(): void {
+  // }
+
   public saveTaxInfo(): void {
     this.submitted = true;
     if (this.taxInfoForm.invalid) {
