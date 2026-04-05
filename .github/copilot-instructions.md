@@ -54,3 +54,72 @@ npm test         # Run unit tests
 - The application is set up for server-side rendering using Angular Universal
 - Angular Material provides the design system and component library
 - Public assets should be placed in the `public/` directory
+
+## Angular 20.3 Modern Control Flow Syntax
+
+This project uses **Angular 20.3 (LTS)** with modern control flow blocks introduced in Angular 17+. Always use the new syntax - **NOT** the deprecated `*ngIf`, `*ngFor`, `*ngSwitch` directives.
+
+### ✅ Modern Syntax (Use These)
+
+**@if - Conditional Statements**
+```html
+@if (condition) {
+  <p>Content when true</p>
+}
+```
+
+**@if / @else - Conditional with Fallback**
+```html
+@if (isLoggedIn) {
+  <p>Welcome!</p>
+} @else {
+  <p>Please login</p>
+}
+```
+
+**@if / @else if / @else - Multiple Conditions**
+```html
+@if (status === 'loading') {
+  <p>Loading...</p>
+} @else if (status === 'success') {
+  <p>Success!</p>
+} @else {
+  <p>Error</p>
+}
+```
+
+**@for - Loops (Replaces *ngFor)**
+```html
+@for (item of items; track item.id) {
+  <li>{{ item.name }}</li>
+}
+```
+⚠️ **Important**: The `track` attribute is mandatory and must reference a unique identifier.
+
+**@switch / @case - Case Selection (No Fallthrough)**
+```html
+@switch (status) {
+  @case ('active') {
+    <span class="badge bg-success">Active</span>
+  }
+  @case ('inactive') {
+    <span class="badge bg-danger">Inactive</span>
+  }
+  @default {
+    <span class="badge bg-secondary">Unknown</span>
+  }
+}
+```
+⚠️ **Important**: Each `@case` is independent - there is NO fallthrough behavior.
+
+### ❌ Deprecated Syntax (Never Use)
+- `*ngIf` → Use `@if`
+- `*ngFor` → Use `@for`
+- `*ngSwitch` / `*ngCase` → Use `@switch` / `@case`
+- NgModules → Use standalone components
+
+### Additional Features
+- **Standalone Components**: Components are standalone by default; no need for NgModule declarations
+- **Function-based Routing**: Routes are defined in `app.routes.ts` using functions, not decorators
+- **Strict TypeScript**: Project uses `strict: true` - all types must be properly typed
+- **RxJS 7.8**: Reactive programming with Observables for async operations

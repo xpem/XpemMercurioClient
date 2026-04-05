@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { Company } from "../models/company/company.model";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { CompanyTaxInfo } from "../models/company/company-tax-info.model";
+import { CompanyInvoiceSequence } from "../models/company/company-invoice-sequence.model";
 
 @Injectable({
     providedIn: "root",
@@ -32,11 +32,11 @@ export class CompanyService {
         return this.http.post(`${this.apiUrl}/certificate`, formData, { responseType: 'text' });
     }
 
-    public getCompanyTaxInfo(): Observable<CompanyTaxInfo> {
-        return this.http.get<CompanyTaxInfo>(`${this.apiUrl}/taxInformation`);
+    public getCompanyTaxInfo(): Observable<CompanyInvoiceSequence> {
+        return this.http.get<CompanyInvoiceSequence>(`${this.apiUrl}/invoiceSequence`);
     }
 
-    public saveCompanyTaxInfo(taxInfo: CompanyTaxInfo): Observable<string> {
-        return this.http.post(`${this.apiUrl}/taxInformation`, taxInfo, { responseType: 'text' });
+    public saveCompanyTaxInfo(taxInfo: CompanyInvoiceSequence): Observable<string> {
+        return this.http.post(`${this.apiUrl}/invoiceSequence`, taxInfo, { responseType: 'text' });
     }
 }

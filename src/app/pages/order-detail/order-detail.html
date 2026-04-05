@@ -9,9 +9,11 @@
         <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
         <div>
+            @if(!order().invoiceCreated) {
             <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px" [disabled]="order().printStatus != 4"
                 (click)="callModalConfirmationInvoiceIssue()"><i class="bi bi-file-earmark-ruled"></i>&nbsp;&nbsp;Emitir
                 NF-e</button>
+            }
             <button class="btn btn-sm btn-primary mb-3" style="margin-top: 20px" (click)="printShipmentLabel()"
                 [disabled]="!PrintLabelIsEnabled()"><i class="bi bi-printer"></i>&nbsp;&nbsp;
                 @if(order().printStatus == 1 || order().printStatus == 3) {
@@ -118,7 +120,7 @@
             </div>
         </div>
     </div>
-    @if(order().nFeStatus != null) {
+    @if(order().invoiceCreated) {
     <div class="card form-card mt-3">
         <div class="card-body">
             <div class="row">
@@ -126,11 +128,27 @@
                     <p>Nota Fiscal Eletrônica</p>
                     <div>
                         <span style="font-size: 0.8rem;"
-                            [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().nFeStatus)">
-                            {{this.order().nFeStatusText}}
+                            [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().invoiceStatus)">
+                            @if(this.order().invoiceStatusText == null &&
+                            this.order().invoiceCreateErrorMessage == null) {
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>&nbsp;&nbsp; 'NF-e
+                            em processo de criação'
+                            }
+                            @else {
+                            {{this.order().invoiceStatusText}}
+                            }
                         </span>
+
+                        <!-- } -->
                     </div>
                 </div>
+                @if(this.order().invoiceCreateErrorMessage != null && this.order().invoiceCreateErrorMessage != '') {
+                <div class="alert alert-danger" role="alert">
+                    <p>{{this.order().invoiceCreateErrorMessage}}</p>
+                    <hr><button type="button" class="btn btn-danger" (click)="retryInvoiceCreation()"><i
+                            class="bi bi-arrow-clockwise"></i>&nbsp;&nbsp;Tentar novamente</button>
+                </div>
+                }
             </div>
         </div>
     </div>

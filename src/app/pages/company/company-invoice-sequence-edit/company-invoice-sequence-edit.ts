@@ -5,12 +5,12 @@ import { ToastService } from '../../../services/toast.service';
 import { CompanyService } from '../../../services/company-api';
 
 @Component({
-  selector: 'app-company-tax-information-edit',
+  selector: 'app-company-invoice-sequence-edit',
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './company-tax-information-edit.html',
-  styleUrl: './company-tax-information-edit.css',
+  templateUrl: './company-invoice-sequence-edit.html',
+  styleUrl: './company-invoice-sequence-edit.css',
 })
-export class CompanyTaxInformationEdit implements OnInit {
+export class CompanyInvoiceSequenceEdit implements OnInit {
   taxInfoForm!: FormGroup;
   submitted = false;
   isLoading: WritableSignal<boolean> = signal(true);
@@ -82,7 +82,7 @@ export class CompanyTaxInformationEdit implements OnInit {
     this.companyService.saveCompanyTaxInfo(this.taxInfoForm.value).subscribe({
       next: (taxInfo) => {
         this.toastService.showSuccess(taxInfo);
-        this.router.navigate(['/tax-information']);
+        this.router.navigate(['/company/invoice-sequence-edit']);
       },
       error: (err) => {
         this.toastService.showError('Failed to save tax information');

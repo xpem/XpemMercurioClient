@@ -52,8 +52,8 @@ export class OrderDetail implements OnInit {
       this.order().shipmentExternalId != null &&
       this.order().shipmentExternalId !== '' &&
       this.order().printStatus != null &&
-      this.order().nFeStatus != null &&
-      this.order().nFeStatus == 1 /*Emitida*/;
+      this.order().invoiceStatus != null &&
+      this.order().invoiceStatus == 1 /*Emitida*/;
   }
 
   getNFeStatusBadgeClass(status: number | null | undefined): string {
@@ -62,6 +62,12 @@ export class OrderDetail implements OnInit {
     }
 
     return this.nFeStatusBadgeClassMap[status] ?? 'text-bg-warning';
+  }
+
+  retryInvoiceCreation(): void {
+    this.order().invoiceCreateErrorMessage = null;
+    this.issueInvoice();
+
   }
 
   private readonly nFeStatusBadgeClassMap: Record<number, string> = {
@@ -131,7 +137,7 @@ export class OrderDetail implements OnInit {
     this.invoiceService.issueNFe(this.order().id).subscribe({
       next: (response) => {
         console.log('NF-e issued successfully:', response);
-        this.toastService.showSuccess('NF-e emitida com sucesso!', 5000);
+        this.toastService.showSuccess(response, 5000);
         this.ngOnInit();
       },
       error: (error) => {

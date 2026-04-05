@@ -1,8 +1,7 @@
-export interface CompanyTaxInfo {
+export interface CompanyInvoiceSequence {
     id: number;
     nFeNumber?: number;
     batchNumber?: number;
     nFeNumberHomol?: number;
     batchNumberHomol?: number;
-    ibptCode: string;
 }

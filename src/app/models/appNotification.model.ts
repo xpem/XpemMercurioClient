@@ -20,10 +20,12 @@ export enum NotificationType {
 }
 
 export enum NotificationObjectType {
-    Order = 0,
+    ImportOrder = 0,
     Product = 1,
     Shipment = 2,
     User = 3,
     MarketPlace = 4,
-    System = 5
+    System = 5,
+    CreateOrder = 6,
+    Invoice = 7,
 }

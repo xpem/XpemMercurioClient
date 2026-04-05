@@ -140,12 +140,14 @@ export class App implements OnInit, OnDestroy {
 
   private getNotificationIcon(objectType: NotificationObjectType): string {
     const iconMap: Record<NotificationObjectType, string> = {
-      [NotificationObjectType.Order]: 'cart-check',
+      [NotificationObjectType.ImportOrder]: 'cart-check',
       [NotificationObjectType.Product]: 'box-seam',
       [NotificationObjectType.Shipment]: 'truck',
       [NotificationObjectType.User]: 'person-circle',
       [NotificationObjectType.MarketPlace]: 'shop',
       [NotificationObjectType.System]: 'cpu',
+      [NotificationObjectType.CreateOrder]: 'cart-plus',
+      [NotificationObjectType.Invoice]: 'file-earmark-ruled',
     };
     return iconMap[objectType] || 'bell';
   }

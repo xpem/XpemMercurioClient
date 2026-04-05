@@ -18,8 +18,10 @@ export interface Order {
     shippingBuyerCost: number;
     liquidAmount: number;
     externalPackId?: string;
-    nFeStatus: OrderNFeStatus;
-    nFeStatusText: string;
+    invoiceStatus: OrderNFeStatus;
+    invoiceStatusText: string;
+    invoiceCreated: boolean;
+    invoiceCreateErrorMessage?: string | null;
 }
 
 export enum OrderStatus {

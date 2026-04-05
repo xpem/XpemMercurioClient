@@ -121,11 +121,11 @@
                                     <i class="bi bi-tag-fill"></i> {{item.printStatusText}}
                                 </p>
                             </div>
-                            @if(item.nFeStatusText != null && item.nFeStatusText != '') {
+                            @if(item.invoiceStatus != null && item.invoiceStatusText != '') {
                             <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                                 <p
-                                    [class]="'status-badge badge rounded-pill mb-0 ' + getNFeStatusBadgeClass(item.nFeStatus)">
-                                    <i class="bi bi-file-earmark-ruled"></i> {{item.nFeStatusText}}
+                                    [class]="'status-badge badge rounded-pill mb-0 ' + getInvoiceStatusBadgeClass(item.invoiceStatus)">
+                                    <i class="bi bi-file-earmark-ruled"></i> {{item.invoiceStatusText}}
                                 </p>
                             </div>
                             }

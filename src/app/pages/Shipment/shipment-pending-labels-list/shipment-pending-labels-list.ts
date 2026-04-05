@@ -95,7 +95,7 @@ export class ShipmentPendingLabelsList implements OnInit {
     return this.printStatusBadgeClassMap[status] ?? 'text-bg-warning';
   }
 
-  getNFeStatusBadgeClass(status: number | null | undefined): string {
+  getInvoiceStatusBadgeClass(status: number | null | undefined): string {
     if (status == null) {
       return 'text-bg-secondary';
     }
