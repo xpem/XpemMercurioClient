@@ -130,7 +130,7 @@
                         <span style="font-size: 0.8rem;"
                             [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().invoiceStatus)">
                             @if(this.order().invoiceStatusText == null &&
-                            this.order().invoiceCreateErrorMessage == null) {
+                            this.order().invoiceErrorMessage == null) {
                             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>&nbsp;&nbsp; 'NF-e
                             em processo de criação'
                             }
@@ -142,9 +142,18 @@
                         <!-- } -->
                     </div>
                 </div>
-                @if(this.order().invoiceCreateErrorMessage != null && this.order().invoiceCreateErrorMessage != '') {
+                <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                     @if(this.order().invoiceNumber != null) {
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="invoiceNumber"
+                            value="{{this.order().invoiceNumber}}">
+                        <label for="invoiceNumber">Número da NF-e</label>
+                    </div>
+                    }
+                </div>
+                @if(this.order().invoiceErrorMessage != null && this.order().invoiceErrorMessage != '') {
                 <div class="alert alert-danger" role="alert">
-                    <p>{{this.order().invoiceCreateErrorMessage}}</p>
+                    <p>{{this.order().invoiceErrorMessage}}</p>
                     <hr><button type="button" class="btn btn-danger" (click)="retryInvoiceCreation()"><i
                             class="bi bi-arrow-clockwise"></i>&nbsp;&nbsp;Tentar novamente</button>
                 </div>

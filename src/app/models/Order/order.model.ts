@@ -21,7 +21,8 @@ export interface Order {
     invoiceStatus: OrderNFeStatus;
     invoiceStatusText: string;
     invoiceCreated: boolean;
-    invoiceCreateErrorMessage?: string | null;
+    invoiceErrorMessage?: string | null;
+    invoiceNumber?: string | null;
 }
 
 export enum OrderStatus {
@@ -66,5 +67,7 @@ export enum OrderNFeStatus {
     IssuanceFailed = 3,
     CancellationInProgress = 4,
     Cancelled = 5,
-    CancellationFailed = 6
+    CancellationFailed = 6,
+    Error = 7,
+    BatchProcessing = 8    
 }

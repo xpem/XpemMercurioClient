@@ -60,12 +60,15 @@ export class OrderDetail implements OnInit {
     if (status == null) {
       return 'text-bg-secondary';
     }
+    if(status == 7 /*Erro na emissão da NF-e*/) {
+      return 'text-bg-danger';
+    }
 
     return this.nFeStatusBadgeClassMap[status] ?? 'text-bg-warning';
   }
 
   retryInvoiceCreation(): void {
-    this.order().invoiceCreateErrorMessage = null;
+    this.order().invoiceErrorMessage = null;
     this.issueInvoice();
 
   }
