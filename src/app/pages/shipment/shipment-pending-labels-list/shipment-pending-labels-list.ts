@@ -1,9 +1,9 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../../services/toast.service';
 import { ShipmentService } from '../../../services/shipment-api';
-import { Order } from '../../../models/order/order.model';
+import { Order } from '../../../models/Order/order.model';
 import { CurrencyPipe } from '@angular/common';
-import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
 import { ShipmentGroupedTotalsRes } from '../../../models/shipment/shipment.totals.model';
 import { RouterLink } from '@angular/router';
 
@@ -124,7 +124,7 @@ export class ShipmentPendingLabelsList implements OnInit {
         console.log('Grouped totals for pending shipments to print labels:', response);
         this.groupedTotalsPendingShipments.set(response);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error fetching grouped totals for pending shipments to print labels:', error);
         this.toastService.showError('Error fetching grouped totals for pending shipments to print labels.');
       }
@@ -141,7 +141,7 @@ export class ShipmentPendingLabelsList implements OnInit {
         this.selectedLabels.set(this.ordersWithPendingLabels().map(order => order.shipmentExternalId!));
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro ao obter pedidos com etiquetas pendentes:', error);
         this.toastService.showError('Erro ao obter pedidos com etiquetas pendentes.');
         this.isLoading.set(false);

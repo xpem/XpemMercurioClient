@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({
@@ -42,7 +43,7 @@ export class MercadoLivreOAuthCallback implements OnInit {
           // Aqui você pode redirecionar o usuário ou mostrar uma mensagem de sucesso
           this.submitted.set(true);
         },
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           console.error('Erro ao enviar credenciais do mercado livre:', error);
           // Aqui você pode mostrar uma mensagem de erro para o usuário
           this.submitted.set(true);

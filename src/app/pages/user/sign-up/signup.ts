@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from '../../../services/user-api';
 import { Router } from '@angular/router';
@@ -82,7 +83,7 @@ export class Signup implements OnInit {
         // Redireciona para a página inicial após o login bem-sucedido
         this.router.navigate(['/user/signin']);
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Erro ao tentar criar usuário:', error);
 
         if(error.error && error.error.errorCode === 3) {

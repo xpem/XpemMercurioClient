@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { OrderStatus } from '../../../../models/order/order.model';
+import { OrderStatus } from '../../../../models/Order/order.model';
 
 @Component({
   selector: 'app-order-filters',

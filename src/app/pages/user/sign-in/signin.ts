@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user-api';
@@ -65,7 +66,7 @@ export class Signin implements OnInit {
         this.router.navigate(['/home']);
         this.isLoadingAccess.set(false);
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Erro ao obter token:', error?.error?.errorCode);
 
         if (error.error && error.error.errorCode === 5) {

@@ -1,11 +1,11 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { UserProfile } from '../../../models/user-profile.model';
 import { UserService } from '../../../services/user-api';
-import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
-import { Order } from '../../../models/order/order.model';
-import { Product } from '../../../models/product/product.model';
+import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
+import { Order } from '../../../models/Order/order.model';
+import { Product } from '../../../models/Product/product.model';
 import { ToastService } from '../../../services/toast.service';
-import { ShopeeApiService } from '../../../services/mercadoLivre/shopee-api';
+import { ShopeeApiService } from '../../../services/MercadoLivre/shopee-api';
 import { ModalImportAllProducts } from './components/modal-import-all-products/modal-import-all-products';
 import { ModalImportSingleProduct } from "./components/modal-import-single-product/modal-import-single-product";
 
@@ -62,7 +62,7 @@ export class BondList implements OnInit {
         this.userProfile.set(_userProfile);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error fetching user profile:', error);
       }
     });
@@ -235,7 +235,7 @@ export class BondList implements OnInit {
         // a response é uma URL de redirecionamento
         window.location.href = response;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro ao conectar com o Mercado Livre:', error);
         this.isActionLoading.set(false);
       }
@@ -253,7 +253,7 @@ export class BondList implements OnInit {
         // a response é uma URL de redirecionamento
         window.location.href = response;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro ao conectar com a Shopee:', error);
         this.isActionLoading.set(false);
       }
@@ -274,7 +274,7 @@ export class BondList implements OnInit {
         // a response é uma URL de redirecionamento
         window.location.href = response;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro ao desconectar da Shopee:', error);
         this.isActionLoading.set(false);
       }
@@ -305,7 +305,7 @@ export class BondList implements OnInit {
         this.hideModal('unbondMercadoLivreCredentialModal');
         this.getUserProfile();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error inactivating credential:', error);
         this.toastService.showError('Erro ao desativar credencial!', 5000);
       }

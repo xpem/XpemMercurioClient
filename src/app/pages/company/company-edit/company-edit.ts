@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../services/toast.service';
@@ -80,7 +81,7 @@ export class CompanyEdit implements OnInit {
 
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         this.toastService.showError('Erro ao carregar empresa.', 5000);
         console.error('Erro ao carregar empresa:', error);
         this.isLoading.set(false);
@@ -195,7 +196,7 @@ export class CompanyEdit implements OnInit {
         }
         this.router.navigate(['/company']);
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         if (error.status === 400 && error.error && error.error.message) {
           this.errorMessage.set(error.error.message);
           this.toastService.showError(error.error.message, 5000);
@@ -318,7 +319,7 @@ export class CompanyEdit implements OnInit {
         this.certificateSubmitted = false;
         this.uploadCertificatePanelIsVisible.set(true);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         this.toastService.showError('Erro ao enviar certificado.', 5000);
         console.error('Erro ao enviar certificado:', error);
       },
