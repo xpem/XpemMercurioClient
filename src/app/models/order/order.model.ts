@@ -26,7 +26,7 @@ export interface Order {
     invoiceNumber?: string | null;
     invoiceKey?: string | null;
     invoiceProtocolNumber?: string | null;
-    invoiceAuthorizedDate?: string | null;
+    invoiveAuthorizedDate?: string | null;
 }
 
 export enum OrderStatus {

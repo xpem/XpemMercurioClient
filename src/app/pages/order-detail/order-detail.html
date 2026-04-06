@@ -138,11 +138,9 @@
                             {{this.order().invoiceStatusText}}
                             }
                         </span>
-
-                        <!-- } -->
                     </div>
                 </div>
-                <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
+                <div class="row">
                     @if(this.order().invoiceNumber != null) {
                     <div class="col-lg-4 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="invoiceNumber"
@@ -151,10 +149,17 @@
                     </div>
                     }
                     @if(this.order().invoiceKey != null) {
-                    <div class="col-lg-4 form-floating">
+                    <div class="col-lg-8 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="invoiceKey"
                             value="{{this.order().invoiceKey}}">
                         <label for="invoiceKey">Chave de acesso</label>
+                    </div>
+                    }
+                    @if(this.order().invoiveAuthorizedDate != null) {
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="invoiceAuthorizedDate"
+                            value="{{this.order().invoiveAuthorizedDate}}">
+                        <label for="invoiceAuthorizedDate">Data de autorização</label>
                     </div>
                     }
                     @if(this.order().invoiceProtocolNumber != null) {
@@ -164,13 +169,15 @@
                         <label for="invoiceProtocolNumber">Número do protocolo</label>
                     </div>
                     }
-                    @if(this.order().invoiceAuthorizedDate != null) {
-                    <div class="col-lg-4 form-floating">
-                        <input type="text" readonly class="form-control-plaintext" id="invoiceAuthorizedDate"
-                            value="{{this.order().invoiceAuthorizedDate}}">
-                        <label for="invoiceAuthorizedDate">Data de autorização</label>
+                    <!-- botão para baixar o XML da NF-e caso a nfe tenha sido emitida -->
+                    @if(this.order().invoiceStatus == 2 && this.order().invoiceKey != null) {
+                    <hr />
+                    <div class="row col-lg-4">
+                        <button class="btn btn-sm btn-outline-primary" (click)="downloadInvoiceXML()"><i
+                                class="bi bi-file-earmark-arrow-down"></i>&nbsp;&nbsp;Baixar XML</button>
                     </div>
                     }
+
                 </div>
                 @if(this.order().invoiceErrorMessage != null && this.order().invoiceErrorMessage != '') {
                 <div class="alert alert-danger" role="alert">

@@ -14,4 +14,8 @@ export class InvoiceService {
     public issueNFe(orderId: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/issueNFe?orderId=${orderId}`, { responseType: 'text' });
     }
+
+    public getInvoiceXML(orderId: number): Observable<Blob> {
+        return this.http.get(`${this.apiUrl}/invoiceXml?orderId=${orderId}`, { responseType: 'blob' });
+    }
 }

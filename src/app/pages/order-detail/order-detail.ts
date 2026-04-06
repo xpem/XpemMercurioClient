@@ -152,4 +152,24 @@ export class OrderDetail implements OnInit {
       }
     });
   }
+
+  downloadInvoiceXML(): void {
+    this.invoiceService.getInvoiceXML(this.order().id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice_${this.order().invoiceKey}.xml`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.toastService.showSuccess('XML da NF-e baixado com sucesso!', 5000);
+      },
+      error: (error: unknown) => {
+        console.error('Error downloading invoice XML:', error);
+        this.toastService.showError('Erro ao baixar o XML da NF-e. Por favor, tente novamente mais tarde.', 5000);
+      }
+    });
+  }
 }
