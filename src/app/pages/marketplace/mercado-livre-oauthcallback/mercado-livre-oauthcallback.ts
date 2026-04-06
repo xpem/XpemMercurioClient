@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({

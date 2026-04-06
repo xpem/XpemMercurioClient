@@ -1,9 +1,9 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../../services/toast.service';
 import { ShipmentService } from '../../../services/shipment-api';
-import { Order } from '../../../models/Order/order.model';
+import { Order } from '../../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
-import { MercadoLivreService } from '../../../services/MercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../../services/mercadoLivre/mercado-livre-api';
 import { ShipmentGroupedTotalsRes } from '../../../models/shipment/shipment.totals.model';
 import { RouterLink } from '@angular/router';
 

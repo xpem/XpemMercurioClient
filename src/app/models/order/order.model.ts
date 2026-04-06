@@ -17,6 +17,7 @@ export interface Order {
     shippingSellerCost: number;
     shippingBuyerCost: number;
     liquidAmount: number;
+    liquidProductsAmount: number;
     externalPackId?: string;
     invoiceStatus: OrderNFeStatus;
     invoiceStatusText: string;

@@ -1,23 +1,21 @@
 import { Directive, Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
-import { MercadoLivreService } from '../../services/MercadoLivre/mercado-livre-api';
+import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-api';
 import { UserService } from '../../services/user-api';
 import { UserProfile } from '../../models/user-profile.model';
 import { OrderService } from '../../services/order-api';
-import { Order, OrderStatus } from '../../models/Order/order.model';
+import { Order, OrderStatus } from '../../models/order/order.model';
 import { CurrencyPipe } from '@angular/common';
 import { ShipmentService } from '../../services/shipment-api';
-import { OrderFilter, OrderFilterDisplay } from '../../models/Order/order-filter.model';
+import { OrderFilter, OrderFilterDisplay } from '../../models/order/order-filter.model';
 import { OrderFilters } from "./components/order-filters/order-filters";
 import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { forkJoin, catchError, of } from 'rxjs';
-import { TooltipDirective } from '../../components/TooltipDirective';
-
 
 @Component({
   selector: 'app-home',
-  imports: [CurrencyPipe, OrderFilters, RouterModule, TooltipDirective],
+  imports: [CurrencyPipe, OrderFilters, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

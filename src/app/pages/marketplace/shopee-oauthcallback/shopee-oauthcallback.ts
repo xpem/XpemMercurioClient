@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { ShopeeApiService } from '../../../services/MercadoLivre/shopee-api';
+import { ShopeeApiService } from '../../../services/mercadoLivre/shopee-api';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({
