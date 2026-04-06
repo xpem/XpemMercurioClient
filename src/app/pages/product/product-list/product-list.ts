@@ -1,8 +1,8 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
-import { Product } from '../../../models/product/product.model';
+import { Product } from '../../../models/Product/product.model';
 import { ProductService } from '../../../services/product-api';
 import { CurrencyPipe } from '@angular/common';
-import { ProductFilter, ProductFilterDisplay } from '../../../models/product/product-filter.model';
+import { ProductFilter, ProductFilterDisplay } from '../../../models/Product/product-filter.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductFilters } from "./product-filters/product-filters";
 

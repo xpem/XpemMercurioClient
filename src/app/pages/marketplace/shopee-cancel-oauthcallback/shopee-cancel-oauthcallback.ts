@@ -33,7 +33,7 @@ export class ShopeeCancelOauthcallback implements OnInit {
           console.log('Credencial inativada com sucesso:', response);
           this.submitted.set(true);
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Erro ao inativar credencial:', error);
           this.errorMessage.set('Erro ao desconectar Shopee. Por favor, tente novamente.');
         }

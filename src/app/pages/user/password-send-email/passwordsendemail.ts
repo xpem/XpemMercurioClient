@@ -38,7 +38,7 @@ export class PasswordSendEmail implements OnInit {
         
         this.router.navigate(['/user/signin']);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro:', error);
       }
     });

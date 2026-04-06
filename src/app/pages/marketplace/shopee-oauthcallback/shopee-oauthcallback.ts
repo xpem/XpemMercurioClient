@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { ShopeeApiService } from '../../../services/mercadoLivre/shopee-api';
+import { ShopeeApiService } from '../../../services/MercadoLivre/shopee-api';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({
@@ -31,7 +31,7 @@ export class ShopeeOAuthCallback implements OnInit {
           console.log('Credenciais enviadas com sucesso:', response);
           this.submitted.set(true);
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Erro ao enviar credenciais:', error);
           this.errorMessage.set('Erro ao conectar com Shopee. Por favor, tente novamente.');
         }

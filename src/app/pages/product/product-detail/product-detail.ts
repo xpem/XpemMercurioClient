@@ -1,12 +1,12 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService } from '../../../services/product-api';
-import { Product } from '../../../models/product/product.model';
+import { Product } from '../../../models/Product/product.model';
 import { CurrencyPipe, NgStyle } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
 import { RouterLink } from '@angular/router';
-import { ProductBond } from '../../../models/product/product-Bond.model';
-import { ProductQuantityHistory } from '../../../models/product/product-quantity-history.model';
+import { ProductBond } from '../../../models/Product/product-Bond.model';
+import { ProductQuantityHistory } from '../../../models/Product/product-quantity-history.model';
 import { MovementHistoryComponent } from './components/movement-history/movement-history';
 
 declare const bootstrap: any;
@@ -90,7 +90,7 @@ export class ProductDetail implements OnInit {
 
               this.isLoadingProductBonds.set(false);
             },
-            error: (error) => {
+            error: (error: unknown) => {
               console.error('Error fetching product bonds:', error);
               this.isLoadingProductBonds.set(false);
             }
@@ -99,7 +99,7 @@ export class ProductDetail implements OnInit {
           this.isLoading.set(false);
 
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Error fetching product:', error);
           this.errorMessage.set('Erro ao carregar o produto. Por favor, tente novamente.');
           this.isLoading.set(false);
@@ -140,7 +140,7 @@ export class ProductDetail implements OnInit {
           this.hasMoreQuantityHistory.set(false);
 
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error fetching quantity history:', error);
         this.isLoadingQuantityHistory.set(false);
       }
@@ -200,7 +200,7 @@ export class ProductDetail implements OnInit {
         this.hideModal('editQuantityModal');
 
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error updating product:', error);
         this.toastService.showError('Erro ao atualizar a quantidade. Por favor, tente novamente.');
       }

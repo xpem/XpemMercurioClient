@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user-api';
 import { Router } from '@angular/router';
@@ -73,7 +74,7 @@ export class UpdatePassword implements OnInit {
           this.toastService.showSuccess('Senha atualizada com sucesso!', 5000);
           this.router.navigate(['/user/signin']);
         },
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           console.error('Erro:', error);
           console.error('mensagem do erro:', error.error.message);
 

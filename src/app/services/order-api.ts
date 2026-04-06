@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Total } from "../models/total.model";
 import { Observable } from "rxjs";
-import { Order } from "../models/order/order.model";
+import { Order } from "../models/Order/order.model";
 import { Injectable } from "@angular/core";
-import { OrderFilter } from "../models/order/order-filter.model";
+import { OrderFilter } from "../models/Order/order-filter.model";
 
 @Injectable({
     providedIn: "root",
