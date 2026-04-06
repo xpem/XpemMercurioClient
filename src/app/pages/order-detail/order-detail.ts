@@ -60,7 +60,7 @@ export class OrderDetail implements OnInit {
     if (status == null) {
       return 'text-bg-secondary';
     }
-    if(status == 7 /*Erro na emissão da NF-e*/) {
+    if (status == 7 /*Erro na emissão da NF-e*/) {
       return 'text-bg-danger';
     }
 
@@ -136,6 +136,9 @@ export class OrderDetail implements OnInit {
   }
 
   issueInvoice(): void {
+    this.order().invoiceErrorMessage = null;
+    this.order().invoiceStatus = 1 /*Pendente*/;
+    this.order().invoiceStatusText = 'Em processo de emissão';
     this.hideModal('confirmationInvoiceIssueModal');
     this.invoiceService.issueNFe(this.order().id).subscribe({
       next: (response) => {

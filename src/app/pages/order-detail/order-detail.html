@@ -150,6 +150,27 @@
                         <label for="invoiceNumber">Número da NF-e</label>
                     </div>
                     }
+                    @if(this.order().invoiceKey != null) {
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="invoiceKey"
+                            value="{{this.order().invoiceKey}}">
+                        <label for="invoiceKey">Chave de acesso</label>
+                    </div>
+                    }
+                    @if(this.order().invoiceProtocolNumber != null) {
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="invoiceProtocolNumber"
+                            value="{{this.order().invoiceProtocolNumber}}">
+                        <label for="invoiceProtocolNumber">Número do protocolo</label>
+                    </div>
+                    }
+                    @if(this.order().invoiceAuthorizedDate != null) {
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="invoiceAuthorizedDate"
+                            value="{{this.order().invoiceAuthorizedDate}}">
+                        <label for="invoiceAuthorizedDate">Data de autorização</label>
+                    </div>
+                    }
                 </div>
                 @if(this.order().invoiceErrorMessage != null && this.order().invoiceErrorMessage != '') {
                 <div class="alert alert-danger" role="alert">

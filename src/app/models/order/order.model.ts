@@ -24,6 +24,9 @@ export interface Order {
     invoiceCreated: boolean;
     invoiceErrorMessage?: string | null;
     invoiceNumber?: string | null;
+    invoiceKey?: string | null;
+    invoiceProtocolNumber?: string | null;
+    invoiceAuthorizedDate?: string | null;
 }
 
 export enum OrderStatus {
