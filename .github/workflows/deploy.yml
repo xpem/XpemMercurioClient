@@ -1,0 +1,56 @@
+name: Deploy XpemMercurioClient
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-xpem-mercurio-client
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  DIST_DIR: 'dist/XpemMercurioClient'
+  REMOTE_PATH: '/var/www/xpemmercurioclient/'
+  PM2_SCRIPT: '/var/www/xpemmercurioclient/server/server.mjs'
+  PM2_PROCESS_NAME: 'ssr-angular'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload dist files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: '${{ env.DIST_DIR }}/*'
+          target: '${{ env.REMOTE_PATH }}'
+          strip_components: 2
+
+      - name: Restart SSR process
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sudo /root/.nvm/versions/node/v22.21.0/bin/pm2 restart ${{ env.PM2_SCRIPT }} --name "${{ env.PM2_PROCESS_NAME }}"
