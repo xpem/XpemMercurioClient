@@ -1,4 +1,4 @@
-<div class="list-group list-group-flush notifications-container">
+<div #container class="list-group list-group-flush notifications-container">
   @if (isLoadingNotifications) {
   <div class="d-flex justify-content-center mt-2">
     <div class="spinner-grow text-light" role="status">
@@ -8,9 +8,15 @@
   }
   @else {
   @for (notif of notifications; track notif.id) {
-  <button id="notificationLink-{{notif.id}}"
-    (click)="onNotificationClick(notif.id); $event.preventDefault(); $event.stopPropagation()"
-    class="list-group-item list-group-item-action border border-{{ notif.borderStyle }} border-2 rounded-1 mb-1">
+  <button id="notificationLink-{{notif.id}}" (click)="$event.stopPropagation()"
+    class="list-group-item list-group-item-action border border-{{ notif.borderStyle }} border-2 rounded-1 mb-1 position-relative">
+    <button type="button"
+      class="btn btn-sm btn-outline-success position-absolute top-0 end-0 p-1 lh-1 text-muted mt-1 me-1"
+      style="font-size: 1rem; border: 0;"
+      title="Marcar como lida"
+      (click)="markAsRead.emit(notif.id); $event.stopPropagation()">
+      <i class="bi bi-check-lg"></i>
+    </button>
     <div class="d-flex w-100">
       <h6 class="mb-1 text-light"><i class="bi bi-{{ notif.icon }}"></i> {{ notif.title }}</h6>
     </div>
@@ -20,5 +26,16 @@
   } @empty {
   <div class="p-3 text-center text-muted">Nenhuma notificação nova</div>
   }
+  @if (hasMore) {
+  <button class="list-group-item list-group-item-action btn btn-outline-secondary text-center small py-2"
+    [disabled]="isLoadingMore"
+    (click)="onLoadMore($event)">
+    @if (isLoadingMore) {
+      <span class="spinner-border spinner-border-sm me-1"></span>
+    }
+    Carregar mais
+  </button>
   }
+  }
+
 </div>

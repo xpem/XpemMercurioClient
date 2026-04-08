@@ -23,16 +23,21 @@
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0 notifications-container"
+                    style="max-height: 450px; overflow-y: auto;"
                     aria-labelledby="notReadNotificationsListBtn">
                     <div class="p-2 border-bottom">
                         <strong class="small">Notificações</strong>
-                        <a type="button"
+                        <!-- <a type="button"
                             class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover float-end"
                             style="font-size: 0.75rem;" (click)="clearAll()">Marcar todas como
-                            lidas</a>
+                            lidas</a> -->
                     </div>
-                    <app-notifications-list [notifications]="notifications()" (notificationRead)="markAsRead($event)"
-                        [isLoadingNotifications]="isLoadingNotifications()"></app-notifications-list>
+                    <app-notifications-list [notifications]="notifications()"
+                        [isLoadingNotifications]="isLoadingNotifications()"
+                        [isLoadingMore]="isLoadingMore()"
+                        [hasMore]="hasMoreNotifications()"
+                        (loadMore)="loadMoreNotifications()"
+                        (markAsRead)="markAsRead($event)"></app-notifications-list>
                 </div>
             </div>
         </div>

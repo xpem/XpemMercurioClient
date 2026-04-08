@@ -13,6 +13,7 @@ import { ToastService } from '../../../services/toast.service';
   styleUrl: './sign-in-super-admin.css',
   standalone: true
 })
+
 export class SignInSuperAdmin implements OnInit {
   SignInForm!: FormGroup;
   submitted = false;
@@ -32,7 +33,6 @@ export class SignInSuperAdmin implements OnInit {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/home']);
     }
-
 
     // Cria o FormGroup com os controles e validações
     this.SignInForm = this.fb.group({

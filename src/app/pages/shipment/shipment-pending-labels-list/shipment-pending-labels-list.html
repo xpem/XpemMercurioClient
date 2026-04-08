@@ -77,16 +77,15 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @for (item of ordersWithPendingLabels(); track $index) {
             <div class="col">
-                <div class="card h-100 linked-card card-custom selectable-card"
+                <div class="card h-100 card-custom selectable-card"
                     id="selectOrderCard{{item.shipmentExternalId}}"
-                    [class.selected]="selectedLabels().includes(item.shipmentExternalId!)"
-                    (click)="toggleLabelSelection(item.shipmentExternalId!, $event)">
+                    [class.selected]="selectedLabels().includes(item.shipmentExternalId!)">
                     <div class="card-header fw-bold">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
                                 id="selectOrderCheckbox{{item.shipmentExternalId}}"
                                 [checked]="selectedLabels().includes(item.shipmentExternalId!)"
-                                (click)="$event.stopPropagation()">
+                                (change)="toggleLabelSelection(item.shipmentExternalId!, $event)">
                             <label class="form-check-label" for="selectOrderCheckbox{{item.shipmentExternalId}}">
                                 #{{ item.externalId }}
                             </label>

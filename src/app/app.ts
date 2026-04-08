@@ -20,6 +20,9 @@ export class App implements OnInit, OnDestroy {
   notifications = signal<AppNotification[]>([]);
   notReadNotificationsCount = signal(0);
   isLoadingNotifications: WritableSignal<boolean> = signal(false);
+  isLoadingMore: WritableSignal<boolean> = signal(false);
+  notificationsPage = signal(0);
+  hasMoreNotifications = signal(true);
 
   private notificationInterval: any;
 
@@ -105,27 +108,44 @@ export class App implements OnInit, OnDestroy {
   }
 
   loadNotReadNotifications() {
+    this.notificationsPage.set(0);
+    this.hasMoreNotifications.set(false);
     this.isLoadingNotifications.set(true);
-    this.notificationApi.getTopUnread()
-      .pipe(
-        map(notifications =>
-          notifications.map(notification => ({
-            ...notification,
-            borderStyle: this.getNotificationBorderStyle(notification.type),
-            icon: this.getNotificationIcon(notification.objectType || NotificationObjectType.System)
-          }))
-        )
-      )
+    this.notificationApi.getTopUnread(0)
+      .pipe(map(notifications => notifications.map(n => this.mapNotification(n))))
       .subscribe({
         next: (result) => {
           this.notifications.set(result);
+          this.hasMoreNotifications.set(result.length >= 5 && this.notReadNotificationsCount() > result.length);
           this.isLoadingNotifications.set(false);
         },
-        error: (e) => {
-          console.error("Erro ao carregar notificações não lidas", e);
-          this.isLoadingNotifications.set(false);
-        }
+        error: () => this.isLoadingNotifications.set(false)
       });
+  }
+
+  loadMoreNotifications() {
+    const nextPage = this.notificationsPage() + 1;
+    this.notificationsPage.set(nextPage);
+    this.isLoadingMore.set(true);
+    this.notificationApi.getTopUnread(nextPage)
+      .pipe(map(notifications => notifications.map(n => this.mapNotification(n))))
+      .subscribe({
+        next: (result) => {
+          this.notifications.update(prev => [...prev, ...result]);
+          const totalLoaded = this.notifications().length;
+          this.hasMoreNotifications.set(result.length >= 5 && this.notReadNotificationsCount() > totalLoaded);
+          this.isLoadingMore.set(false);
+        },
+        error: () => this.isLoadingMore.set(false)
+      });
+  }
+
+  private mapNotification(notification: AppNotification): AppNotification {
+    return {
+      ...notification,
+      borderStyle: this.getNotificationBorderStyle(notification.type),
+      icon: this.getNotificationIcon(notification.objectType || NotificationObjectType.System)
+    };
   }
 
   private getNotificationBorderStyle(type: NotificationType): string {

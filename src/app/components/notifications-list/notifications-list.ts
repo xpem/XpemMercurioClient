@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppNotification } from '../../models/appNotification.model';
 
@@ -11,12 +11,23 @@ import { AppNotification } from '../../models/appNotification.model';
 })
 export class NotificationsList {
   @Input() notifications: AppNotification[] = [];
-  @Output() notificationRead = new EventEmitter<number>();
   @Input() isLoadingNotifications: boolean = false;
+  @Input() isLoadingMore: boolean = false;
+  @Input() hasMore: boolean = false;
+  @Output() loadMore = new EventEmitter<void>();
+  @Output() markAsRead = new EventEmitter<number>();
+  @ViewChild('container') containerRef!: ElementRef<HTMLElement>;
 
-  onNotificationClick(id: number) {
-    this.notificationRead.emit(id);
+  onLoadMore(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const scrollTop = this.containerRef?.nativeElement.scrollTop ?? 0;
+    this.loadMore.emit();
+    // restaura o scroll após o Angular re-renderizar
+    setTimeout(() => {
+      if (this.containerRef?.nativeElement) {
+        this.containerRef.nativeElement.scrollTop = scrollTop;
+      }
+    });
   }
 }
-
-// ng generate component notifications-list --skip-tests --standalone   

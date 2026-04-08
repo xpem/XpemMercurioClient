@@ -16,8 +16,8 @@ export class NotificationApi {
         return this.http.get<number>(`${this.apiUrl}/notRead/total`);
     }
 
-    public getTopUnread(): Observable<AppNotification[]> {
-        return this.http.get<AppNotification[]>(`${this.apiUrl}/notRead/top`);
+    public getTopUnread(page: number = 0): Observable<AppNotification[]> {
+        return this.http.get<AppNotification[]>(`${this.apiUrl}/notRead/top?page=${page}`);
     }
 
     public markAsRead(ids: number[]): Observable<void> {
