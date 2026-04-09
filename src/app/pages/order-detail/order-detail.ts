@@ -1,12 +1,14 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { OrderService } from '../../services/order-api';
 import { InvoiceService } from '../../services/invoice-api';
 import { MercadoLivreService } from '../../services/mercadoLivre/mercado-livre-api';
-import { Order } from '../../models/order/order.model';
+import { Order, OrderNFeStatus } from '../../models/order/order.model';
 import { ToastService } from '../../services/toast.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
+import { interval, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 declare const bootstrap: any;
 
@@ -17,9 +19,18 @@ declare const bootstrap: any;
   styleUrl: './order-detail.css',
 })
 
-export class OrderDetail implements OnInit {
+export class OrderDetail implements OnInit, OnDestroy {
   order: WritableSignal<Order> = signal({} as Order);
   isLoading: WritableSignal<boolean> = signal(true);
+  isPolling: WritableSignal<boolean> = signal(false);
+
+  private stopPolling$ = new Subject<void>();
+  private readonly pendingStatuses = [
+    OrderNFeStatus.Pending,
+    OrderNFeStatus.IssuanceInProgress,
+    OrderNFeStatus.BatchProcessing,
+    OrderNFeStatus.CancellationInProgress
+  ];
 
 
   constructor(private orderService: OrderService, private invoiceService: InvoiceService,
@@ -45,6 +56,32 @@ export class OrderDetail implements OnInit {
         }
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.stopPolling$.next();
+    this.stopPolling$.complete();
+  }
+
+  private startPolling(orderId: number): void {
+    this.isPolling.set(true);
+    this.stopPolling$.next(); // cancela polling anterior se houver
+
+    interval(3000).pipe(
+      switchMap(() => this.orderService.getbyId(orderId)),
+      takeUntil(this.stopPolling$)
+    ).subscribe({
+      next: (response) => {
+        this.order.set(response);
+        if (!this.pendingStatuses.includes(response.invoiceStatus)) {
+          this.isPolling.set(false);
+          this.stopPolling$.next();
+        }
+      },
+      error: () => {
+        this.isPolling.set(false);
+      }
+    });
   }
 
   PrintLabelIsEnabled(): boolean {
@@ -144,7 +181,7 @@ export class OrderDetail implements OnInit {
       next: (response) => {
         console.log('NF-e issued successfully:', response);
         this.toastService.showSuccess(response, 5000);
-        this.ngOnInit();
+        this.startPolling(this.order().id);
       },
       error: (error: unknown) => {
         console.error('Error issuing NF-e:', error);

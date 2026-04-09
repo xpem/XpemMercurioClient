@@ -16,5 +16,13 @@
       "preLaunchTask": "npm: test",
       "url": "http://localhost:9876/debug.html"
     }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": ["ng serve"],
+      "preLaunchTask": "start backend",
+      "stopAll": true
+    }
   ]
 }

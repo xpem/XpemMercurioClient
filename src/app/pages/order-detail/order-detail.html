@@ -10,7 +10,9 @@
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
         <div>
             @if(!order().invoiceCreated) {
-            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px" [disabled]="order().printStatus != 4"
+                <!-- por enquanto, emissão de nf liberada para qualquer status de impressão, para testes. -->
+                <!-- [disabled]="order().printStatus != 4" -->
+            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px" 
                 (click)="callModalConfirmationInvoiceIssue()"><i class="bi bi-file-earmark-ruled"></i>&nbsp;&nbsp;Emitir
                 NF-e</button>
             }
@@ -127,6 +129,9 @@
                 <div class="d-flex justify-content-between mt-1 mb-0" style="width: 100%;">
                     <p>Nota Fiscal Eletrônica</p>
                     <div>
+                        @if(isPolling()) {
+                        <span class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-hidden="true"></span>
+                        }
                         <span style="font-size: 0.8rem;"
                             [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().invoiceStatus)">
                             @if(this.order().invoiceStatusText == null &&
