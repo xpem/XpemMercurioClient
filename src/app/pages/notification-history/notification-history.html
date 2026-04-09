@@ -1,0 +1,62 @@
+@if (isLoading()) {
+<div class="spinner-grow" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+} @else {
+<div class="list-group list-group-flush">
+  @for (notif of notifications(); track notif.id) {
+  <div class="list-group-item border border-{{ notif.borderStyle }} border-2 rounded-1 mb-2">
+    <div class="d-flex w-100 justify-content-between align-items-start">
+      <h6 class="mb-1"><i class="bi bi-{{ notif.icon }}"></i> {{ notif.title }}</h6>
+      <div class="d-flex flex-column align-items-end ms-2" style="min-width: 90px;">
+        <small class="text-muted" style="font-size: 0.75rem;">{{ notif.createdAt | date:'short' }}</small>
+        @if (notif.isRead) {
+        <span class="badge bg-success mt-1" style="font-size: 0.65rem;">Lida</span>
+        } @else {
+        <span class="badge bg-warning text-dark mt-1" style="font-size: 0.65rem;">Não lida</span>
+        }
+      </div>
+    </div>
+    <p class="mb-0 small">{{ notif.message }}</p>
+    @if (notif.readAt) {
+    <small class="text-muted" style="font-size: 0.7rem;">Lida em: {{ notif.readAt | date:'short' }}</small>
+    }
+  </div>
+  } @empty {
+  <div class="alert alert-info">Nenhuma notificação encontrada.</div>
+  }
+</div>
+
+<nav aria-label="Page navigation" class="mt-4">
+  @if (totalPages() > 1) {
+  <ul class="pagination justify-content-end">
+    <li class="page-item" [class.disabled]="currentPage() === 1">
+      <button class="page-link" (click)="goToPage(1)" [disabled]="currentPage() === 1">&laquo;&laquo;</button>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage() === 1">
+      <button class="page-link" (click)="prevPage()" [disabled]="currentPage() === 1">&laquo;</button>
+    </li>
+    @if (pages()[0] > 1) {
+    <li class="page-item disabled"><span class="page-link">...</span></li>
+    }
+    @for (p of pages(); track p) {
+    <li class="page-item" [class.active]="currentPage() === p">
+      <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
+    </li>
+    }
+    @if (pages()[pages().length - 1] < totalPages()) {
+    <li class="page-item disabled"><span class="page-link">...</span></li>
+    }
+    <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+      <button class="page-link" (click)="nextPage()" [disabled]="currentPage() === totalPages()">&raquo;</button>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+      <button class="page-link" (click)="goToPage(totalPages())" [disabled]="currentPage() === totalPages()">&raquo;&raquo;</button>
+    </li>
+  </ul>
+  }
+  <div class="text-end text-muted small mt-2">
+    Página {{ currentPage() }} de {{ totalPages() }} | Total: {{ total() }}
+  </div>
+</nav>
+}

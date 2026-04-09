@@ -7,6 +7,7 @@ import { NotificationsList } from "./components/notifications-list/notifications
 import { AppNotification, NotificationObjectType, NotificationType } from './models/appNotification.model';
 import { NotificationApi } from './services/notification-api';
 import { map, filter } from 'rxjs';
+import { notificationStyle } from './components/notifications-list/notification-style';
 
 @Component({
   selector: 'app-root',
@@ -141,35 +142,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   private mapNotification(notification: AppNotification): AppNotification {
-    return {
-      ...notification,
-      borderStyle: this.getNotificationBorderStyle(notification.type),
-      icon: this.getNotificationIcon(notification.objectType || NotificationObjectType.System)
-    };
-  }
-
-  private getNotificationBorderStyle(type: NotificationType): string {
-    const borderStyleMap: Record<NotificationType, string> = {
-      [NotificationType.Info]: 'info',
-      [NotificationType.Warning]: 'warning',
-      [NotificationType.Error]: 'danger',
-      [NotificationType.Success]: 'success',
-    };
-    return borderStyleMap[type] || 'secondary';
-  }
-
-  private getNotificationIcon(objectType: NotificationObjectType): string {
-    const iconMap: Record<NotificationObjectType, string> = {
-      [NotificationObjectType.ImportOrder]: 'cart-check',
-      [NotificationObjectType.Product]: 'box-seam',
-      [NotificationObjectType.Shipment]: 'truck',
-      [NotificationObjectType.User]: 'person-circle',
-      [NotificationObjectType.MarketPlace]: 'shop',
-      [NotificationObjectType.System]: 'cpu',
-      [NotificationObjectType.CreateOrder]: 'cart-plus',
-      [NotificationObjectType.Invoice]: 'file-earmark-ruled',
-    };
-    return iconMap[objectType] || 'bell';
+    return notificationStyle(notification);
   }
 
 
@@ -195,13 +168,13 @@ export class App implements OnInit, OnDestroy {
   }
 
   clearAll() {
-    // this.notifications.set([]);
-    // this.notReadNotificationsCount.set(0);
+
 
     const ids = this.notifications().map(n => n.id);
-    this.notificationApi.markAsRead(ids).subscribe({
+    this.notificationApi.markAllAsRead().subscribe({
       next: () => {
-        this.loadTotalNotificationsUnread();
+        this.notifications.set([]);
+        this.notReadNotificationsCount.set(0);
       },
       error: (e) => {
         console.error("Erro ao marcar todas as notificações como lidas", e);

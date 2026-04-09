@@ -71,6 +71,8 @@ export class Signin implements OnInit {
 
         if (error.error && error.error.errorCode === 5) {
           this.toastService.showError('Email ou senha inválidos!', 5000);
+        } else {
+          this.toastService.showError('Erro ao realizar login. Tente novamente.', 5000);
         }
         // Aqui você pode adicionar lógica para exibir uma mensagem de erro ao usuário
         this.isLoadingAccess.set(false);

@@ -16,6 +16,7 @@ import { ShopeeCancelOauthcallback } from './pages/marketplace/shopee-cancel-oau
 import { SignInSuperAdmin } from './pages/user/sign-in-super-admin/sign-in-super-admin';
 import { CompanyEdit } from './pages/company/company-edit/company-edit';
 import { CompanyInvoiceSequenceEdit } from './pages/company/company-invoice-sequence-edit/company-invoice-sequence-edit';
+import { NotificationHistory } from './pages/notification-history/notification-history';
 
 export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard], data: { title: '<i class="bi bi-house"></i> Principal' } },
@@ -34,5 +35,6 @@ export const routes: Routes = [
   { path: 'shipment-pending-labels-list', component: ShipmentPendingLabelsList, canActivate: [authGuard], data: { title: '<i class="bi bi-truck"></i> Etiquetas Pendentes' } },
   { path: 'company/company-edit', component: CompanyEdit, canActivate: [authGuard], data: { title: '<i class="bi bi-building"></i> Editar Empresa' } },
   { path: 'company/invoice-sequence-edit', component: CompanyInvoiceSequenceEdit, canActivate: [authGuard], data: { title: '<i class="bi bi-file-earmark-ruled"></i> Numeração de Notas Fiscais' } },
+  { path: 'notifications', component: NotificationHistory, canActivate: [authGuard], data: { title: '<i class="bi bi-bell"></i> Histórico de Notificações' } },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

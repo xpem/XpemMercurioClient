@@ -20,8 +20,20 @@ export class NotificationApi {
         return this.http.get<AppNotification[]>(`${this.apiUrl}/notRead/top?page=${page}`);
     }
 
-    public markAsRead(ids: number[]): Observable<void> {
+    public markAsRead(ids: number[] | null = null): Observable<void> {
         return this.http.put<void>(`${this.apiUrl}/markAsRead`, ids);
+    }
+
+    public markAllAsRead(ids: number[] | null = null): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/markAllAsRead`, ids);
+    }
+
+    public getAll(page: number = 1): Observable<AppNotification[]> {
+        return this.http.get<AppNotification[]>(`${this.apiUrl}/all?page=${page}`);
+    }
+
+    public getAllTotal(): Observable<{ totalItems: number; totalPages: number }> {
+        return this.http.get<{ totalItems: number; totalPages: number }>(`${this.apiUrl}/all/total`);
     }
 }
 

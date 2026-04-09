@@ -37,9 +37,15 @@
                     Anunciados</a>
             </li> -->
             <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="/notifications"
+                    [routerLinkActiveOptions]="{ exact: true }" data-bs-dismiss="offcanvas" aria-label="Close"><i
+                        class="bi bi-bell"></i> Notificações</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" style="background-color: var(--bs-danger);" (click)="onLogout()"><i
                         class="bi bi-box-arrow-left"></i> Sair</a>
             </li>
+
         </ul>
         <div class="nav-item" style=" display: flex; flex-direction: row-reverse; margin-right: 20px;">
             <span>Versão 0.2.6</span>
