@@ -10,9 +10,9 @@
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
         <div>
             @if(!order().invoiceCreated) {
-                <!-- por enquanto, emissão de nf liberada para qualquer status de impressão, para testes. -->
-                <!-- [disabled]="order().printStatus != 4" -->
-            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px" 
+            <!-- por enquanto, emissão de nf liberada para qualquer status de impressão, para testes. -->
+            <!-- [disabled]="order().printStatus != 4" -->
+            <button class="btn btn-sm btn-info mb-3 me-2" style="margin-top: 20px"
                 (click)="callModalConfirmationInvoiceIssue()"><i class="bi bi-file-earmark-ruled"></i>&nbsp;&nbsp;Emitir
                 NF-e</button>
             }
@@ -29,96 +29,103 @@
         </div>
     </div>
     <div class="col-lg-12">
-        <div class="col-lg-12 d-flex justify-content-between border-bottom mb-1"
-            [class.mercado-livre-border]="order().marketPlace == '1'"
+        <div class="card text-bg-dark h-100" [class.mercado-livre-border]="order().marketPlace == '1'"
             [class.shopee-border]="order().marketPlace == '2'">
-            <!-- merdado livre color: var(--mercado-livre-color) -->
-            <p class="h5 mb-1" [class.mercado-livre-header]="order().marketPlace == '1'"
-                [class.shopee-header]="order().marketPlace == '2'">#{{order().externalId}}</p>
-            <p class="fst-italic text-body-secondary mb-0">{{order().createdAt}}</p>
-        </div>
-        <div class="col-lg-12 row">
-            <div class="col-lg-3 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="situation" value="{{order().status}}">
-                <label for="situation">Situação</label>
+            <div class="card-header d-flex justify-content-between border-bottom mb-1"
+                [class.mercado-livre-border]="order().marketPlace == '1'"
+                [class.shopee-border]="order().marketPlace == '2'">
+                <!-- mercado livre color: var(--mercado-livre-color) -->
+                <p class="h5 mb-1" [class.mercado-livre-header]="order().marketPlace == '1'"
+                    [class.shopee-header]="order().marketPlace == '2'">#{{order().externalId}}</p>
+                <p class="fst-italic text-body-secondary mb-0">{{order().createdAt}}</p>
             </div>
-            <div class="col-lg-3 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="marketplace"
-                    value="{{order().marketPlaceText}}">
-                <label for="marketplace">Marketplace</label>
-            </div>
-            @if(order().printStatus != null) {
-            <div class="col-lg-3 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="marketplace"
-                    value="{{order().printStatusText}}">
-                <label for="marketplace">Etiqueta</label>
-            </div>
-            }
-        </div>
-        <div class="h6 pb-2 mb-1 text-secondary  border-bottom border-secondary ">
-            Comprador
-        </div>
-        <div class="col-lg-12 row">
-            <div class="col-lg-2 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="orderBuyerId"
-                    value="#{{order().buyer?.externalId}}">
-                <label for="orderBuyerId">Id</label>
-            </div>
-            <div class="col-lg-6 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="orderBuyerName"
-                    value="{{order().buyer?.firstName}} {{order().buyer?.lastName}}">
-                <label for="orderBuyerName">Nome</label>
-            </div>
-        </div>
-        <div class="h6 pb-2 mb-1 text-secondary  border-bottom border-secondary ">
-            Produtos
-        </div>
-        @for(product of order().products; track $index) {
-        <div class="col-lg-12 row">
-            <div class="col-lg-2 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productId"
-                    value="#{{product.externalId}}">
-                <label for="productId">Id</label>
-            </div>
-            <div class="col-lg-10 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productTitle" value="{{product.title}}">
-                <label for="productTitle">Título</label>
-            </div>
-            <div class="col-lg-2 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productQuantity"
-                    value="{{product.quantity}}">
-                <label for="productQuantity">Quantidade</label>
-            </div>
-            <div class="col-lg-2 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
-                    value="{{product.unitPrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="productUnitPrice">Valor unitário</label>
-            </div>
-            <div class="col-lg-2 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
-                    value="{{((product.saleFee) * -1)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="productUnitPrice">Tarifa</label>
-            </div>
-        </div>
-        }
-        <div class="h6 pb-2 mb-1  border-bottom border-success" style="color: var(--primary-green);">
-            Totais
-        </div>
-        <div class="col-lg-12 row">
-            <div class="col-lg-4 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
-                    value="{{(order().liquidProductsAmount)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="productUnitPrice">Total líquido dos produtos</label>
-            </div>
-            <div class="col-lg-4 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
-                    value="{{(order().shippingSellerCost * -1)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="productUnitPrice">Tarifa de envio por sua conta</label>
-            </div>
-            <div class="col-lg-4 form-floating">
-                <input type="text" readonly class="form-control-plaintext" id="liquidAmount"
-                    value="{{(order().liquidAmount)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
-                <label for="liquidAmount">Total Líquido</label>
+            <div class="card-body">
+                <div class="col-lg-12 row">
+                    <div class="col-lg-3 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="situation"
+                            value="{{order().status}}">
+                        <label for="situation">Situação</label>
+                    </div>
+                    <div class="col-lg-3 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="marketplace"
+                            value="{{order().marketPlaceText}}">
+                        <label for="marketplace">Marketplace</label>
+                    </div>
+                    @if(order().printStatus != null) {
+                    <div class="col-lg-3 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="marketplace"
+                            value="{{order().printStatusText}}">
+                        <label for="marketplace">Etiqueta</label>
+                    </div>
+                    }
+                </div>
+                <div class="h6 pb-2 mb-1 text-secondary  border-bottom border-secondary ">
+                    Comprador
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-2 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="orderBuyerId"
+                            value="#{{order().buyer?.externalId}}">
+                        <label for="orderBuyerId">Id</label>
+                    </div>
+                    <div class="col-lg-6 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="orderBuyerName"
+                            value="{{order().buyer?.firstName}} {{order().buyer?.lastName}}">
+                        <label for="orderBuyerName">Nome</label>
+                    </div>
+                </div>
+                <div class="h6 pb-2 mb-1 text-secondary  border-bottom border-secondary ">
+                    Produtos
+                </div>
+                @for(product of order().products; track $index) {
+                <div class="col-lg-12 row">
+                    <div class="col-lg-2 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productId"
+                            value="#{{product.externalId}}">
+                        <label for="productId">Id</label>
+                    </div>
+                    <div class="col-lg-10 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productTitle"
+                            value="{{product.title}}">
+                        <label for="productTitle">Título</label>
+                    </div>
+                    <div class="col-lg-2 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productQuantity"
+                            value="{{product.quantity}}">
+                        <label for="productQuantity">Quantidade</label>
+                    </div>
+                    <div class="col-lg-2 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
+                            value="{{product.unitPrice | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                        <label for="productUnitPrice">Valor unitário</label>
+                    </div>
+                    <div class="col-lg-2 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
+                            value="{{((product.saleFee) * -1)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                        <label for="productUnitPrice">Tarifa</label>
+                    </div>
+                </div>
+                }
+                <div class="h6 pb-2 mb-1  border-bottom border-success" style="color: var(--primary-green);">
+                    Totais
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
+                            value="{{(order().liquidProductsAmount)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                        <label for="productUnitPrice">Total líquido dos produtos</label>
+                    </div>
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="productUnitPrice"
+                            value="{{(order().shippingSellerCost * -1)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                        <label for="productUnitPrice">Tarifa de envio por sua conta</label>
+                    </div>
+                    <div class="col-lg-4 form-floating">
+                        <input type="text" readonly class="form-control-plaintext" id="liquidAmount"
+                            value="{{(order().liquidAmount)| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}">
+                        <label for="liquidAmount">Total Líquido</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -130,13 +137,15 @@
                     <p>Nota Fiscal Eletrônica</p>
                     <div>
                         @if(isPolling()) {
-                        <span class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm text-primary me-2" role="status"
+                            aria-hidden="true"></span>
                         }
                         <span style="font-size: 0.8rem;"
                             [class]="'status-badge badge rounded-pill ' + getNFeStatusBadgeClass(this.order().invoiceStatus)">
                             @if(this.order().invoiceStatusText == null &&
                             this.order().invoiceErrorMessage == null) {
-                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>&nbsp;&nbsp; 'NF-e
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>&nbsp;&nbsp;
+                            'NF-e
                             em processo de criação'
                             }
                             @else {
