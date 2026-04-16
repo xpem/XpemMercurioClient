@@ -19,7 +19,7 @@ declare const bootstrap: any;
 })
 export class BondList implements OnInit {
   userProfile: WritableSignal<UserProfile | null> = signal(null);
-  SingleImportOrders: WritableSignal<Order[] | null> = signal(null);
+  SingleImportOrders: WritableSignal<Order[]> = signal([]);
   SingleProduct: WritableSignal<Product | null> = signal(null);
   errorMessage: WritableSignal<string> = signal('');
   isLoading: WritableSignal<boolean> = signal(true);
@@ -92,13 +92,13 @@ export class BondList implements OnInit {
       importObservable(orderId).subscribe({
         next: (response: any) => {
 
-          const responseData = Array.isArray(response) ? response : JSON.parse(response);
+          const responseData = this.parseOrdersResponse(response);
 
           this.SingleImportOrders.set(responseData);
 
           console.log('Order imported successfully:', this.SingleImportOrders());
 
-          for (let order of this.SingleImportOrders() || []) {
+          for (const order of this.SingleImportOrders()) {
             console.log(`Importação do pedido ${order.externalId} em processamento!`);
           }
 
@@ -116,6 +116,35 @@ export class BondList implements OnInit {
         }
       });
     }
+  }
+
+  private parseOrdersResponse(response: unknown): Order[] {
+    if (Array.isArray(response)) {
+      return response as Order[];
+    }
+
+    if (typeof response === 'string') {
+      try {
+        const parsed = JSON.parse(response);
+        if (Array.isArray(parsed)) {
+          return parsed as Order[];
+        }
+
+        if (parsed && typeof parsed === 'object') {
+          return [parsed as Order];
+        }
+
+        return [];
+      } catch {
+        return [];
+      }
+    }
+
+    if (response && typeof response === 'object') {
+      return [response as Order];
+    }
+
+    return [];
   }
 
   importOrdersByPeriod() {

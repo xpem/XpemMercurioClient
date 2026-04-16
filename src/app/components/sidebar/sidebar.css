@@ -163,7 +163,7 @@
 }
 
 .sidebar .nav-link.active {
-    background-color: var(--primary-green);
+    background: radial-gradient(circle at top right, #1ca64f 0%, #006370 100%);
     color: white;
 }
 

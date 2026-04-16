@@ -140,7 +140,7 @@
                         <p class="status-badge rounded-pill badge text-bg-success mb-0"> <i class="bi bi-tag-fill"></i>
                             {{item.printStatusText}}</p>
                         }
-                        @else{
+                        @else if(item.printStatus != null){
                             <p class="status-badge rounded-pill badge text-bg-warning mb-0"> <i class="bi bi-tag-fill"></i>
                             {{item.printStatusText}}</p>
                         }

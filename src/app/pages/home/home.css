@@ -49,7 +49,7 @@
 }
 
 .card-mercado-livre:hover {
-   border-color: var(--mercado-livre-color);
+    border-color: var(--mercado-livre-color);
 }
 
 .card-mercado-livre .card-header {
@@ -58,9 +58,24 @@
 
 
 .card-shopee:hover {
-   border-color: var(--shopee-color);
+    border-color: var(--shopee-color);
 }
 
 .card-shopee .card-header {
     color: var(--shopee-color);
+}
+
+.text-bg-warning {
+    color: #ffc107 !important;
+    background-color: #ffc10742 !important;
+}
+
+.text-bg-info {
+    color: #0dcaf0 !important;
+    background-color: #0dcaf042 !important;
+}
+
+.text-bg-success {
+    color: #22c55e !important;
+    background-color: #21c45d42 !important;
 }

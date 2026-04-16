@@ -138,3 +138,18 @@ body {
 .background-custom {
     background-color: #272c35;
 }
+
+.text-bg-warning-custom {
+    color: #ffc107 !important;
+    background-color: #ffc10742 !important;
+}
+
+.text-bg-info-custom {
+    color: #0dcaf0 !important;
+    background-color: #0dcaf042 !important;
+}
+
+.text-bg-success-custom {
+    color: #22c55e !important;
+    background-color: #21c45d42 !important;
+}

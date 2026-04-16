@@ -12,11 +12,11 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  // ng generate component sidebar --standalone --skip-tests
   private authService = inject(AuthService);
   router = inject(Router);
 
-    // constructor(public router: Router, private authService: AuthService) {}
+  userName = this.authService.userName;
+  userEmail = this.authService.userEmail;
 
   // Função chamada pelo (click) do botão 'Sair'
   onLogout() {

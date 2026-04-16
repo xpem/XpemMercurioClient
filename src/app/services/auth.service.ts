@@ -10,11 +10,15 @@ export class AuthService {
     private cookieService = inject(CookieService);
     private platformId = inject(PLATFORM_ID);
     private isAuthenticatedSignal = signal<boolean>(false);
+    private userNameSignal = signal<string>('');
+    private userEmailSignal = signal<string>('');
 
     private readonly TOKEN_KEY = 'auth_token';
     readonly apiUrlStatus = '/api/user';
 
     isAuthenticated = computed(() => this.isAuthenticatedSignal());
+    userName = computed(() => this.userNameSignal());
+    userEmail = computed(() => this.userEmailSignal());
 
     constructor() {
         // Verifica se existe token ao inicializar
@@ -61,6 +65,8 @@ export class AuthService {
     public logout(): void {
         this.cookieService.delete(this.TOKEN_KEY, '/');
         this.isAuthenticatedSignal.set(false);
+        this.userNameSignal.set('');
+        this.userEmailSignal.set('');
     }
 
     // 4. Verificação Assíncrona via API (O Guard principal)
@@ -71,8 +77,12 @@ export class AuthService {
             map(response => {
                 const hasSession = !!response?.email;
                 this.isAuthenticatedSignal.set(hasSession);
+                if (hasSession) {
+                    this.userNameSignal.set(response.name ?? '');
+                    this.userEmailSignal.set(response.email ?? '');
+                }
                 return hasSession;
-            }), // Retorna true se a sessão estiver ativa
+            }),
             catchError((error) => {
                 console.error('Erro ao verificar status da sessão:', error);
                 this.isAuthenticatedSignal.set(false);

@@ -1,7 +1,13 @@
 <div class="offcanvas offcanvas-start text-bg-dark sidebar" tabindex="-1" id="offcanvasSidebar"
     aria-labelledby="offcanvasSidebarLabel">
-    <div class="offcanvas-header">
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <div class="offcanvas-header" style="background: radial-gradient(circle at top right, #1ca64f 0%, #006370 100%); border-radius: 10px;">
+        @if (userName()) {
+        <div>
+            <div style="font-weight: 600; font-size: 0.9rem;">{{ userName() }}</div>
+            <div style="font-size: 0.8rem; opacity: 0.65;">{{ userEmail() }}</div>
+        </div>
+        }
+        <!-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
     </div>
     <div class="offcanvas-body">
         <ul class="nav navbar-nav justify-content-end flex-grow-1">
@@ -28,7 +34,7 @@
             <li class="nav-item">
                 <a class="nav-link" routerLinkActive="active" routerLink="/company/invoice-sequence-edit"
                     [routerLinkActiveOptions]="{ exact: true }" data-bs-dismiss="offcanvas" aria-label="Close"><i
-                        class="bi bi-file-earmark-ruled"></i> Numeração de Notas Fiscais</a>
+                        class="bi bi-file-earmark-ruled"></i> Configurações de NF-e</a>
             </li>
 
             <!-- <li class="nav-item">
@@ -47,8 +53,8 @@
             </li>
 
         </ul>
-        <div class="nav-item" style=" display: flex; flex-direction: row-reverse; margin-right: 20px;">
-            <span>Versão 0.2.6</span>
+        <div class="nav-item" style="display: flex; flex-direction: row-reverse; margin-right: 20px;">
+            <span>Versão 0.2.7</span>
         </div>
     </div>
 </div>

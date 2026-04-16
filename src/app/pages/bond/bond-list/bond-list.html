@@ -191,7 +191,7 @@
                 } @else {
                 <button class="btn btn-success" type="button" disabled>
                     <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-                    <span role="status">Importando...</span>
+                    <span role="status">&nbsp;Importando...</span>
                 </button>
                 }
             </div>
@@ -257,7 +257,7 @@
                             order?.status }}</small></p>
                     <p class="fw-medium m-0">Produtos:</p>
                     <ul class="list-unstyled ">
-                        @for (item of order?.products; track $index) {
+                        @for (item of (order?.products ?? []); track $index) {
                         <li>
                             {{ item.title }} - <small class="fw-light m-0" style="font-size: medium;">{{
                                 item.quantity }}</small> - <small class="fw-light m-0" style="font-size: medium;">R$

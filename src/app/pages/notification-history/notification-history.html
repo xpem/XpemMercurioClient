@@ -11,9 +11,9 @@
       <div class="d-flex flex-column align-items-end ms-2" style="min-width: 90px;">
         <small class="text-muted" style="font-size: 0.75rem;">{{ notif.createdAt | date:'short' }}</small>
         @if (notif.isRead) {
-        <span class="badge bg-success mt-1" style="font-size: 0.65rem;">Lida</span>
+        <span class="badge text-bg-success-custom mt-1">Lida</span>
         } @else {
-        <span class="badge bg-warning text-dark mt-1" style="font-size: 0.65rem;">Não lida</span>
+        <span class="badge text-bg-warning-custom mt-1">Não lida</span>
         }
       </div>
     </div>
