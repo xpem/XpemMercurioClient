@@ -39,8 +39,9 @@ export interface OrderBuyer {
     externalId: string;
     marketPlace: string;
     createdAt: string;
-    firstName?: string;
-    lastName?: string;
+    // firstName?: string;
+    // lastName?: string;
+    Name: string;
 }
 
 export interface OrderProduct {

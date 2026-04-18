@@ -335,9 +335,14 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                <button type="submit" class="btn btn-success" [disabled]="companyForm.invalid"><i
-                        class="bi bi-floppy"></i> Salvar
-                    Empresa</button>
+                <button type="submit" class="btn btn-success" [disabled]="companyForm.invalid || isSaving()">
+                    @if (isSaving()) {
+                      <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    } @else {
+                      <i class="bi bi-floppy"></i>
+                    }
+                    Salvar Empresa
+                </button>
             </div>
         </form>
         @if (!uploadCertificatePanelIsVisible()) {
@@ -394,8 +399,14 @@
                                 class="bi bi-x"></i>&nbsp;&nbsp;Cancelar</button>
 
 
-                        <button type="button" class="btn btn-success" (click)="uploadCertificate()"><i
-                                class="bi bi-upload"></i>&nbsp;&nbsp;Upload do Certificado</button>
+                        <button type="button" class="btn btn-success" (click)="uploadCertificate()" [disabled]="isUploadingCertificate()">
+                            @if (isUploadingCertificate()) {
+                              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                            } @else {
+                              <i class="bi bi-upload"></i>
+                            }
+                            &nbsp;&nbsp;Upload do Certificado
+                        </button>
                     </div>
                 </div>
             </div>

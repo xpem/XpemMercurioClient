@@ -24,6 +24,8 @@ export class CompanyEdit implements OnInit {
   // Determina se estamos criando ou editando uma empresa
   isCreateMode: WritableSignal<boolean> = signal(true);
   uploadCertificatePanelIsVisible: WritableSignal<boolean> = signal(false);
+  isSaving: WritableSignal<boolean> = signal(false);
+  isUploadingCertificate: WritableSignal<boolean> = signal(false);
   constructor(private fb: FormBuilder, private router: Router, private toastService: ToastService, private companyService: CompanyService) { }
 
   ngOnInit(): void {
@@ -187,6 +189,8 @@ export class CompanyEdit implements OnInit {
     //console log em formato de json
     console.log('Payload a ser enviado para a API:', JSON.stringify(companyPayload, null, 2));
 
+    this.isSaving.set(true);
+
     this.companyService.saveCompany(companyPayload, this.isCreateMode()).subscribe({
       next: (response) => {
         if (this.isCreateMode()) {
@@ -197,6 +201,7 @@ export class CompanyEdit implements OnInit {
         this.router.navigate(['/company']);
       },
       error: (error: HttpErrorResponse) => {
+        this.isSaving.set(false);
         if (error.status === 400 && error.error && error.error.message) {
           this.errorMessage.set(error.error.message);
           this.toastService.showError(error.error.message, 5000);
@@ -312,14 +317,18 @@ export class CompanyEdit implements OnInit {
       return;
     }
 
+    this.isUploadingCertificate.set(true);
+
     this.companyService.uploadCertificate(certificateFile, certificatePassword).subscribe({
       next: () => {
         this.toastService.showSuccess('Certificado enviado com sucesso!', 5000);
         this.certificateForm.reset();
         this.certificateSubmitted = false;
+        this.isUploadingCertificate.set(false);
         this.uploadCertificatePanelIsVisible.set(true);
       },
       error: (error: unknown) => {
+        this.isUploadingCertificate.set(false);
         this.toastService.showError('Erro ao enviar certificado.', 5000);
         console.error('Erro ao enviar certificado:', error);
       },
