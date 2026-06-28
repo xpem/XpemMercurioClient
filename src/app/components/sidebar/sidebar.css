@@ -189,7 +189,7 @@
     .sidebar {
         position: fixed;
         left: 0;
-        z-index: 1000;
+        z-index: var(--bs-offcanvas-zindex);
     }
 
     .sidebar-overlay {

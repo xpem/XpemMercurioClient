@@ -26,7 +26,7 @@ export interface Order {
     invoiceNumber?: string | null;
     invoiceKey?: string | null;
     invoiceProtocolNumber?: string | null;
-    invoiveAuthorizedDate?: string | null;
+    invoiceAuthorizedDate?: string | null;
 }
 
 export enum OrderStatus {
@@ -41,7 +41,7 @@ export interface OrderBuyer {
     createdAt: string;
     // firstName?: string;
     // lastName?: string;
-    Name: string;
+    name: string;
 }
 
 export interface OrderProduct {

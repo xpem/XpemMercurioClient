@@ -5,10 +5,10 @@
 }
 @else {
 <div class="container-fluid">
-    <div class="col-lg-12 d-flex justify-content-between">
-        <a routerLink="/home" class="btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
+    <div class="row d-flex justify-content-between">
+        <a routerLink="/home" class="col-auto btn btn-sm btn-outline-info mb-3" style="margin-top: 20px"><i
                 class="bi bi-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
-        <div>
+        <div class="col-auto">
             @if(!order().invoiceCreated) {
             <!-- por enquanto, emissão de nf liberada para qualquer status de impressão, para testes. -->
             <!-- [disabled]="order().printStatus != 4" -->
@@ -31,13 +31,13 @@
     <div class="col-lg-12">
         <div class="card text-bg-dark h-100" [class.mercado-livre-border]="order().marketPlace == '1'"
             [class.shopee-border]="order().marketPlace == '2'">
-            <div class="card-header d-flex justify-content-between border-bottom mb-1"
+            <div class="card-header row d-flex justify-content-between border-bottom mb-1"
                 [class.mercado-livre-border]="order().marketPlace == '1'"
                 [class.shopee-border]="order().marketPlace == '2'">
                 <!-- mercado livre color: var(--mercado-livre-color) -->
-                <p class="h5 mb-1" [class.mercado-livre-header]="order().marketPlace == '1'"
+                <p class="col-6 h5 mb-1" [class.mercado-livre-header]="order().marketPlace == '1'"
                     [class.shopee-header]="order().marketPlace == '2'">#{{order().externalId}}</p>
-                <p class="fst-italic text-body-secondary mb-0">{{order().createdAt}}</p>
+                <p class="col-6 fst-italic text-body-secondary mb-0 text-end">{{order().createdAt}}</p>
             </div>
             <div class="card-body">
                 <div class="col-lg-12 row">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-lg-6 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="orderBuyerName"
-                            value="{{order().buyer?.Name}}">
+                            value="{{order().buyer?.name}}">
                         <label for="orderBuyerName">Nome</label>
                     </div>
                 </div>
@@ -169,10 +169,10 @@
                         <label for="invoiceKey">Chave de acesso</label>
                     </div>
                     }
-                    @if(this.order().invoiveAuthorizedDate != null) {
+                    @if(this.order().invoiceAuthorizedDate != null) {
                     <div class="col-lg-4 form-floating">
                         <input type="text" readonly class="form-control-plaintext" id="invoiceAuthorizedDate"
-                            value="{{this.order().invoiveAuthorizedDate}}">
+                            value="{{this.order().invoiceAuthorizedDate}}">
                         <label for="invoiceAuthorizedDate">Data de autorização</label>
                     </div>
                     }
